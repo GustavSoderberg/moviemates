@@ -11,7 +11,7 @@ import SwiftUI
 struct MovieMatesApp: App {
     var body: some Scene {
         WindowGroup {
-            SwiftUISwitchView()
+            ContentView()
         }
     }
 }
