@@ -11,7 +11,7 @@ enum Status {
     case WelcomeView, HomeView
 }
 
-struct SwiftUISwitchView: View {
+struct ContentView: View {
     
     @State var viewShowing: Status = .WelcomeView
     
