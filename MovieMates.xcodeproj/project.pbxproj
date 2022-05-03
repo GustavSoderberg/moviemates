@@ -15,6 +15,7 @@
 		3F2F5690281FEEAE00C6AF76 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F568F281FEEAE00C6AF76 /* HomeView.swift */; };
 		3F2F5692281FEEE200C6AF76 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F5691281FEEE200C6AF76 /* ProfileView.swift */; };
 		3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F5693281FEF1200C6AF76 /* SearchView.swift */; };
+		415764DD2821676900A9795A /* ProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DC2821676900A9795A /* ProfileSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		3F2F568F281FEEAE00C6AF76 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		3F2F5691281FEEE200C6AF76 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3F2F5693281FEF1200C6AF76 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		415764DC2821676900A9795A /* ProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +85,17 @@
 				3F2F568F281FEEAE00C6AF76 /* HomeView.swift */,
 				3F2F5691281FEEE200C6AF76 /* ProfileView.swift */,
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
+				415764DB2821674900A9795A /* View Components */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		415764DB2821674900A9795A /* View Components */ = {
+			isa = PBXGroup;
+			children = (
+				415764DC2821676900A9795A /* ProfileSheet.swift */,
+			);
+			path = "View Components";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +174,7 @@
 				3F2F568E281FECBA00C6AF76 /* WelcomeView.swift in Sources */,
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
+				415764DD2821676900A9795A /* ProfileSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +231,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -273,7 +285,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
