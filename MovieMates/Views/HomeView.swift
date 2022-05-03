@@ -18,10 +18,17 @@ struct HomeView: View {
                         .border(Color.black, width: 3)
                     VStack(alignment: .leading){
                         Spacer()
-                        Text(review.username)
+                        HStack{
+                            Text(review.username)
+                            Spacer()
+                            Text(review.timestamp.formatted())
+                                .font(.system(size: 12))
+                        }
+                        
                         Spacer()
                         Text(review.title)
                             .font(.title)
+                        Text(review.rating)
                         Spacer()
                         Text(review.reviewText)
                         Spacer()
@@ -38,13 +45,15 @@ struct Review: Identifiable {
     
     let username: String
     let title: String
+    let rating: String
     let reviewText: String
+    let timestamp = Date.now
 }
 
 private var reviews = [
-    Review(username: "Sarah", title: "The Batman", reviewText: "Review Text"),
-    Review(username: "Oscar", title: "The Duckman", reviewText: "Review Text"),
-    Review(username: "Joakim", title: "The Birdman", reviewText: "Review Text")
+    Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Oscar", title: "The Duckman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Joakim", title: "The Birdman", rating: "5/5", reviewText: "Review Text...")
 ]
 
 struct HomeView_Previews: PreviewProvider {
