@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+var um = UserManager()
+
 enum Status {
     case WelcomeView, HomeView
 }
