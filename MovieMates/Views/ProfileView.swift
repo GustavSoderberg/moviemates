@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 
 
 struct ProfileView: View {
@@ -21,7 +21,7 @@ struct ProfileView: View {
             
             ZStack{
                 
-                Text("Username")
+                Text(um.currentUser!.username)
                     .font(.largeTitle)
                     .lineLimit(1)
                     .frame(width: 250)
@@ -44,9 +44,14 @@ struct ProfileView: View {
             }
             }
             Spacer()
-            Image(systemName: "person")
-                .resizable()
-                .frame(width: 50.0, height: 50.0)
+            AsyncImage(url: um.currentUser!.photoUrl) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(50)
+            } placeholder: {
+                ProgressView()
+            }
             Spacer()
             
                 
