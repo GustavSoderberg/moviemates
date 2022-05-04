@@ -6,71 +6,185 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 
 
 struct ProfileView: View {
     
-    @State var index = ""
+    @State var index = "reviews"
     @State private var showingSheet = false
-   
     
     
     var body: some View {
-        
+        ZStack{
+            Color("background")
         VStack{
-            
-            HStack{
+                        
+            ZStack{
                 
-            
-             Text("USERNAME")
-                .font(.largeTitle)
+
+                Text(um.currentUser!.username)
+                    .font(.largeTitle)
+                    .lineLimit(1)
+                    .frame(width: 250)
+                    
+                HStack{
+                    Spacer()
                 
                 Button {
-                    showingSheet.toggle()
+                    showingSheet = true
                 } label: {
                     Image(systemName: "slider.horizontal.3")
                         .resizable()
                         .frame(width: 25, height: 25)
+                        .padding(.trailing, 30)
                 }.sheet(isPresented: $showingSheet) {
-                    SheetView()
-
-            }
-            }
-            Spacer()
-            
-            Image(systemName: "person")
-                .resizable()
-                    .frame(width: 50.0, height: 50.0)
-            
-        Spacer()
-        HStack{
-            
-            Picker(selection: $index,
-                   label: Text("Gender"),
-                   content: {
-                Text("Reviews").tag("reviews")
-                Text("Wishlist").tag("wishlist")
-                Text("About").tag("about")
+                    SettingSheetView(showProfileSheet: $showingSheet)
+                    
+                }
                 
-            })
-                .padding()
-                .pickerStyle(SegmentedPickerStyle())
-            
-        }
-        
+            }
+            }
             Spacer()
-    }
+            AsyncImage(url: um.currentUser!.photoUrl) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(50)
+            } placeholder: {
+                ProgressView()
+            }
+            Spacer()
+            
+                
+                Picker(selection: $index,
+                       label: Text("Reviews"),
+                       content: {
+                    Text("Reviews").tag("reviews")
+                    Text("Watchlist").tag("watchlist")
+                    Text("About").tag("about")
+                    
+                })
+                    .padding()
+                    .pickerStyle(SegmentedPickerStyle())
+                    .colorMultiply(.red)
+            
+            ScrollView{
+                LazyVStack{
+                    ForEach(reviews) { review in
+                        MyReviewCardView(review: review)
+                    }
+                }
+                .padding()
+            }
+                
+            
+            switch index {
+            case "reviews":
+                UserReviewView()
+            case "watchlist":
+                WatchListView()
+            case "about":
+                AboutMeView()
+            default:
+                UserReviewView()
+            }
+            
+            Spacer()
+        }
     }
 }
 
+}
 
-struct SheetView: View {
-    @Environment(\.dismiss) var dismiss
+struct MyReviewCardView: View {
+    
+    let review: Review
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(.gray)
+            HStack{
+                Image(systemName: "film")
+                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                    .frame(width: 100, height: 150, alignment: .center)
+                    .border(Color.black, width: 3)
+                VStack(alignment: .leading){
+                    
+                    HStack{
+                        Text(review.username)
+                        Spacer()
+                        Text(review.timestamp.formatted())
+                            .font(.system(size: 12))
+                    }
+                    .padding(.bottom, 1)
+                    Text(review.title)
+                        .font(.title)
+                    Text(review.rating)
+                    Spacer()
+                    Text(review.reviewText)
+                    Spacer()
+                }
+            }
+            .padding()
+            
+            
+        }
+    }
+}
+struct TheReviews: Identifiable {
+    var id = UUID()
+    let username: String
+    let title: String
+    let rating: String
+    let reviewText: String
+    let timestamp = Date.now
+}
 
+private var reviews = [
+    Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Oscar", title: "The Duckman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Joakim", title: "The Birdman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Review Text...")
+]
+struct UserReviewView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Hej min favoritfilm är Batman!!")
+            
+        }
+        
+    }
+}
+struct WatchListView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Jag vill se den nya Dr Strange!!")
+            
+        }
+        
+    }
+}
+struct AboutMeView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Tjo! Jag gillar att kolla på film!!")
+            
+        }
+        
+    }
+}
+
+struct SettingSheetView: View {
+    @Binding var showProfileSheet: Bool
+    
     var body: some View {
         Button("Press to dismiss") {
-            dismiss()
+            showProfileSheet = false
         }
         .font(.title)
         .padding()

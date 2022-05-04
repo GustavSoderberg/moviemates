@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+var um = UserManager()
+
 enum Status {
     case WelcomeView, HomeView
 }
@@ -14,6 +16,7 @@ enum Status {
 struct ContentView: View {
     
     @State var viewShowing: Status = .WelcomeView
+    @State var text = ""
     
     var body: some View {
         
@@ -36,7 +39,7 @@ struct ContentView: View {
                             Image(systemName: "house")
                             Text("Home")
                         }
-                    SearchView()
+                    SearchView(text: $text)
                         .tabItem {
                             Image(systemName: "magnifyingglass")
                             Text("Search")
