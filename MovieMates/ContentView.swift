@@ -16,7 +16,6 @@ struct ContentView: View {
     @State var viewShowing: Status = .WelcomeView
     
     var body: some View {
-        
         VStack {
             switch self.viewShowing {
                 

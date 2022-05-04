@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F785ABB2821608700905C6B /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F785ABA2821608700905C6B /* MovieView.swift */; };
 		3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */; };
 		3F2F5680281FE5EA00C6AF76 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F567F281FE5EA00C6AF76 /* ContentView.swift */; };
 		3F2F5682281FE5EB00C6AF76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F5681281FE5EB00C6AF76 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F785ABA2821608700905C6B /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		3F2F567A281FE5EA00C6AF76 /* MovieMates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieMates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMatesApp.swift; sourceTree = "<group>"; };
 		3F2F567F281FE5EA00C6AF76 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				3F2F568F281FEEAE00C6AF76 /* HomeView.swift */,
 				3F2F5691281FEEE200C6AF76 /* ProfileView.swift */,
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
+				1F785ABA2821608700905C6B /* MovieView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			files = (
 				3F2F5680281FE5EA00C6AF76 /* ContentView.swift in Sources */,
 				3F2F5690281FEEAE00C6AF76 /* HomeView.swift in Sources */,
+				1F785ABB2821608700905C6B /* MovieView.swift in Sources */,
 				3F2F5692281FEEE200C6AF76 /* ProfileView.swift in Sources */,
 				3F2F568E281FECBA00C6AF76 /* WelcomeView.swift in Sources */,
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
