@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     @State var index = "friends"
+    @State var showMovieView = false
     
     var body: some View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
+            
             VStack{
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag("friends")
@@ -30,7 +33,12 @@ struct HomeView: View {
                         switch index {
                         case "friends":
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review)
+                                Button {
+                                    showMovieView = true
+                                } label: {
+                                    ReviewCardView(review: review)
+                                }
+                                .buttonStyle(.plain)
                             }
                         case "trending":
                             ForEach(trendingReviews) { review in
@@ -42,6 +50,9 @@ struct HomeView: View {
                             }
                         }
                     }.padding()
+                }
+                .sheet(isPresented: $showMovieView) {
+                    MovieView()
                 }
             }
         }
@@ -117,8 +128,8 @@ private var trendingReviews = [
     Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!")
 ]
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//    }
+//}
