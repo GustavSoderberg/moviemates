@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FABF9012822B734006F5259 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABF9002822B734006F5259 /* MovieView.swift */; };
 		3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */; };
 		3F2F5680281FE5EA00C6AF76 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F567F281FE5EA00C6AF76 /* ContentView.swift */; };
 		3F2F5682281FE5EB00C6AF76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F5681281FE5EB00C6AF76 /* Assets.xcassets */; };
@@ -24,11 +25,11 @@
 		3F396FE1282291C000E1D336 /* FirebaseOAuthUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3F396FE0282291C000E1D336 /* FirebaseOAuthUI */; };
 		3F396FE32822940B00E1D336 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F396FE22822940B00E1D336 /* GoogleService-Info.plist */; };
 		3F396FE728229F0100E1D336 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F396FE628229F0100E1D336 /* User.swift */; };
-		415764DD2821676900A9795A /* ProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DC2821676900A9795A /* ProfileSheet.swift */; };
 		415764E02822743300A9795A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DF2822743300A9795A /* UserManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1FABF9002822B734006F5259 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		3F2F567A281FE5EA00C6AF76 /* MovieMates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieMates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieMatesApp.swift; sourceTree = "<group>"; };
 		3F2F567F281FE5EA00C6AF76 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -41,7 +42,6 @@
 		3F396FE22822940B00E1D336 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F396FE428229A9400E1D336 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3F396FE628229F0100E1D336 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		415764DC2821676900A9795A /* ProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheet.swift; sourceTree = "<group>"; };
 		415764DF2822743300A9795A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,12 +105,12 @@
 		3F2F568C281FEC3300C6AF76 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1FABF9002822B734006F5259 /* MovieView.swift */,
 				3F2F567F281FE5EA00C6AF76 /* ContentView.swift */,
 				3F2F568D281FECBA00C6AF76 /* WelcomeView.swift */,
 				3F2F568F281FEEAE00C6AF76 /* HomeView.swift */,
 				3F2F5691281FEEE200C6AF76 /* ProfileView.swift */,
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
-				415764DB2821674900A9795A /* View Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -121,14 +121,6 @@
 				3F396FE628229F0100E1D336 /* User.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		415764DB2821674900A9795A /* View Components */ = {
-			isa = PBXGroup;
-			children = (
-				415764DC2821676900A9795A /* ProfileSheet.swift */,
-			);
-			path = "View Components";
 			sourceTree = "<group>";
 		};
 		415764DE282273AD00A9795A /* ViewModels */ = {
@@ -228,10 +220,10 @@
 				3F2F5692281FEEE200C6AF76 /* ProfileView.swift in Sources */,
 				3F2F568E281FECBA00C6AF76 /* WelcomeView.swift in Sources */,
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
+				1FABF9012822B734006F5259 /* MovieView.swift in Sources */,
 				3F396FE728229F0100E1D336 /* User.swift in Sources */,
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
 				415764E02822743300A9795A /* UserManager.swift in Sources */,
-				415764DD2821676900A9795A /* ProfileSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
