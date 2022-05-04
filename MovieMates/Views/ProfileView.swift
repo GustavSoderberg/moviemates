@@ -11,66 +11,111 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @State var index = ""
+    @State var index = "reviews"
     @State private var showingSheet = false
-   
     
     
     var body: some View {
         
         VStack{
             
-            HStack{
+            ZStack{
                 
-            
-             Text("USERNAME")
-                .font(.largeTitle)
+                Text("Username")
+                    .font(.largeTitle)
+                    .lineLimit(1)
+                    .frame(width: 250)
+                    
+                HStack{
+                    Spacer()
                 
                 Button {
-                    showingSheet.toggle()
+                    showingSheet = true
                 } label: {
                     Image(systemName: "slider.horizontal.3")
                         .resizable()
                         .frame(width: 25, height: 25)
+                        .padding(.trailing, 30)
                 }.sheet(isPresented: $showingSheet) {
-                    SheetView()
-
+                    SettingSheetView(showProfileSheet: $showingSheet)
+                    
+                }
+                
             }
             }
             Spacer()
-            
             Image(systemName: "person")
                 .resizable()
-                    .frame(width: 50.0, height: 50.0)
-            
-        Spacer()
-        HStack{
-            
-            Picker(selection: $index,
-                   label: Text("Gender"),
-                   content: {
-                Text("Reviews").tag("reviews")
-                Text("Wishlist").tag("wishlist")
-                Text("About").tag("about")
-                
-            })
-                .padding()
-                .pickerStyle(SegmentedPickerStyle())
-            
-        }
-        
+                .frame(width: 50.0, height: 50.0)
             Spacer()
-    }
+            
+                
+                Picker(selection: $index,
+                       label: Text("Reviews"),
+                       content: {
+                    Text("Reviews").tag("reviews")
+                    Text("Watchlist").tag("watchlist")
+                    Text("About").tag("about")
+                    
+                })
+                    .padding()
+                    .pickerStyle(SegmentedPickerStyle())
+                
+            
+            switch index {
+            case "reviews":
+                UserReviewView()
+            case "watchlist":
+                WatchListView()
+            case "about":
+                AboutMeView()
+            default:
+                UserReviewView()
+            }
+            
+            Spacer()
+        }
     }
 }
 
 
-struct SheetView: View {
-    @Environment(\.dismiss) var dismiss
+struct UserReviewView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Hej min favoritfilm är Batman!!")
+            
+        }
+        
+    }
+}
+struct WatchListView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Jag vill se den nya Dr Strange!!")
+            
+        }
+        
+    }
+}
+struct AboutMeView: View {
+    
+    var body: some View{
+        VStack{
+            Text("Tjo! Jag gillar att kolla på film!!")
+            
+        }
+        
+    }
+}
 
+struct SettingSheetView: View {
+    @Binding var showProfileSheet: Bool
+    
     var body: some View {
         Button("Press to dismiss") {
-            dismiss()
+            showProfileSheet = false
         }
         .font(.title)
         .padding()
