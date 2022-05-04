@@ -17,7 +17,7 @@ struct ProfileSheet: View {
     init() {
             UITextView.appearance().backgroundColor = .clear
         }
-     
+    
     var body: some View {
         VStack {
             
@@ -122,4 +122,3 @@ struct ProfileSheet_Previews: PreviewProvider {
         ProfileSheet()
     }
 }
-
