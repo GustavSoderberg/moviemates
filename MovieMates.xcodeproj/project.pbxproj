@@ -16,6 +16,7 @@
 		3F2F5692281FEEE200C6AF76 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F5691281FEEE200C6AF76 /* ProfileView.swift */; };
 		3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F5693281FEF1200C6AF76 /* SearchView.swift */; };
 		415764DD2821676900A9795A /* ProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DC2821676900A9795A /* ProfileSheet.swift */; };
+		415764E02822743300A9795A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DF2822743300A9795A /* UserManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		3F2F5691281FEEE200C6AF76 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3F2F5693281FEF1200C6AF76 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		415764DC2821676900A9795A /* ProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheet.swift; sourceTree = "<group>"; };
+		415764DF2822743300A9795A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */,
 				3F2F567F281FE5EA00C6AF76 /* ContentView.swift */,
 				3F2F568C281FEC3300C6AF76 /* Views */,
+				415764DE282273AD00A9795A /* ViewModels */,
 				3F2F5681281FE5EB00C6AF76 /* Assets.xcassets */,
 				3F2F5683281FE5EB00C6AF76 /* Preview Content */,
 			);
@@ -96,6 +99,14 @@
 				415764DC2821676900A9795A /* ProfileSheet.swift */,
 			);
 			path = "View Components";
+			sourceTree = "<group>";
+		};
+		415764DE282273AD00A9795A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				415764DF2822743300A9795A /* UserManager.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,6 +185,7 @@
 				3F2F568E281FECBA00C6AF76 /* WelcomeView.swift in Sources */,
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
+				415764E02822743300A9795A /* UserManager.swift in Sources */,
 				415764DD2821676900A9795A /* ProfileSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
