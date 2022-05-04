@@ -18,6 +18,8 @@ struct ProfileView: View {
     var body: some View {
         ZStack{
             Color("background")
+                .ignoresSafeArea()
+            
         VStack{
                         
             ZStack{
