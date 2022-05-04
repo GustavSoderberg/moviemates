@@ -17,7 +17,7 @@ struct WelcomeView: View {
     @Binding var viewShowing: Status
     @State var showLoginView = showLoginViewGlobal
     
-    @State var username = ""
+    @State var username = "Movie mastr 👽"
     var body: some View {
         ZStack {
             Color("background")
