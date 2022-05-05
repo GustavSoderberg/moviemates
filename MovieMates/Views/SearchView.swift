@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @Binding var text: String
-   
+    
     
     @State var index = "movies"
     @State private var isEditing = false
@@ -53,7 +53,6 @@ struct SearchView: View {
                                 }
                             }
                         )
-                
                 }
                 
                 Picker(selection: $index,
@@ -77,30 +76,23 @@ struct SearchView: View {
                 default:
                     moviesAndSeriesView()
                 }
-
-             
-                
-            }
-            
-           
             }
         }
-        
     }
+}
 struct moviesAndSeriesView: View {
     
     var body: some View{
         VStack{
             ScrollView{
                 LazyVStack{
-                    ForEach(searchResults) { result in
+                    ForEach(searchResultsMovies) { result in
                         MovieCardView(movie: result)
                     }
                 }
                 .padding()
             }
         }
-        
     }
 }
 
@@ -108,13 +100,49 @@ struct usersView: View {
     
     var body: some View{
         VStack{
-            Text("hej hej här ska Users visas")
+            ScrollView{
+                LazyVStack{
+                    ForEach(searchResultsUsers) { result in
+                        UserCardView(user: result)
+                    }
+                }
+                .padding()
+            }
         }
-        
     }
 }
 
-private var searchResults = [
+struct UserCardView: View {
+    
+    let user: User
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(.gray)
+            HStack(alignment: .top){
+                Image(systemName: "film")
+                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                    .frame(width: 100, height: 150, alignment: .center)
+                    .border(Color.black, width: 3)
+                VStack(alignment: .leading){
+                    Text(user.username)
+                }
+                Spacer()
+            }
+            .padding()
+        }
+    }
+}
+
+private var searchResultsUsers = [
+    User(documentId: "", authId: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
+    User(documentId: "", authId: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
+    User(documentId: "", authId: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
+    User(documentId: "", authId: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0)
+]
+
+private var searchResultsMovies = [
     Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
     Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
     Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
