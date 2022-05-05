@@ -120,11 +120,12 @@ struct UserCardView: View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
-            HStack(alignment: .top){
-                Image(systemName: "film")
-                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
-                    .frame(width: 100, height: 150, alignment: .center)
-                    .border(Color.black, width: 3)
+            HStack{
+                Image(systemName: "person.crop.circle")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(25)
                 VStack(alignment: .leading){
                     Text(user.username)
                 }
