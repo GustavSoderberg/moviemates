@@ -91,8 +91,14 @@ struct moviesAndSeriesView: View {
     
     var body: some View{
         VStack{
-            Text("Här ska filmer visas")
-            
+            ScrollView{
+                LazyVStack{
+                    ForEach(searchResults) { result in
+                        MovieCardView(movie: result)
+                    }
+                }
+                .padding()
+            }
         }
         
     }
@@ -107,6 +113,12 @@ struct usersView: View {
         
     }
 }
+
+private var searchResults = [
+    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
+    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
+    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
+]
 
 
 struct SearchView_Previews: PreviewProvider {

@@ -91,6 +91,7 @@ struct ReviewCardView: View {
                     Spacer()
                     Text(review.reviewText)
                         .font(.system(size: 15))
+                        .lineLimit(3)
                     Spacer()
                 }
             }
@@ -105,15 +106,6 @@ func formatDate(date: Date) -> String{
     return dateFormatter.string(from: date)
 }
 
-
-struct Review: Identifiable {
-    var id = UUID()
-    let username: String
-    let title: String
-    let rating: String
-    let reviewText: String
-    let timestamp = Date.now
-}
 
 private var friendsReviews = [
     Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
