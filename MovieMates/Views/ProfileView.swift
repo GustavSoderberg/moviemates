@@ -20,44 +20,44 @@ struct ProfileView: View {
             Color("background")
                 .ignoresSafeArea()
             
-        VStack{
+            VStack{
+                
+                ZStack{
+                    
+                    
+                    Text(um.currentUser!.username)
+                        .font(.largeTitle)
+                        .lineLimit(1)
+                        .frame(width: 250)
+                    
+                    HStack{
+                        Spacer()
                         
-            ZStack{
-                
-
-                Text(um.currentUser!.username)
-                    .font(.largeTitle)
-                    .lineLimit(1)
-                    .frame(width: 250)
-                    
-                HStack{
-                    Spacer()
-                
-                Button {
-                    showingSheet = true
-                } label: {
-                    Image(systemName: "slider.horizontal.3")
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                        .padding(.trailing, 30)
-                }.sheet(isPresented: $showingSheet) {
-                    SettingSheetView(showProfileSheet: $showingSheet)
-                    
+                        Button {
+                            showingSheet = true
+                        } label: {
+                            Image(systemName: "slider.horizontal.3")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .padding(.trailing, 30)
+                        }.sheet(isPresented: $showingSheet) {
+                            SettingSheetView(showProfileSheet: $showingSheet)
+                            
+                        }
+                        
+                    }
                 }
+                Spacer()
+                AsyncImage(url: um.currentUser!.photoUrl) { image in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(50)
+                } placeholder: {
+                    ProgressView()
+                }
+                Spacer()
                 
-            }
-            }
-            Spacer()
-            AsyncImage(url: um.currentUser!.photoUrl) { image in
-                image.resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(50)
-            } placeholder: {
-                ProgressView()
-            }
-            Spacer()
-            
                 
                 Picker(selection: $index,
                        label: Text("Reviews"),
@@ -70,33 +70,26 @@ struct ProfileView: View {
                     .padding()
                     .pickerStyle(SegmentedPickerStyle())
                     .colorMultiply(.red)
-            
-            ScrollView{
-                LazyVStack{
-                    ForEach(reviews) { review in
-                        MyReviewCardView(review: review)
-                    }
-                }
-                .padding()
-            }
                 
-            
-            switch index {
-            case "reviews":
-                UserReviewView()
-            case "watchlist":
-                WatchListView()
-            case "about":
-                AboutMeView()
-            default:
-                UserReviewView()
+                
+                
+                
+                switch index {
+                case "reviews":
+                    UserReviewView()
+                case "watchlist":
+                    WatchListView()
+                case "about":
+                    AboutMeView()
+                default:
+                    UserReviewView()
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
     }
-}
-
+    
 }
 
 struct MyReviewCardView: View {
@@ -150,12 +143,27 @@ private var reviews = [
     Review(username: "Joakim", title: "The Birdman", rating: "5/5", reviewText: "Review Text..."),
     Review(username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Review Text...")
 ]
+
+private var watchlist = [
+    Review(username: "Sarah", title: "Lord of the rings", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Oscar", title: "Batman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Joakim", title: "Barbie", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Gustav", title: "The Birdman", rating: "5/5", reviewText: "Review Text...")
+]
 struct UserReviewView: View {
     
     var body: some View{
         VStack{
             Text("Hej min favoritfilm är Batman!!")
             
+            ScrollView{
+                LazyVStack{
+                    ForEach(reviews) { review in
+                        MyReviewCardView(review: review)
+                    }
+                }
+                .padding()
+            }
         }
         
     }
@@ -166,20 +174,65 @@ struct WatchListView: View {
         VStack{
             Text("Jag vill se den nya Dr Strange!!")
             
+            ScrollView{
+                LazyVStack{
+                    ForEach(watchlist) { review in
+                        MyReviewCardView(review: review)
+                    }
+                }
+                .padding()
+            }
         }
         
     }
 }
 struct AboutMeView: View {
-    
+
     var body: some View{
         VStack{
-            Text("Tjo! Jag gillar att kolla på film!!")
-            
+            ScrollView{
+                HStack{
+                Text("Biography")
+                    .font(.title2)
+                    .padding()
+                    Spacer()
+                }
+                ZStack(alignment: .leading){
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .fill(.gray)
+                        .frame(minHeight: 100)
+
+                    VStack{
+                        Text("sdvbsd")
+                            .padding()
+                            
+                        Spacer()
+                        
+                    }
+                }.padding()
+                HStack{
+                    Text("Summary of \(um.currentUser!.username)")
+                    .font(.title2)
+                    .padding()
+                    Spacer()
+                }
+
+                ZStack(alignment: .leading){
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .fill(.gray)
+                        .frame(minHeight: 100)
+
+                    VStack{
+                        Text("about blblblbbababa ska kasokdak ajsjd jiasd jiasdj as bla bla bla ")
+                            .padding()
+                        Spacer()
+                    }
+                }.padding()
+            }
         }
-        
     }
 }
+
 
 struct SettingSheetView: View {
     @Binding var showProfileSheet: Bool
