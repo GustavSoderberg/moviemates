@@ -33,26 +33,23 @@ struct HomeView: View {
                         switch index {
                         case "friends":
                             ForEach(friendsReviews) { review in
-                                Button {
-                                    showMovieView = true
-                                } label: {
-                                    ReviewCardView(review: review)
-                                }
-                                .buttonStyle(.plain)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
                         case "trending":
                             ForEach(trendingReviews) { review in
-                                ReviewCardView(review: review)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
+                            
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
                         }
                     }.padding()
                 }
                 .sheet(isPresented: $showMovieView) {
-                    MovieView()
+                    MovieViewController()
+                        .preferredColorScheme(.dark)
                 }
             }
         }
@@ -62,6 +59,7 @@ struct HomeView: View {
 struct ReviewCardView: View {
     
     let review: Review
+    @Binding var showMovieView : Bool
     
     var body: some View {
         ZStack{
@@ -75,6 +73,7 @@ struct ReviewCardView: View {
                     .border(Color.black, width: 3)
                     .onTapGesture {
                         print("click!")
+                        showMovieView = true
                     }
                 VStack(alignment: .leading){
                     

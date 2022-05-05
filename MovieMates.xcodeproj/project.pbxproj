@@ -118,8 +118,8 @@
 		3F2F568C281FEC3300C6AF76 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1FABF9002822B734006F5259 /* MovieView.swift */,
 				3F2F567F281FE5EA00C6AF76 /* ContentView.swift */,
+				1FABF9002822B734006F5259 /* MovieView.swift */,
 				3F2F568D281FECBA00C6AF76 /* WelcomeView.swift */,
 				3F2F568F281FEEAE00C6AF76 /* HomeView.swift */,
 				3F2F5691281FEEE200C6AF76 /* ProfileView.swift */,
