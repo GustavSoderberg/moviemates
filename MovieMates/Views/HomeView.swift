@@ -33,26 +33,25 @@ struct HomeView: View {
                         switch index {
                         case "friends":
                             ForEach(friendsReviews) { review in
-                                Button {
-                                    showMovieView = true
-                                } label: {
-                                    ReviewCardView(review: review)
-                                }
-                                .buttonStyle(.plain)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
                         case "trending":
                             ForEach(trendingReviews) { review in
-                                ReviewCardView(review: review)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
+                            
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review)
+                                ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
                         }
                     }.padding()
                 }
+                //TODO: The sheet needs darkmode/lightmode specified based on the device colorScheme
                 .sheet(isPresented: $showMovieView) {
-                    MovieView()
+                    MovieViewController()
+                        .preferredColorScheme(.dark)
+//                        .preferredColorScheme( true ? .dark : .light)
                 }
             }
         }
@@ -62,6 +61,7 @@ struct HomeView: View {
 struct ReviewCardView: View {
     
     let review: Review
+    @Binding var showMovieView : Bool
     
     var body: some View {
         ZStack{
@@ -75,6 +75,7 @@ struct ReviewCardView: View {
                     .border(Color.black, width: 3)
                     .onTapGesture {
                         print("click!")
+                        showMovieView = true
                     }
                 VStack(alignment: .leading){
                     
@@ -90,6 +91,7 @@ struct ReviewCardView: View {
                     Spacer()
                     Text(review.reviewText)
                         .font(.system(size: 15))
+                        .lineLimit(3)
                     Spacer()
                 }
             }
@@ -104,15 +106,6 @@ func formatDate(date: Date) -> String{
     return dateFormatter.string(from: date)
 }
 
-
-struct Review: Identifiable {
-    var id = UUID()
-    let username: String
-    let title: String
-    let rating: String
-    let reviewText: String
-    let timestamp = Date.now
-}
 
 private var friendsReviews = [
     Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),

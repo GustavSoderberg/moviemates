@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileSheet: View {
+struct ReviewSheet: View {
     
     @Environment(\.dismiss) var dismiss
     
@@ -19,6 +19,7 @@ struct ProfileSheet: View {
         }
     
     var body: some View {
+        Spacer()
         VStack {
             
             ZStack(alignment: .leading) {
@@ -110,6 +111,7 @@ struct ProfileSheet: View {
                 
             }
             
+            Spacer()
         }
         
     }
@@ -119,6 +121,6 @@ struct ProfileSheet: View {
 
 struct ProfileSheet_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSheet()
+        ReviewSheet()
     }
 }

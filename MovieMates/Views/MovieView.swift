@@ -7,7 +7,30 @@
 
 import SwiftUI
 
+enum Sheet {
+    case MovieView, ReviewSheet
+}
+
+struct MovieViewController: View {
+    @State var sheetShowing: Sheet = .MovieView
+    
+    var body: some View {
+        
+        switch self.sheetShowing {
+            
+        case .MovieView:
+            MovieView(sheetShowing: $sheetShowing)
+            
+        case .ReviewSheet:
+            ReviewSheet()
+            
+        }
+    }
+}
+
 struct MovieView: View {
+    @Binding var sheetShowing: Sheet
+    
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var ratingGlobalWidth : Float = 30
@@ -16,80 +39,100 @@ struct MovieView: View {
     @State var ratingLocalScore : String = "0"
     
     var body: some View {
-        VStack(spacing: 0){
-            HStack{
-                Image("bill_poster")
-                    .resizable()
-                    .frame(width: 80, height: 140)
-                VStack {
-                    Text("Movie Title")
-                    Text("Movie Description")
+        ZStack {
+            Color("background")
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0){
+                
+                HStack {
+                    
+                    Spacer()
+                    
+                    Button {
+                        sheetShowing = .ReviewSheet
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .foregroundColor(Color.white)
+                    }
+                    .padding()
+
                 }
-            }
-            HStack{
-                Text("RATINGS:")
-                    .padding(.leading)
-                Spacer()
-            }
-        
-            ZStack{
-                Rectangle()
-                    .padding(.horizontal)
-                    .frame(height: 80)
-                    .foregroundColor(.gray)
-                VStack {
-                    
-                    
-                    
-                    HStack{
-                        Text("GLOBAL")
-                            .foregroundColor(.white)
-                        Spacer()
-                        HStack(spacing: 2) {
-                                ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: ratingGlobalScore)
-                                }
-                            }
-                        .frame(height: 20)
-                        .onAppear(perform: {
-                            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
-                            if ratingGlobalScore.hasSuffix("0") {
-                                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-                            }
-                        })
-                        
-                        Text("\(ratingGlobalScore)")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: 30, alignment: .leading)
-                        Spacer()
+                
+                HStack{
+                    Image("bill_poster")
+                        .resizable()
+                        .frame(width: 80, height: 140)
+                    VStack {
+                        Text("Movie Title")
+                        Text("Movie Description")
                     }
-                    .padding(.horizontal, 30.0)
-                    
-                    
-                    
-                    HStack{
-                        Text("FRIENDS")
-                            .foregroundColor(.white)
-                        Spacer()
-                        HStack(spacing: 2) {
-                                ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: ratingLocalScore)
-                                }
-                            }
-                        .frame(height: 20)
-                        .onAppear(perform: {
-                            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
-                            if ratingLocalScore.hasSuffix("0") {
-                                ratingLocalScore = String(ratingLocalScore.prefix(1))
-                            }
-                        })
+                }
+                HStack{
+                    Text("RATINGS:")
+                        .padding(.leading)
+                    Spacer()
+                }
+            
+                ZStack{
+                    Rectangle()
+                        .padding(.horizontal)
+                        .frame(height: 80)
+                        .foregroundColor(.gray)
+                    VStack {
                         
-                        Text("\(ratingLocalScore)")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: 30, alignment: .leading)
-                        Spacer()
+                        
+                        
+                        HStack{
+                            Text("GLOBAL")
+                                .foregroundColor(.white)
+                            Spacer()
+                            HStack(spacing: 2) {
+                                    ForEach(1..<6) { i in
+                                        ReviewClapper(pos: i, score: ratingGlobalScore)
+                                    }
+                                }
+                            .frame(height: 20)
+                            .onAppear(perform: {
+                                ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
+                                if ratingGlobalScore.hasSuffix("0") {
+                                    ratingGlobalScore = String(ratingGlobalScore.prefix(1))
+                                }
+                            })
+                            
+                            Text("\(ratingGlobalScore)")
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 30, alignment: .leading)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30.0)
+                        
+                        
+                        
+                        HStack{
+                            Text("FRIENDS")
+                                .foregroundColor(.white)
+                            Spacer()
+                            HStack(spacing: 2) {
+                                    ForEach(1..<6) { i in
+                                        ReviewClapper(pos: i, score: ratingLocalScore)
+                                    }
+                                }
+                            .frame(height: 20)
+                            .onAppear(perform: {
+                                ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
+                                if ratingLocalScore.hasSuffix("0") {
+                                    ratingLocalScore = String(ratingLocalScore.prefix(1))
+                                }
+                            })
+                            
+                            Text("\(ratingLocalScore)")
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 30, alignment: .leading)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30.0)
                     }
-                    .padding(.horizontal, 30.0)
                 }
             }
         }
@@ -130,9 +173,9 @@ struct ReviewClapper: View {
     }
 }
 
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieView()
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieView()
+//    }
+//}
 

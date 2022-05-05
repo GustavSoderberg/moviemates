@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
+//Global singleton
 var um = UserManager()
+var fm = FirestoreManager()
 
 enum Status {
     case WelcomeView, HomeView
@@ -15,37 +18,52 @@ enum Status {
 
 struct ContentView: View {
     
-    @State var viewShowing: Status = .WelcomeView
+    @ObservedObject var uw = um
+    @State var viewShowing: Status = Auth.auth().currentUser != nil ? .HomeView : .WelcomeView
     @State var text = ""
+    
+    init() {
+        
+        fm.listenToFirestore()
+        
+    }
     
     var body: some View {
         
-        VStack {
-            switch self.viewShowing {
-                
-            case .WelcomeView:
-                WelcomeView(viewShowing: $viewShowing)
-                
-            case .HomeView:
-                
-                TabView {
-                    ProfileView()
-                        .tabItem {
-                            Image(systemName: "person.fill")
-                            Text("Profile")
-                        }
-                    HomeView()
-                        .tabItem {
-                            Image(systemName: "house")
-                            Text("Home")
-                        }
-                    SearchView(text: $text)
-                        .tabItem {
-                            Image(systemName: "magnifyingglass")
-                            Text("Search")
-                        }
+        if um.isLoading {
+            
+            ProgressView()
+            
+        }
+        
+        else {
+            VStack {
+                switch self.viewShowing {
+                    
+                case .WelcomeView:
+                        WelcomeView(viewShowing: $viewShowing)
+                    
+                case .HomeView:
+                    
+                    TabView {
+                        ProfileView()
+                            .tabItem {
+                                Image(systemName: "person.fill")
+                                Text("Profile")
+                            }
+                        HomeView()
+                            .tabItem {
+                                Image(systemName: "house")
+                                Text("Home")
+                            }
+                        SearchView(text: $text)
+                            .tabItem {
+                                Image(systemName: "magnifyingglass")
+                                Text("Search")
+                            }
+                    }
+                    
                 }
-                
             }
         }
     }
