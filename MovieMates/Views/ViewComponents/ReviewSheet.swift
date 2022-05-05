@@ -19,6 +19,7 @@ struct ReviewSheet: View {
         }
     
     var body: some View {
+        Spacer()
         VStack {
             
             ZStack(alignment: .leading) {
@@ -110,6 +111,7 @@ struct ReviewSheet: View {
                 
             }
             
+            Spacer()
         }
         
     }
