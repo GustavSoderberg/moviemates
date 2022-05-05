@@ -24,6 +24,7 @@ struct ProfileView: View {
                 
                 ZStack{
                     
+                    
                     Text(um.currentUser!.username)
                         .font(.largeTitle)
                         .lineLimit(1)
@@ -43,6 +44,7 @@ struct ProfileView: View {
                             SettingSheetView(showProfileSheet: $showingSheet)
                             
                         }
+                        
                     }
                 }
                 Spacer()
@@ -56,6 +58,7 @@ struct ProfileView: View {
                 }
                 Spacer()
                 
+                
                 Picker(selection: $index,
                        label: Text("Reviews"),
                        content: {
@@ -68,6 +71,7 @@ struct ProfileView: View {
                     .pickerStyle(SegmentedPickerStyle())
                     .colorMultiply(.red)
                 
+
                 switch index {
                 case "reviews":
                     UserReviewView()
@@ -83,7 +87,67 @@ struct ProfileView: View {
             }
         }
     }
+    
 }
+
+struct MyReviewCardView: View {
+    
+    let review: Review
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(.gray)
+            HStack{
+                Image(systemName: "film")
+                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                    .frame(width: 100, height: 150, alignment: .center)
+                    .border(Color.black, width: 3)
+                VStack(alignment: .leading){
+                    
+                    HStack{
+                        Text(review.username)
+                        Spacer()
+                        Text(review.timestamp.formatted())
+                            .font(.system(size: 12))
+                    }
+                    .padding(.bottom, 1)
+                    Text(review.title)
+                        .font(.title)
+                    Text(review.rating)
+                    Spacer()
+                    Text(review.reviewText)
+                    Spacer()
+                }
+            }
+            .padding()
+            
+            
+        }
+    }
+}
+struct TheReviews: Identifiable {
+    var id = UUID()
+    let username: String
+    let title: String
+    let rating: String
+    let reviewText: String
+    let timestamp = Date.now
+}
+
+private var reviews = [
+    Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Oscar", title: "The Duckman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Joakim", title: "The Birdman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Review Text...")
+]
+
+private var watchlist = [
+    Review(username: "Sarah", title: "Lord of the rings", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Oscar", title: "Batman", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Joakim", title: "Barbie", rating: "5/5", reviewText: "Review Text..."),
+    Review(username: "Gustav", title: "The Birdman", rating: "5/5", reviewText: "Review Text...")
+]
 
 struct UserReviewView: View {
     var body: some View{
@@ -98,6 +162,14 @@ struct UserReviewView: View {
                 .padding()
             }
             
+            ScrollView{
+                LazyVStack{
+                    ForEach(reviews) { review in
+                        MyReviewCardView(review: review)
+                    }
+                }
+                .padding()
+            }
         }
         
     }
@@ -120,14 +192,52 @@ struct WatchListView: View {
 }
 
 struct AboutMeView: View {
-    
+
     var body: some View{
         VStack{
-            Text("Tjo! Jag gillar att kolla på film!!")
-            
+            ScrollView{
+                HStack{
+                Text("Biography")
+                    .font(.title2)
+                    .padding()
+                    Spacer()
+                }
+                ZStack(alignment: .leading){
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .fill(.gray)
+                        .frame(minHeight: 100)
+
+                    VStack{
+                        Text("sdvbsd")
+                            .padding()
+                            
+                        Spacer()
+                        
+                    }
+                }.padding()
+                HStack{
+                    Text("Summary of \(um.currentUser!.username)")
+                    .font(.title2)
+                    .padding()
+                    Spacer()
+                }
+
+                ZStack(alignment: .leading){
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .fill(.gray)
+                        .frame(minHeight: 100)
+
+                    VStack{
+                        Text("about blblblbbababa ska kasokdak ajsjd jiasd jiasdj as bla bla bla ")
+                            .padding()
+                        Spacer()
+                    }
+                }.padding()
+            }
         }
     }
 }
+
 
 struct SettingSheetView: View {
     @Binding var showProfileSheet: Bool
