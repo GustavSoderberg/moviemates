@@ -23,8 +23,9 @@ struct MovieViewController: View {
             
         case .ReviewSheet:
             ReviewSheet()
-            
         }
+        
+        //sheetShowing = .ReviewSheet
     }
 }
 
@@ -33,10 +34,10 @@ struct MovieView: View {
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
-    @State var ratingGlobalWidth : Float = 30
-    @State var ratingLocalWidth : Float = 90
-    @State var ratingGlobalScore : String = "1.7"
-    @State var ratingLocalScore : String = "4.1"
+    @State var ratingGlobalWidth : Float = 67
+    @State var ratingLocalWidth : Float = 14
+    @State var ratingGlobalScore : String = "0"
+    @State var ratingLocalScore : String = "0"
     
     var body: some View {
         VStack(spacing: 0){
@@ -80,7 +81,7 @@ struct MovieView: View {
                             Spacer()
                             HStack(spacing: 2) {
                                 ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: ratingGlobalScore)
+                                    ReviewClapper(pos: i, score: $ratingGlobalScore)
                                 }
                             }
                             .frame(height: 20)
@@ -98,7 +99,7 @@ struct MovieView: View {
                             Spacer()
                             HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: ratingLocalScore)
+                                        ReviewClapper(pos: i, score: $ratingLocalScore)
                                     }
                                 }
                             .frame(height: 20)
@@ -114,6 +115,8 @@ struct MovieView: View {
             }
         }
         .onAppear(perform: {
+            ratingGlobalWidth = Float(Int.random(in: 1...100))
+            ratingLocalWidth = Float(Int.random(in: 1...100))
             ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
             if ratingGlobalScore.hasSuffix("0") {
                 ratingGlobalScore = String(ratingGlobalScore.prefix(1))
@@ -129,7 +132,7 @@ struct MovieView: View {
 
 struct ReviewClapper: View {
     var pos : Int
-    var score : String
+    @Binding var score : String
     @State var width : Float = 20
     
     var body: some View {
