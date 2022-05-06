@@ -23,8 +23,9 @@ struct MovieViewController: View {
             
         case .ReviewSheet:
             ReviewSheet()
-            
         }
+        
+        //sheetShowing = .ReviewSheet
     }
 }
 
@@ -33,41 +34,34 @@ struct MovieView: View {
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
-    @State var ratingGlobalWidth : Float = 30
-    @State var ratingLocalWidth : Float = 90
+    @State var ratingGlobalWidth : Float = 67
+    @State var ratingLocalWidth : Float = 14
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
     var body: some View {
-        ZStack {
-            Color("background")
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0){
-                
-                HStack {
-                    
-                    Spacer()
-                    
-                    Button {
-                        sheetShowing = .ReviewSheet
-                    } label: {
-                        Image(systemName: "plus.circle")
-                            .foregroundColor(Color.white)
-                    }
-                    .padding()
-
+        VStack(spacing: 0){
+            HStack{
+                Image("bill_poster")
+                    .resizable()
+                    .frame(width: 80, height: 140)
+                VStack {
+                    Text("Movie Title")
+                    Text("Movie Description")
                 }
+            }
+            HStack{
+                Text("RATINGS:")
+                    .padding(.leading)
+                Spacer()
+            }
+        
+            ZStack{
+                Rectangle()
+                    .padding(.horizontal)
+                    .frame(height: 80)
+                    .foregroundColor(.gray)
                 
-                HStack{
-                    Image("bill_poster")
-                        .resizable()
-                        .frame(width: 80, height: 140)
-                    VStack {
-                        Text("Movie Title")
-                        Text("Movie Description")
-                    }
-                }
                 HStack{
                     Text("RATINGS:")
                         .padding(.leading)
@@ -81,24 +75,16 @@ struct MovieView: View {
                         .foregroundColor(.gray)
                     VStack {
                         
-                        
-                        
                         HStack{
                             Text("GLOBAL")
                                 .foregroundColor(.white)
                             Spacer()
                             HStack(spacing: 2) {
-                                    ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: ratingGlobalScore)
-                                    }
+                                ForEach(1..<6) { i in
+                                    ReviewClapper(pos: i, score: $ratingGlobalScore)
                                 }
+                            }
                             .frame(height: 20)
-                            .onAppear(perform: {
-                                ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
-                                if ratingGlobalScore.hasSuffix("0") {
-                                    ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-                                }
-                            })
                             
                             Text("\(ratingGlobalScore)")
                                 .foregroundColor(.white)
@@ -107,24 +93,16 @@ struct MovieView: View {
                         }
                         .padding(.horizontal, 30.0)
                         
-                        
-                        
                         HStack{
                             Text("FRIENDS")
                                 .foregroundColor(.white)
                             Spacer()
                             HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: ratingLocalScore)
+                                        ReviewClapper(pos: i, score: $ratingLocalScore)
                                     }
                                 }
                             .frame(height: 20)
-                            .onAppear(perform: {
-                                ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
-                                if ratingLocalScore.hasSuffix("0") {
-                                    ratingLocalScore = String(ratingLocalScore.prefix(1))
-                                }
-                            })
                             
                             Text("\(ratingLocalScore)")
                                 .foregroundColor(.white)
@@ -136,12 +114,25 @@ struct MovieView: View {
                 }
             }
         }
+        .onAppear(perform: {
+            ratingGlobalWidth = Float(Int.random(in: 1...100))
+            ratingLocalWidth = Float(Int.random(in: 1...100))
+            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
+            if ratingGlobalScore.hasSuffix("0") {
+                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
+            }
+            
+            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
+            if ratingLocalScore.hasSuffix("0") {
+                ratingLocalScore = String(ratingLocalScore.prefix(1))
+            }
+        })
     }
 }
 
 struct ReviewClapper: View {
     var pos : Int
-    var score : String
+    @Binding var score : String
     @State var width : Float = 20
     
     var body: some View {
@@ -165,10 +156,12 @@ struct ReviewClapper: View {
         .onAppear(perform: {
             if Int(score.prefix(1)) ?? 0 >= pos {
                 width = 20
+            } else if ((Int(score.prefix(1)) ?? 0) + 1) == pos {
+                width = ((Float(score.prefix(3)) ?? 0) - (Float(score.prefix(1)) ?? 0))*20
             } else {
-                width = (Float(score.prefix(3)) ?? 0)*2
+                width = 0
             }
-            print("pos: \(pos) width: \(width)")
+            print("pos: \(pos), score: \(score), width: \(width)")
         })
     }
 }
