@@ -7,7 +7,30 @@
 
 import SwiftUI
 
+enum Sheet {
+    case MovieView, ReviewSheet
+}
+
+struct MovieViewController: View {
+    @State var sheetShowing: Sheet = .MovieView
+    
+    var body: some View {
+        
+        switch self.sheetShowing {
+            
+        case .MovieView:
+            MovieView(sheetShowing: $sheetShowing)
+            
+        case .ReviewSheet:
+            ReviewSheet()
+            
+        }
+    }
+}
+
 struct MovieView: View {
+    @Binding var sheetShowing: Sheet
+    
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var ratingGlobalWidth : Float = 30
@@ -54,27 +77,71 @@ struct MovieView: View {
                             .frame(maxWidth: 30, alignment: .leading)
                         Spacer()
                     }
-                    .padding(.horizontal, 30.0)
-                    
-                    
-                    
-                    HStack{
-                        Text("FRIENDS")
-                            .foregroundColor(.white)
-                        Spacer()
-                        HStack(spacing: 2) {
-                                ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: ratingLocalScore)
+                    .padding()
+
+                }
+                
+                HStack{
+                    Image("bill_poster")
+                        .resizable()
+                        .frame(width: 80, height: 140)
+                    VStack {
+                        Text("Movie Title")
+                        Text("Movie Description")
+                    }
+                }
+                HStack{
+                    Text("RATINGS:")
+                        .padding(.leading)
+                    Spacer()
+                }
+            
+                ZStack{
+                    Rectangle()
+                        .padding(.horizontal)
+                        .frame(height: 80)
+                        .foregroundColor(.gray)
+                    VStack {
+                        
+                        
+                        
+                        HStack{
+                            Text("GLOBAL")
+                                .foregroundColor(.white)
+                            Spacer()
+                            HStack(spacing: 2) {
+                                    ForEach(1..<6) { i in
+                                        ReviewClapper(pos: i, score: ratingGlobalScore)
+                                    }
                                 }
                         }
                         .frame(height: 20)
                         
-                        Text("\(ratingLocalScore)")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: 30, alignment: .leading)
-                        Spacer()
+                        
+                        HStack{
+                            Text("FRIENDS")
+                                .foregroundColor(.white)
+                            Spacer()
+                            HStack(spacing: 2) {
+                                    ForEach(1..<6) { i in
+                                        ReviewClapper(pos: i, score: ratingLocalScore)
+                                    }
+                                }
+                            .frame(height: 20)
+                            .onAppear(perform: {
+                                ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
+                                if ratingLocalScore.hasSuffix("0") {
+                                    ratingLocalScore = String(ratingLocalScore.prefix(1))
+                                }
+                            })
+                            
+                            Text("\(ratingLocalScore)")
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 30, alignment: .leading)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30.0)
                     }
-                    .padding(.horizontal, 30.0)
                 }
             }
         }
@@ -128,9 +195,9 @@ struct ReviewClapper: View {
     }
 }
 
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieView()
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieView()
+//    }
+//}
 

@@ -49,8 +49,17 @@ struct WelcomeView: View {
                 Button {
                     if Auth.auth().currentUser != nil && !username.isEmpty {
                         
-                        um.register(username: username)
-                        viewShowing = .HomeView
+                        if um.login() {
+                            
+                            viewShowing = .HomeView
+                            
+                        }
+                        else {
+                            
+                            um.register(username: username)
+                            viewShowing = .HomeView
+                            
+                        }
                         
                     }
                 } label: {
@@ -79,8 +88,14 @@ struct WelcomeView: View {
                 }
             }
             
-        }.sheet(isPresented: $showLoginView) {
+        }.sheet(isPresented: $showLoginView, onDismiss: {
+            
+            viewShowing = um.login() ? .HomeView : .WelcomeView
+            
+        }) {
+            
             LoginView(showLoginView: $showLoginView)
+            
         }
 
     }
