@@ -43,6 +43,11 @@ struct ContentView: View {
                             Image(systemName: "magnifyingglass")
                             Text("Search")
                         }
+                    MovieView()
+                        .tabItem {
+                            Image(systemName: "film")
+                            Text("Movie")
+                        }
                 }
                 
             }

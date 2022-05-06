@@ -12,8 +12,8 @@ struct MovieView: View {
     @State var description : String = "Movie Description"
     @State var ratingGlobalWidth : Float = 30
     @State var ratingLocalWidth : Float = 90
-    @State var ratingGlobalScore : String = "0"
-    @State var ratingLocalScore : String = "0"
+    @State var ratingGlobalScore : String = "2.5"
+    @State var ratingLocalScore : String = "2.3"
     
     var body: some View {
         VStack(spacing: 0){
@@ -38,25 +38,16 @@ struct MovieView: View {
                     .frame(height: 80)
                     .foregroundColor(.gray)
                 VStack {
-                    
-                    
-                    
                     HStack{
                         Text("GLOBAL")
                             .foregroundColor(.white)
                         Spacer()
                         HStack(spacing: 2) {
-                                ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: ratingGlobalScore)
-                                }
+                            ForEach(1..<6) { i in
+                                ReviewClapper(pos: i, score: ratingGlobalScore)
                             }
+                        }
                         .frame(height: 20)
-                        .onAppear(perform: {
-                            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
-                            if ratingGlobalScore.hasSuffix("0") {
-                                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-                            }
-                        })
                         
                         Text("\(ratingGlobalScore)")
                             .foregroundColor(.white)
@@ -75,14 +66,8 @@ struct MovieView: View {
                                 ForEach(1..<6) { i in
                                     ReviewClapper(pos: i, score: ratingLocalScore)
                                 }
-                            }
+                        }
                         .frame(height: 20)
-                        .onAppear(perform: {
-                            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
-                            if ratingLocalScore.hasSuffix("0") {
-                                ratingLocalScore = String(ratingLocalScore.prefix(1))
-                            }
-                        })
                         
                         Text("\(ratingLocalScore)")
                             .foregroundColor(.white)
@@ -93,6 +78,17 @@ struct MovieView: View {
                 }
             }
         }
+        .onAppear(perform: {
+            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
+            if ratingGlobalScore.hasSuffix("0") {
+                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
+            }
+            
+            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
+            if ratingLocalScore.hasSuffix("0") {
+                ratingLocalScore = String(ratingLocalScore.prefix(1))
+            }
+        })
     }
 }
 
@@ -122,10 +118,12 @@ struct ReviewClapper: View {
         .onAppear(perform: {
             if Int(score.prefix(1)) ?? 0 >= pos {
                 width = 20
-            } else {
+            } else if Int(score.prefix(1)) ?? 0 + 1 == pos {
                 width = (Float(score.prefix(3)) ?? 0)*2
+            } else {
+                width = 0
             }
-            print("pos: \(pos) width: \(width)")
+            print("pos: \(pos), score: \(score), width: \(width)")
         })
     }
 }
