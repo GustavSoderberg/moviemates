@@ -62,7 +62,6 @@ struct ContentView: View {
                                 Text("Search")
                             }
                     }
-                    
                 }
             }
         }
