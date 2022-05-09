@@ -21,12 +21,12 @@ struct MovieCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                 VStack(alignment: .leading){
-                    Text(movie.title)
+                    Text(movie.title!)
                         .font(.title2)
                         .padding(.bottom, 4)
                         .lineLimit(2)
                     
-                    Text(movie.description)
+                    Text(movie.overview ?? "")
                     Spacer()
                 }
                 Spacer()

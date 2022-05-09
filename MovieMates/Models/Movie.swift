@@ -7,10 +7,40 @@
 
 import Foundation
 
-struct Movie: Identifiable {
+struct Movie: Identifiable, Codable {
     
-    let id = UUID()
-    let title: String
-    let description: String
+//    var id = UUID()
+//    var title: String
+//    var description: String
+    let id: Int
+    let adult: Bool?
+    let backdropPath: String?
+    let genreIDS: [Int]?
+    let originalLanguage: String?
+    let originalTitle: String?
+    let overview: String?
+    let releaseDate: String?
+    let posterPath: String?
+    let popularity: Double?
+    let title: String?
+    let video: Bool?
+    let voteAverage, voteCount: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case adult
+        case backdropPath = "backdrop_path"
+        case genreIDS = "genre_ids"
+        case id
+        case originalLanguage = "original_language"
+        case originalTitle = "original_title"
+        case overview
+        case releaseDate = "release_date"
+        case posterPath = "poster_path"
+        case popularity
+        case video
+        case title
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
+    }
     
 }
