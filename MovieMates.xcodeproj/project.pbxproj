@@ -37,6 +37,7 @@
 		B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919B2827F97F00B9ABF4 /* SearchBar.swift */; };
 		B548919E282800B000B9ABF4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919D282800B000B9ABF4 /* Constants.swift */; };
 		B54891A0282830F100B9ABF4 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919F282830F100B9ABF4 /* APIResponse.swift */; };
+		B54891A32828FB6F00B9ABF4 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = B54891A22828FB6F00B9ABF4 /* AlamofireImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 			files = (
 				3F396FD82822917B00E1D336 /* FirebaseFirestoreSwift-Beta in Frameworks */,
 				B54891982827B44A00B9ABF4 /* Alamofire in Frameworks */,
+				B54891A32828FB6F00B9ABF4 /* AlamofireImage in Frameworks */,
 				3F396FD42822917B00E1D336 /* FirebaseAuth in Frameworks */,
 				3F396FDF282291C000E1D336 /* FirebaseGoogleAuthUI in Frameworks */,
 				3F396FE1282291C000E1D336 /* FirebaseOAuthUI in Frameworks */,
@@ -204,6 +206,7 @@
 				3F396FDE282291C000E1D336 /* FirebaseGoogleAuthUI */,
 				3F396FE0282291C000E1D336 /* FirebaseOAuthUI */,
 				B54891972827B44A00B9ABF4 /* Alamofire */,
+				B54891A22828FB6F00B9ABF4 /* AlamofireImage */,
 			);
 			productName = MovieMates;
 			productReference = 3F2F567A281FE5EA00C6AF76 /* MovieMates.app */;
@@ -237,6 +240,7 @@
 				3F396FD22822917B00E1D336 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3F396FD9282291C000E1D336 /* XCRemoteSwiftPackageReference "FirebaseUI-iOS" */,
 				B54891962827B44A00B9ABF4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B54891A12828FB6F00B9ABF4 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
 			);
 			productRefGroup = 3F2F567B281FE5EA00C6AF76 /* Products */;
 			projectDirPath = "";
@@ -512,6 +516,14 @@
 				kind = branch;
 			};
 		};
+		B54891A12828FB6F00B9ABF4 /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -554,6 +566,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B54891962827B44A00B9ABF4 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		B54891A22828FB6F00B9ABF4 /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B54891A12828FB6F00B9ABF4 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
