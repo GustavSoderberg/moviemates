@@ -13,6 +13,7 @@ struct ProfileView: View {
     
     @State var index = "reviews"
     @State private var showingSheet = false
+    @State private var changeUsername = ""
     @State private var addFriend = false
     
     var body: some View {
@@ -32,7 +33,7 @@ struct ProfileView: View {
                     HStack{
                         Spacer()
                         
-                        if um.currentUser!.authId != um.currentUser!.authId {
+                        if um.currentUser!.id != um.currentUser!.id {
                             Button {
                                 print("added friendo")
                             } label: {
@@ -52,7 +53,8 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showingSheet) {
-                                SettingsSheet(showProfileSheet: $showingSheet)
+                                //FriendRequestTestView(showProfileSheet: $showingSheet)
+                                SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
                                 
                             }
                         }
@@ -157,10 +159,10 @@ struct AboutMeView: View {
                         .frame(minHeight: 100)
                     
                     VStack{
-                        if um.currentUser!.authId != um.currentUser!.authId {
+                        if um.currentUser!.id != um.currentUser!.id {
                             Text(bio)
                                 .padding()
-                        }else if um.currentUser!.authId == um.currentUser!.authId {
+                        }else if um.currentUser!.id == um.currentUser!.id {
                             TextEditor(text: $bio)
                                 .background(Color("secondary-background"))
                                 .foregroundColor(.white)
@@ -238,10 +240,10 @@ struct MyReviewCardView: View {
 
 
 private var myReviews = [
-    Review(username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-    Review(username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+    Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+    Review(movieId: 414906, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+    Review(movieId: 414906, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
 ]
 
 //private var watchlist = [
@@ -251,9 +253,37 @@ private var myReviews = [
 ////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
 //]
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+struct FriendRequestTestView: View {
+    @Binding var showProfileSheet: Bool
+    @ObservedObject var uq = um
+    
+    var body: some View {
+        Button("Send friend request") {
+            uq.friendRequest(from: uq.currentUser!, to: uq.currentUser!)
+        }
+        
+        Text("Requests:").padding().padding(.top,40)
+        ForEach(uq.currentUser!.frequests, id: \.self) { request in
+            
+            Button {
+                uq.manageFriendRequests(sender: request, accept: true)
+            } label: {
+                Text("Accept request from \(request)")
+            }
+
+            
+        }
+        
+        Text("Friends:").padding().padding(.top,40)
+        ForEach(uq.currentUser!.friends, id: \.self) { friend in
+            
+            Button {
+                um.removeFriend(userId: friend)
+            } label: {
+                Text(friend)
+            }
+
+            
+        }
     }
 }
-

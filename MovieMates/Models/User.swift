@@ -9,17 +9,16 @@ import Foundation
 import FirebaseFirestoreSwift
 
 struct User: Codable, Identifiable {
-    var id = UUID()
     
+    @DocumentID var id : String?
     
-    @DocumentID var documentId : String?
-    
-    let authId: String
     let username: String
     let photoUrl: URL
     let bio : String?
     
-    let friendsArray: [String]?
+    let friends: [String]
+    let frequests: [String]
+    
     let themeId: Int
     
 }

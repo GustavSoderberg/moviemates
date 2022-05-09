@@ -14,10 +14,11 @@ class UserManager: ObservableObject {
     var currentUser: User? = nil
     
     @Published var isLoading = true
+    @Published var refresh = 0
     
     func register(username: String) {
         
-        let user = User(authId: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: nil, friendsArray: nil, themeId: 0)
+        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: nil, friends: [String](), frequests: [String](), themeId: 0)
         
         fm.saveUserToFirestore(user: user)
         currentUser = user
@@ -36,10 +37,10 @@ class UserManager: ObservableObject {
         else {
             for user in listOfUsers {
                 
-                if user.authId == Auth.auth().currentUser!.uid {
+                if user.id == Auth.auth().currentUser!.uid {
                     
                     um.currentUser = user
-                    print("Logged in as \(user.username)")
+                    if um.isLoading { print("Logged in as \(user.username)") }
                     
                     return true
                     
@@ -51,6 +52,54 @@ class UserManager: ObservableObject {
             return false
             
         }
+        
+    }
+    
+    func friendRequest(from: User, to: User) {
+        
+        if from.friends.contains(to.id!){
+            print("\(to.id!) is already your friend")
+        }
+        else if to.frequests.contains(from.id!){
+            print("You've already sent a friend request to this user")
+        }
+        else if !to.frequests.contains(from.id!) && fm.sendFriendRequest(from: from, to: to) {
+            print("✔️ Successfully sent the friend request")
+        }
+        else {
+            print("E: UserManager - friendRequest() Failed to send the request")
+        }
+        
+    }
+    
+    func manageFriendRequests(sender: String, accept: Bool) {
+        
+        if accept {
+            
+            if fm.acceptFriendRequest(you: currentUser!, theirId: sender) {
+                print("✔️ Successfully added user as a friend")
+            }
+            
+            else {
+                print("E: UserManager - manageFriendRequests() Failed to add the friend")
+            }
+        }
+        else {
+            
+            
+        }
+        
+    }
+    
+    func removeFriend(userId: String) {
+        
+        if fm.removeFriend(you: um.currentUser!, theirId: userId) {
+            print("✔️ Successfully removed friend")
+        }
+        else {
+            print("E: UserManager - removeFriend() Failed to remove user")
+        }
+        
         
     }
     

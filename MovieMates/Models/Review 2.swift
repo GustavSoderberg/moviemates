@@ -10,7 +10,6 @@ import Foundation
 struct Review: Identifiable {
     
     let id = UUID()
-    let movieId: Int
     let username: String
     let title: String
     let rating: String

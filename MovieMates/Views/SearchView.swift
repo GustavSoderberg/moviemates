@@ -88,10 +88,15 @@ struct moviesAndSeriesView: View {
     var body: some View{
         VStack{
             SearchBar(text: $viewModel.searchTerm,
-                      onSearchButtonClicked: viewModel.onSearchTapped)
-            List(viewModel.movies, id: \.title) { movie in
+                      onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
+            
+            List(viewModel.movies, id: \.id) { movie in
                 MovieCardView(movie: movie)
+                    .onAppear(){
+                        viewModel.loadMoreContent(currentItem: movie)
+                    }
             }
+
 //            ScrollView{
 //                LazyVStack{
 //                    ForEach(searchResultsMovies) { result in
@@ -145,10 +150,10 @@ struct UserCardView: View {
 }
 
 private var searchResultsUsers = [
-    User(documentId: "", authId: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0)
+    User(id: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
 ]
 
 //private var searchResultsMovies = [
