@@ -13,6 +13,7 @@ struct ProfileView: View {
     
     @State var index = "reviews"
     @State private var showingSheet = false
+    @State private var changeUsername = ""
     @State private var addFriend = false
     
     var body: some View {
@@ -52,7 +53,8 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showingSheet) {
-                                FriendRequestTestView(showProfileSheet: $showingSheet)
+                                //FriendRequestTestView(showProfileSheet: $showingSheet)
+                                SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
                                 
                             }
                         }
