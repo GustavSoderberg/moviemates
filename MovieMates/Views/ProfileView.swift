@@ -13,6 +13,7 @@ struct ProfileView: View {
     
     @State var index = "reviews"
     @State private var showingSheet = false
+    @State private var addFriend = false
     
     
     var body: some View {
@@ -24,7 +25,6 @@ struct ProfileView: View {
                 
                 ZStack{
                     
-                    
                     Text(um.currentUser!.username)
                         .font(.largeTitle)
                         .lineLimit(1)
@@ -33,19 +33,32 @@ struct ProfileView: View {
                     HStack{
                         Spacer()
                         
-                        Button {
-                            showingSheet = true
-                        } label: {
-                            Image(systemName: "slider.horizontal.3")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .padding(.trailing, 30)
-                        }.sheet(isPresented: $showingSheet) {
-                            SettingSheetView(showProfileSheet: $showingSheet)
+                        if um.currentUser!.authId != um.currentUser!.authId {
+                            Button {
+                                print("added friendo")
+                            } label: {
+                                Image(systemName: "person.crop.circle.badge.plus")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing, 20)
+                            }
                             
+                        } else {
+                            
+                            Button {
+                                showingSheet = true
+                            } label: {
+                                Image(systemName: "slider.horizontal.3")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .padding(.trailing, 20)
+                            }.sheet(isPresented: $showingSheet) {
+                                SettingsSheet(showProfileSheet: $showingSheet)
+                                
+                            }
                         }
-                        
                     }
+                    
                 }
                 Spacer()
                 AsyncImage(url: um.currentUser!.photoUrl) { image in
@@ -71,7 +84,7 @@ struct ProfileView: View {
                     .pickerStyle(SegmentedPickerStyle())
                     .colorMultiply(.red)
                 
-
+                
                 switch index {
                 case "reviews":
                     UserReviewView()
@@ -112,9 +125,9 @@ struct WatchListView: View {
             Text("Jag vill se den nya Dr Strange!!")
             ScrollView{
                 LazyVStack{
-//                    ForEach(watchlist) { movie in
-//                        MovieCardView(movie: movie)
-//                    }
+                    //                    ForEach(watchlist) { movie in
+                    //                        MovieCardView(movie: movie)
+                    //                    }
                 }
                 .padding()
             }
@@ -123,41 +136,41 @@ struct WatchListView: View {
 }
 
 struct AboutMeView: View {
-
+    
     var body: some View{
         VStack{
             ScrollView{
                 HStack{
-                Text("Biography")
-                    .font(.title2)
-                    .padding()
+                    Text("Biography")
+                        .font(.title2)
+                        .padding()
                     Spacer()
                 }
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
                         .fill(.gray)
                         .frame(minHeight: 100)
-
+                    
                     VStack{
                         Text("sdvbsd")
                             .padding()
-                            
+                        
                         Spacer()
                         
                     }
                 }.padding()
                 HStack{
                     Text("Summary of \(um.currentUser!.username)")
-                    .font(.title2)
-                    .padding()
+                        .font(.title2)
+                        .padding()
                     Spacer()
                 }
-
+                
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
                         .fill(.gray)
                         .frame(minHeight: 100)
-
+                    
                     VStack{
                         Text("about blblblbbababa ska kasokdak ajsjd jiasd jiasdj as bla bla bla ")
                             .padding()
@@ -170,18 +183,7 @@ struct AboutMeView: View {
 }
 
 
-struct SettingSheetView: View {
-    @Binding var showProfileSheet: Bool
-    
-    var body: some View {
-        Button("Press to dismiss") {
-            showProfileSheet = false
-        }
-        .font(.title)
-        .padding()
-        .background(Color.black)
-    }
-}
+
 
 struct MyReviewCardView: View {
     
