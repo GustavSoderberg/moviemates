@@ -42,6 +42,8 @@ class FirestoreManager {
                 }
                 
                 _ = um.login()
+                
+                um.refresh += 1
                 um.isLoading = false
                 
             }
@@ -57,4 +59,62 @@ class FirestoreManager {
         }
     }
     
+    func sendFriendRequest(from: User, to: User) -> Bool {
+        
+        if let id = to.documentId {
+            
+            db.collection("users").document(id)
+                
+                    .updateData([
+                        
+                        "frequests": FieldValue.arrayUnion([from.authId])
+                        
+                    ])
+            
+            return true
+            
+        }
+        
+        return false
+        
+    }
+    
+    func acceptFriendRequest(you: User, theirId: String) -> Bool {
+        
+        if let id = you.documentId {
+            
+            db.collection("users").document(id)
+                
+                    .updateData([
+                        
+                        "friends": FieldValue.arrayUnion([theirId]),
+                        "frequests": FieldValue.arrayRemove([theirId])
+                        
+                    ])
+            
+            return true
+            
+        }
+        
+        return false
+    }
+    
+    func removeFriend(you: User, theirId: String) -> Bool {
+        
+        if let id = you.documentId {
+            
+            db.collection("users").document(id)
+                
+                    .updateData([
+                        
+                        "friends": FieldValue.arrayRemove([theirId]),
+                        
+                    ])
+            
+            return true
+            
+        }
+        
+        return false
+    }
 }

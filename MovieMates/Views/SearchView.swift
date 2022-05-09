@@ -145,10 +145,10 @@ struct UserCardView: View {
 }
 
 private var searchResultsUsers = [
-    User(documentId: "", authId: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0),
-    User(documentId: "", authId: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0)
+    User(documentId: "", authId: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(documentId: "", authId: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(documentId: "", authId: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(documentId: "", authId: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
 ]
 
 //private var searchResultsMovies = [

@@ -19,7 +19,9 @@ struct User: Codable, Identifiable {
     let photoUrl: URL
     let bio : String?
     
-    let friendsArray: [String]?
+    let friends: [String]
+    let frequests: [String]
+    
     let themeId: Int
     
 }
