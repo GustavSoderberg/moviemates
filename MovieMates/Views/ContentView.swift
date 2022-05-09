@@ -58,6 +58,7 @@ struct ContentView: View {
                                 else {
                                     viewShowing = .WelcomeView
                                 }
+                                
                             }
                         
                     }

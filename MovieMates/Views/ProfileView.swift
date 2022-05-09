@@ -52,7 +52,7 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showingSheet) {
-                                SettingsSheet(showProfileSheet: $showingSheet)
+                                FriendRequestTestView(showProfileSheet: $showingSheet)
                                 
                             }
                         }
@@ -251,9 +251,44 @@ private var myReviews = [
 ////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
 //]
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+struct FriendRequestTestView: View {
+    @Binding var showProfileSheet: Bool
+    @ObservedObject var uq = um
+    
+    var body: some View {
+        Button("Send friend request") {
+            uq.friendRequest(from: uq.currentUser!, to: uq.currentUser!)
+        }
+        
+        Text("Requests:").padding().padding(.top,40)
+        ForEach(uq.currentUser!.frequests, id: \.self) { request in
+            
+            Button {
+                uq.manageFriendRequests(sender: request, accept: true)
+            } label: {
+                Text("Accept request from \(request)")
+            }
+
+            
+        }
+        
+        Text("Friends:").padding().padding(.top,40)
+        ForEach(uq.currentUser!.friends, id: \.self) { friend in
+            
+            Button {
+                um.removeFriend(userId: friend)
+            } label: {
+                Text(friend)
+            }
+
+            
+        }
+        
+        Button {
+            try! Auth.auth().signOut()
+        } label: {
+            Text("Sign out").padding().padding(.top,40)
+        }
+
     }
 }
-
