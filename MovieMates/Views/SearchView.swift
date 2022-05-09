@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @Binding var text: String
+
     
     
     @State var index = "movies"
@@ -21,39 +22,39 @@ struct SearchView: View {
                 .ignoresSafeArea()
             VStack{
                 
-                HStack{
-                    
-                    TextField("Search....", text: $text)
-                        .padding(10)
-                        .padding(.horizontal, 25)
-                        .foregroundColor(.white)
-                        .background(Color(.lightGray))
-                        .cornerRadius(10)
-                        .padding(.horizontal, 10 )
-                        .onTapGesture {
-                            self.isEditing = true
-                        }
-                        .overlay(
-                            HStack{
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.red)
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 10)
-                                
-                                
-                                if isEditing{
-                                    Button(action: {
-                                        self.text = ""
-                                        isEditing = false
-                                    }) {
-                                        Image(systemName: "multiply.circle.fill")
-                                            .foregroundColor(.white)
-                                            .padding(.trailing, 10)
-                                    }
-                                }
-                            }
-                        )
-                }
+//                HStack{
+//
+//                    TextField("Search....", text: $text)
+//                        .padding(10)
+//                        .padding(.horizontal, 25)
+//                        .foregroundColor(.white)
+//                        .background(Color(.lightGray))
+//                        .cornerRadius(10)
+//                        .padding(.horizontal, 10 )
+//                        .onTapGesture {
+//                            self.isEditing = true
+//                        }
+//                        .overlay(
+//                            HStack{
+//                                Image(systemName: "magnifyingglass")
+//                                    .foregroundColor(.red)
+//                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+//                                    .padding(.leading, 20)
+//
+//
+//                                if isEditing{
+//                                    Button(action: {
+//                                        self.text = ""
+//                                        isEditing = false
+//                                    }) {
+//                                        Image(systemName: "multiply.circle.fill")
+//                                            .foregroundColor(.white)
+//                                            .padding(.trailing, 20)
+//                                    }
+//                                }
+//                            }
+//                        )
+//                }
                 
                 Picker(selection: $index,
                        label: Text("Reviews"),
@@ -82,16 +83,23 @@ struct SearchView: View {
 }
 struct moviesAndSeriesView: View {
     
+    @ObservedObject var viewModel = MovieListViewModel()
+    
     var body: some View{
         VStack{
-            ScrollView{
-                LazyVStack{
-                    ForEach(searchResultsMovies) { result in
-                        MovieCardView(movie: result)
-                    }
-                }
-                .padding()
+            SearchBar(text: $viewModel.searchTerm,
+                      onSearchButtonClicked: viewModel.onSearchTapped)
+            List(viewModel.movies, id: \.title) { movie in
+                MovieCardView(movie: movie)
             }
+//            ScrollView{
+//                LazyVStack{
+//                    ForEach(searchResultsMovies) { result in
+//                        MovieCardView(movie: result)
+//                    }
+//                }
+//                .padding()
+//            }
         }
     }
 }
@@ -143,11 +151,11 @@ private var searchResultsUsers = [
     User(documentId: "", authId: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friendsArray: [], themeId: 0)
 ]
 
-private var searchResultsMovies = [
-    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
-    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
-    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
-]
+//private var searchResultsMovies = [
+////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
+////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
+////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
+//]
 
 
 struct SearchView_Previews: PreviewProvider {

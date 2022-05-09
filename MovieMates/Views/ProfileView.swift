@@ -112,9 +112,9 @@ struct WatchListView: View {
             Text("Jag vill se den nya Dr Strange!!")
             ScrollView{
                 LazyVStack{
-                    ForEach(watchlist) { movie in
-                        MovieCardView(movie: movie)
-                    }
+//                    ForEach(watchlist) { movie in
+//                        MovieCardView(movie: movie)
+//                    }
                 }
                 .padding()
             }
@@ -227,11 +227,12 @@ private var myReviews = [
     Review(username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
 ]
 
-private var watchlist = [
-    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
-    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
-    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
-]
+//private var watchlist = [
+//    Movie(id: 1, adult: false, backdropPath: nil, genreIDS: nil, originalLanguage: nil, originalTitle: "spider man", overview: "fasdfdsafasdf", releaseDate: nil, posterPath: nil, popularity: nil, title: "Spooder-Man", video: nil, voteAverage: nil, voteCount: nil)
+////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
+////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
+////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
+//]
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {

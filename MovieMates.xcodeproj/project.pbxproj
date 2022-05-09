@@ -32,6 +32,11 @@
 		55738AC32823CED200A5ED38 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55738AC22823CED200A5ED38 /* Review.swift */; };
 		55738AC52823CF6F00A5ED38 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55738AC42823CF6F00A5ED38 /* Movie.swift */; };
 		55738AC72823D2E300A5ED38 /* MovieCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55738AC62823D2E300A5ED38 /* MovieCardView.swift */; };
+		B54891982827B44A00B9ABF4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B54891972827B44A00B9ABF4 /* Alamofire */; };
+		B548919A2827F68500B9ABF4 /* MovieListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54891992827F68500B9ABF4 /* MovieListViewModel.swift */; };
+		B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919B2827F97F00B9ABF4 /* SearchBar.swift */; };
+		B548919E282800B000B9ABF4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919D282800B000B9ABF4 /* Constants.swift */; };
+		B54891A0282830F100B9ABF4 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919F282830F100B9ABF4 /* APIResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +60,10 @@
 		55738AC22823CED200A5ED38 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		55738AC42823CF6F00A5ED38 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		55738AC62823D2E300A5ED38 /* MovieCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCardView.swift; sourceTree = "<group>"; };
+		B54891992827F68500B9ABF4 /* MovieListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewModel.swift; sourceTree = "<group>"; };
+		B548919B2827F97F00B9ABF4 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		B548919D282800B000B9ABF4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B548919F282830F100B9ABF4 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F396FD82822917B00E1D336 /* FirebaseFirestoreSwift-Beta in Frameworks */,
+				B54891982827B44A00B9ABF4 /* Alamofire in Frameworks */,
 				3F396FD42822917B00E1D336 /* FirebaseAuth in Frameworks */,
 				3F396FDF282291C000E1D336 /* FirebaseGoogleAuthUI in Frameworks */,
 				3F396FE1282291C000E1D336 /* FirebaseOAuthUI in Frameworks */,
@@ -135,6 +145,7 @@
 				3F2F5691281FEEE200C6AF76 /* ProfileView.swift */,
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
 				3F2972C12822C92D00D1616D /* ViewComponents */,
+				B548919B2827F97F00B9ABF4 /* SearchBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -145,6 +156,7 @@
 				3F396FE628229F0100E1D336 /* User.swift */,
 				55738AC22823CED200A5ED38 /* Review.swift */,
 				55738AC42823CF6F00A5ED38 /* Movie.swift */,
+				B548919F282830F100B9ABF4 /* APIResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -153,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				3FC3D1B42823C9970005E8BD /* FirestoreManager.swift */,
+				B548919D282800B000B9ABF4 /* Constants.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -161,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				415764DF2822743300A9795A /* UserManager.swift */,
+				B54891992827F68500B9ABF4 /* MovieListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -189,6 +203,7 @@
 				3F396FDC282291C000E1D336 /* FirebaseFacebookAuthUI */,
 				3F396FDE282291C000E1D336 /* FirebaseGoogleAuthUI */,
 				3F396FE0282291C000E1D336 /* FirebaseOAuthUI */,
+				B54891972827B44A00B9ABF4 /* Alamofire */,
 			);
 			productName = MovieMates;
 			productReference = 3F2F567A281FE5EA00C6AF76 /* MovieMates.app */;
@@ -221,6 +236,7 @@
 			packageReferences = (
 				3F396FD22822917B00E1D336 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3F396FD9282291C000E1D336 /* XCRemoteSwiftPackageReference "FirebaseUI-iOS" */,
+				B54891962827B44A00B9ABF4 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 3F2F567B281FE5EA00C6AF76 /* Products */;
 			projectDirPath = "";
@@ -260,10 +276,14 @@
 				3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */,
 				55738AC52823CF6F00A5ED38 /* Movie.swift in Sources */,
 				3FC3D1B52823C9970005E8BD /* FirestoreManager.swift in Sources */,
+				B548919A2827F68500B9ABF4 /* MovieListViewModel.swift in Sources */,
 				3F396FE728229F0100E1D336 /* User.swift in Sources */,
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
 				3F2972C02822C67D00D1616D /* AppDelegate.swift in Sources */,
+				B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */,
 				415764E02822743300A9795A /* UserManager.swift in Sources */,
+				B548919E282800B000B9ABF4 /* Constants.swift in Sources */,
+				B54891A0282830F100B9ABF4 /* APIResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +504,14 @@
 				kind = branch;
 			};
 		};
+		B54891962827B44A00B9ABF4 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -521,6 +549,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3F396FD9282291C000E1D336 /* XCRemoteSwiftPackageReference "FirebaseUI-iOS" */;
 			productName = FirebaseOAuthUI;
+		};
+		B54891972827B44A00B9ABF4 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B54891962827B44A00B9ABF4 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
