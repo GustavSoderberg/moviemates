@@ -43,4 +43,8 @@ struct Movie: Identifiable, Codable {
         case voteCount = "vote_count"
     }
     
+    var posterURL: URL {
+        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")!
+    }
+    
 }
