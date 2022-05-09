@@ -33,7 +33,7 @@ struct ProfileView: View {
                     HStack{
                         Spacer()
                         
-                        if um.currentUser!.authId != um.currentUser!.authId {
+                        if um.currentUser!.id != um.currentUser!.id {
                             Button {
                                 print("added friendo")
                             } label: {
@@ -159,10 +159,10 @@ struct AboutMeView: View {
                         .frame(minHeight: 100)
                     
                     VStack{
-                        if um.currentUser!.authId != um.currentUser!.authId {
+                        if um.currentUser!.id != um.currentUser!.id {
                             Text(bio)
                                 .padding()
-                        }else if um.currentUser!.authId == um.currentUser!.authId {
+                        }else if um.currentUser!.id == um.currentUser!.id {
                             TextEditor(text: $bio)
                                 .background(Color("secondary-background"))
                                 .foregroundColor(.white)
@@ -285,12 +285,5 @@ struct FriendRequestTestView: View {
 
             
         }
-        
-        Button {
-            try! Auth.auth().signOut()
-        } label: {
-            Text("Sign out").padding().padding(.top,40)
-        }
-
     }
 }
