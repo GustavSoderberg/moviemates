@@ -88,10 +88,15 @@ struct moviesAndSeriesView: View {
     var body: some View{
         VStack{
             SearchBar(text: $viewModel.searchTerm,
-                      onSearchButtonClicked: viewModel.onSearchTapped)
-            List(viewModel.movies, id: \.title) { movie in
+                      onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
+            
+            List(viewModel.movies, id: \.id) { movie in
                 MovieCardView(movie: movie)
+                    .onAppear(){
+                        viewModel.loadMoreContent(currentItem: movie)
+                    }
             }
+
 //            ScrollView{
 //                LazyVStack{
 //                    ForEach(searchResultsMovies) { result in
