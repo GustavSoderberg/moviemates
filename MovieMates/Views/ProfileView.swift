@@ -15,7 +15,6 @@ struct ProfileView: View {
     @State private var showingSheet = false
     @State private var addFriend = false
     
-    
     var body: some View {
         ZStack{
             Color("background")
@@ -137,6 +136,12 @@ struct WatchListView: View {
 
 struct AboutMeView: View {
     
+    @State var bio: String = "this is my bio fix me later this is my bio fix me later this is my this is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterbio fix me later"
+    
+    init() {
+        UITextView.appearance().backgroundColor = .clear
+    }
+    
     var body: some View{
         VStack{
             ScrollView{
@@ -148,12 +153,22 @@ struct AboutMeView: View {
                 }
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(.gray)
+                        .fill(Color("secondary-background"))
                         .frame(minHeight: 100)
                     
                     VStack{
-                        Text("sdvbsd")
-                            .padding()
+                        if um.currentUser!.authId != um.currentUser!.authId {
+                            Text(bio)
+                                .padding()
+                        }else if um.currentUser!.authId == um.currentUser!.authId {
+                            TextEditor(text: $bio)
+                                .background(Color("secondary-background"))
+                                .foregroundColor(.white)
+                                .frame(minHeight: 100)
+                                .cornerRadius(25)
+                            
+                        }
+                        
                         
                         Spacer()
                         
@@ -168,7 +183,7 @@ struct AboutMeView: View {
                 
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(.gray)
+                        .fill(Color("secondary-background"))
                         .frame(minHeight: 100)
                     
                     VStack{
