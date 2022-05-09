@@ -18,7 +18,7 @@ class UserManager: ObservableObject {
     
     func register(username: String) {
         
-        let user = User(authId: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: nil, friends: [String](), frequests: [String](), themeId: 0)
+        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: nil, friends: [String](), frequests: [String](), themeId: 0)
         
         fm.saveUserToFirestore(user: user)
         currentUser = user
@@ -37,7 +37,7 @@ class UserManager: ObservableObject {
         else {
             for user in listOfUsers {
                 
-                if user.authId == Auth.auth().currentUser!.uid {
+                if user.id == Auth.auth().currentUser!.uid {
                     
                     um.currentUser = user
                     if um.isLoading { print("Logged in as \(user.username)") }
@@ -57,13 +57,13 @@ class UserManager: ObservableObject {
     
     func friendRequest(from: User, to: User) {
         
-        if from.friends.contains(to.authId){
-            print("\(to.authId) is already your friend")
+        if from.friends.contains(to.id!){
+            print("\(to.id!) is already your friend")
         }
-        else if to.frequests.contains(from.authId){
+        else if to.frequests.contains(from.id!){
             print("You've already sent a friend request to this user")
         }
-        else if !to.frequests.contains(from.authId) && fm.sendFriendRequest(from: from, to: to) {
+        else if !to.frequests.contains(from.id!) && fm.sendFriendRequest(from: from, to: to) {
             print("✔️ Successfully sent the friend request")
         }
         else {
@@ -94,7 +94,7 @@ class UserManager: ObservableObject {
     func removeFriend(userId: String) {
         
         if fm.removeFriend(you: um.currentUser!, theirId: userId) {
-            print("Successfully removed friend")
+            print("✔️ Successfully removed friend")
         }
         else {
             print("E: UserManager - removeFriend() Failed to remove user")

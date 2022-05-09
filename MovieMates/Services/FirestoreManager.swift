@@ -53,7 +53,7 @@ class FirestoreManager {
     func saveUserToFirestore(user: User) {
         
         do {
-            _ = try db.collection("users").addDocument(from: user)
+            _ = try db.collection("users").document(user.id!).setData(from: user)
         } catch {
             print("Error saving to db")
         }
@@ -61,13 +61,13 @@ class FirestoreManager {
     
     func sendFriendRequest(from: User, to: User) -> Bool {
         
-        if let id = to.documentId {
+        if let id = to.id {
             
             db.collection("users").document(id)
                 
                     .updateData([
                         
-                        "frequests": FieldValue.arrayUnion([from.authId])
+                        "frequests": FieldValue.arrayUnion([from.id!])
                         
                     ])
             
@@ -81,14 +81,14 @@ class FirestoreManager {
     
     func acceptFriendRequest(you: User, theirId: String) -> Bool {
         
-        if let id = you.documentId {
+        if let id = you.id {
             
             db.collection("users").document(id)
                 
                     .updateData([
                         
-                        "friends": FieldValue.arrayUnion([theirId]),
-                        "frequests": FieldValue.arrayRemove([theirId])
+                        "frequests": FieldValue.arrayRemove([theirId]),
+                        "friends": FieldValue.arrayUnion([theirId])
                         
                     ])
             
@@ -101,7 +101,7 @@ class FirestoreManager {
     
     func removeFriend(you: User, theirId: String) -> Bool {
         
-        if let id = you.documentId {
+        if let id = you.id {
             
             db.collection("users").document(id)
                 
