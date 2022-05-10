@@ -299,18 +299,46 @@ struct FriendRequestTestView: View {
     @ObservedObject var uq = um
     
     var body: some View {
-        Button("Send friend request") {
-            uq.friendRequest(from: uq.currentUser!, to: uq.currentUser!)
+        ForEach(uq.listOfUsers) { user in
+            
+            if user.id != um.currentUser!.id! {
+                
+                if um.currentUser!.friends.contains(user.id!) {
+                    Text("\(user.username) is your friend")
+                }
+                else if um.currentUser!.frequests.contains(user.id!) {
+                    Text("\(user.username) has sent you a request")
+                }
+                else if user.frequests.contains(um.currentUser!.id!) {
+                    Text("You've sent \(user.username) a request")
+                }
+                else {
+                    Button {
+                        um.friendRequest(to: user)
+                    } label: {
+                        Text("Add \(user.username)")
+                    }
+                }
+
+                
+            }
+            
         }
         
         Text("Requests:").padding().padding(.top,40)
         ForEach(uq.currentUser!.frequests, id: \.self) { request in
             
             Button {
-                uq.manageFriendRequests(sender: request, accept: true)
+                uq.manageFriendRequests(forId: request, accept: true)
             } label: {
                 Text("Accept request from \(request)")
             }
+            Button {
+                uq.manageFriendRequests(forId: request, accept: false)
+            } label: {
+                Text("Deny request from \(request)")
+            }
+
 
             
         }
@@ -319,9 +347,9 @@ struct FriendRequestTestView: View {
         ForEach(uq.currentUser!.friends, id: \.self) { friend in
             
             Button {
-                um.removeFriend(userId: friend)
+                um.removeFriend(id: friend)
             } label: {
-                Text(friend)
+                Text("Remove \(friend)")
             }
 
             

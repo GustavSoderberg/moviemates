@@ -55,15 +55,15 @@ class UserManager: ObservableObject {
         
     }
     
-    func friendRequest(from: User, to: User) {
+    func friendRequest(to: User) {
         
-        if from.friends.contains(to.id!){
+        if currentUser!.friends.contains(to.id!){
             print("\(to.id!) is already your friend")
         }
-        else if to.frequests.contains(from.id!){
+        else if to.frequests.contains(currentUser!.id!){
             print("You've already sent a friend request to this user")
         }
-        else if !to.frequests.contains(from.id!) && fm.sendFriendRequest(from: from, to: to) {
+        else if !to.frequests.contains(currentUser!.id!) && fm.sendFriendRequest(from: currentUser!, to: to) {
             print("✔️ Successfully sent the friend request")
         }
         else {
@@ -72,28 +72,38 @@ class UserManager: ObservableObject {
         
     }
     
-    func manageFriendRequests(sender: String, accept: Bool) {
+    func manageFriendRequests(forId: String, accept: Bool) {
         
         if accept {
             
-            if fm.acceptFriendRequest(you: currentUser!, theirId: sender) {
+            if fm.acceptFriendRequest(you: currentUser!, newFriendId: forId) {
                 print("✔️ Successfully added user as a friend")
             }
             
             else {
-                print("E: UserManager - manageFriendRequests() Failed to add the friend")
+                print("E: UserManager - manageFriendRequests() Failed to accept the friend request")
             }
         }
+        else if !accept {
+            
+            if fm.denyFriendRequest(you: currentUser!, denyFriendId: forId) {
+                print("✔️ Successfully added user as a friend")
+            }
+            
+            else {
+                print("E: UserManager - manageFriendRequests() Failed to deny the friend request")
+            }
+            
+        }
         else {
-            
-            
+            print("E: UserManager - manageFriendRequests() Failed handle the friend request")
         }
         
     }
     
-    func removeFriend(userId: String) {
+    func removeFriend(id: String) {
         
-        if fm.removeFriend(you: um.currentUser!, theirId: userId) {
+        if fm.removeFriend(you: currentUser!, removeUserId: id) {
             print("✔️ Successfully removed friend")
         }
         else {
