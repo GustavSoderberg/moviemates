@@ -214,6 +214,8 @@ struct ProfileReviewCardView: View {
     let review: Review
     @State var movie: Movie?
     
+    @State private var isExpanded: Bool = false
+    
     private let apiService: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
@@ -245,10 +247,13 @@ struct ProfileReviewCardView: View {
                         Text(movie.title ?? "no title")
                             .font(.title2)
                         Text(review.rating)
-                        Spacer()
+                            .padding(.bottom, 4)
                         Text(review.reviewText)
                             .font(.system(size: 15))
-                            .lineLimit(3)
+                            .lineLimit(isExpanded ? nil : 4)
+                            .onTapGesture {
+                                isExpanded.toggle()
+                            }
                         Spacer()
                     }.padding(.leading, 1)
                 }
