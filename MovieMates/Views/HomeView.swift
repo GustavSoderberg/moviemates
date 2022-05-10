@@ -48,11 +48,12 @@ struct HomeView: View {
                     }.padding()
                 }
                 //TODO: The sheet needs darkmode/lightmode specified based on the device colorScheme
-                .sheet(isPresented: $showMovieView) {
-                    MovieViewController()
-                        .preferredColorScheme(.dark)
-                    //                        .preferredColorScheme( true ? .dark : .light)
-                }
+
+//                .sheet(isPresented: $showMovieView) {
+//                    MovieViewController(movie: movie)
+//                        .preferredColorScheme(.dark)
+////                        .preferredColorScheme( true ? .dark : .light)
+//                }
             }
         }
     }
