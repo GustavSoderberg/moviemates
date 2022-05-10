@@ -23,10 +23,10 @@ struct HomeView: View {
                     Text("Trending").tag("trending")
                     
                 })
-                    .padding(.horizontal)
-                    .padding(.top, 20)
-                    .pickerStyle(SegmentedPickerStyle())
-                    .colorMultiply(.red)
+                .padding(.horizontal)
+                .padding(.top, 20)
+                .pickerStyle(SegmentedPickerStyle())
+                .colorMultiply(.red)
                 
                 ScrollView{
                     LazyVStack{
@@ -51,7 +51,7 @@ struct HomeView: View {
                 .sheet(isPresented: $showMovieView) {
                     MovieViewController()
                         .preferredColorScheme(.dark)
-//                        .preferredColorScheme( true ? .dark : .light)
+                    //                        .preferredColorScheme( true ? .dark : .light)
                 }
             }
         }
@@ -63,6 +63,8 @@ struct ReviewCardView: View {
     let review: Review
     @State var movie: Movie?
     @Binding var showMovieView : Bool
+    
+    @State private var isExpanded: Bool = false
     
     private let apiService: MovieViewModel = MovieViewModel.shared
     
@@ -87,7 +89,6 @@ struct ReviewCardView: View {
                     }
                     
                     VStack(alignment: .leading){
-                        
                         HStack{
                             Text(review.username)
                             Spacer()
@@ -96,12 +97,16 @@ struct ReviewCardView: View {
                         }
                         Text(movie.title ?? "no title")
                             .font(.title2)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(1)
                         Text(review.rating)
-                        Spacer()
+                            .padding(.bottom, 4)
                         Text(review.reviewText)
                             .font(.system(size: 15))
-                            .lineLimit(3)
-                        Spacer()
+                            .lineLimit(isExpanded ? nil : 4)
+                            .onTapGesture {
+                                isExpanded.toggle()
+                            }
                     }
                 }
             }
@@ -124,6 +129,7 @@ struct ReviewCardView: View {
         }
     }
 }
+
 func formatDate(date: Date) -> String{
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "d MMMM yyyy"
@@ -132,8 +138,8 @@ func formatDate(date: Date) -> String{
 
 
 private var friendsReviews = [
-    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+    Review(movieId: 10612, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+    Review(movieId: 634649, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
     Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
     Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
 ]
