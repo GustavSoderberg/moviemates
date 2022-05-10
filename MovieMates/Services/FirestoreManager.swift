@@ -61,9 +61,9 @@ class FirestoreManager {
     
     func sendFriendRequest(from: User, to: User) -> Bool {
         
-        if let id = to.id {
+        if from.id != nil && to.id != nil {
             
-            db.collection("users").document(id)
+            db.collection("users").document(to.id!)
                 
                     .updateData([
                         
@@ -79,35 +79,72 @@ class FirestoreManager {
         
     }
     
-    func acceptFriendRequest(you: User, theirId: String) -> Bool {
+    func acceptFriendRequest(you: User, newFriendId: String) -> Bool {
         
-        if let id = you.id {
+        if you.id != nil {
             
-            db.collection("users").document(id)
+            db.collection("users").document(you.id!)
                 
                     .updateData([
                         
-                        "frequests": FieldValue.arrayRemove([theirId]),
-                        "friends": FieldValue.arrayUnion([theirId])
+                        "frequests": FieldValue.arrayRemove([newFriendId]),
+                        "friends": FieldValue.arrayUnion([newFriendId])
+                        
+                    ])
+            
+            db.collection("users").document(newFriendId)
+                
+                    .updateData([
+                        
+                        "friends": FieldValue.arrayUnion([you.id!])
                         
                     ])
             
             return true
             
         }
-        
+            
         return false
+        
     }
     
-    func removeFriend(you: User, theirId: String) -> Bool {
+    func denyFriendRequest(you: User, denyFriendId: String) -> Bool {
         
-        if let id = you.id {
+        if you.id != nil {
             
-            db.collection("users").document(id)
+            db.collection("users").document(you.id!)
                 
                     .updateData([
                         
-                        "friends": FieldValue.arrayRemove([theirId]),
+                        "frequests": FieldValue.arrayRemove([denyFriendId])
+                        
+                    ])
+            
+            return true
+            
+        }
+            
+        return false
+        
+    }
+    
+    func removeFriend(you: User, removeUserId: String) -> Bool {
+        
+        if you.id != nil {
+            
+            db.collection("users").document(you.id!)
+                
+                    .updateData([
+                        
+                        "friends": FieldValue.arrayRemove([removeUserId]),
+                        
+                    ])
+            
+            db.collection("users").document(removeUserId)
+                
+                    .updateData([
+                        
+                        "friends": FieldValue.arrayRemove([you.id!]),
                         
                     ])
             
@@ -116,5 +153,6 @@ class FirestoreManager {
         }
         
         return false
+        
     }
 }

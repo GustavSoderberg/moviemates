@@ -15,6 +15,9 @@ struct ProfileView: View {
     @State private var showingSheet = false
     @State private var changeUsername = ""
     @State private var addFriend = false
+    var user: User
+    
+    
     
     var body: some View {
         ZStack{
@@ -92,7 +95,7 @@ struct ProfileView: View {
                 case "watchlist":
                     WatchListView()
                 case "about":
-                    AboutMeView()
+                    AboutMeView(user: user)
                 default:
                     UserReviewView()
                 }
@@ -111,7 +114,7 @@ struct UserReviewView: View {
             ScrollView{
                 LazyVStack{
                     ForEach(myReviews) { review in
-                        MyReviewCardView(review: review)
+                        ProfileReviewCardView(review: review)
                     }
                 }
                 .padding()
@@ -138,10 +141,14 @@ struct WatchListView: View {
 
 struct AboutMeView: View {
     
-    @State var bio: String = "this is my bio fix me later this is my bio fix me later this is my this is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterbio fix me later"
+    let user: User
+    @State var bio = ""
     
-    init() {
+    
+    init(user: User) {
         UITextView.appearance().backgroundColor = .clear
+        self.user = user
+         
     }
     
     var body: some View{
@@ -160,7 +167,7 @@ struct AboutMeView: View {
                     
                     VStack{
                         if um.currentUser!.id != um.currentUser!.id {
-                            Text(bio)
+                            Text("Hej")
                                 .padding()
                         }else if um.currentUser!.id == um.currentUser!.id {
                             TextEditor(text: $bio)
@@ -171,10 +178,13 @@ struct AboutMeView: View {
                             
                         }
                         
+                        }.onAppear {
+                            self.bio = user.bio!
                         
+                        }
                         Spacer()
                         
-                    }
+                    
                 }.padding()
                 HStack{
                     Text("Summary of \(um.currentUser!.username)")
@@ -199,40 +209,71 @@ struct AboutMeView: View {
     }
 }
 
-
-
-
-struct MyReviewCardView: View {
+struct ProfileReviewCardView: View {
     
     let review: Review
+    @State var movie: Movie?
+    
+    @State private var isExpanded: Bool = false
+    
+    private let apiService: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
             HStack(alignment: .top){
-                Image(systemName: "film")
-                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                if let movie = movie {
+                    AsyncImage(url: movie.posterURL){ image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
-                VStack(alignment: .leading){
+                    .onTapGesture {
+                        print("click!")
+                    }
                     
-                    Text(review.timestamp.formatted())
-                        .font(.system(size: 12))
-                        .frame(maxWidth: 1000, alignment: .trailing)
-                    
-                    Text(review.title)
-                        .font(.title)
-                    Text(review.rating)
-                    Spacer()
-                    Text(review.reviewText)
-                        .font(.system(size: 15))
-                        .lineLimit(3)
-                    Spacer()
+                    VStack(alignment: .leading){
+                        
+                        HStack{
+                            Spacer()
+                            Text(formatDate(date: review.timestamp))
+                                .font(.system(size: 12))
+                        }
+                        Text(movie.title ?? "no title")
+                            .font(.title2)
+                        Text(review.rating)
+                            .padding(.bottom, 4)
+                        Text(review.reviewText)
+                            .font(.system(size: 15))
+                            .lineLimit(isExpanded ? nil : 4)
+                            .onTapGesture {
+                                isExpanded.toggle()
+                            }
+                        Spacer()
+                    }.padding(.leading, 1)
                 }
-                Spacer()
             }
             .padding()
+        }.onAppear {
+            loadMovie(id: review.movieId)
+        }
+    }
+    
+    func loadMovie(id: Int){
+        apiService.fetchMovie(id: id) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let movie):
+                    self.movie = movie
+                }
+            }
         }
     }
 }
@@ -240,10 +281,10 @@ struct MyReviewCardView: View {
 
 
 private var myReviews = [
-    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+    Review(movieId: 414, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
     Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(movieId: 414906, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(movieId: 414906, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+    Review(movieId: 272, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+    Review(movieId: 406759, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
 ]
 
 //private var watchlist = [
@@ -258,18 +299,46 @@ struct FriendRequestTestView: View {
     @ObservedObject var uq = um
     
     var body: some View {
-        Button("Send friend request") {
-            uq.friendRequest(from: uq.currentUser!, to: uq.currentUser!)
+        ForEach(uq.listOfUsers) { user in
+            
+            if user.id != um.currentUser!.id! {
+                
+                if um.currentUser!.friends.contains(user.id!) {
+                    Text("\(user.username) is your friend")
+                }
+                else if um.currentUser!.frequests.contains(user.id!) {
+                    Text("\(user.username) has sent you a request")
+                }
+                else if user.frequests.contains(um.currentUser!.id!) {
+                    Text("You've sent \(user.username) a request")
+                }
+                else {
+                    Button {
+                        um.friendRequest(to: user)
+                    } label: {
+                        Text("Add \(user.username)")
+                    }
+                }
+
+                
+            }
+            
         }
         
         Text("Requests:").padding().padding(.top,40)
         ForEach(uq.currentUser!.frequests, id: \.self) { request in
             
             Button {
-                uq.manageFriendRequests(sender: request, accept: true)
+                uq.manageFriendRequests(forId: request, accept: true)
             } label: {
                 Text("Accept request from \(request)")
             }
+            Button {
+                uq.manageFriendRequests(forId: request, accept: false)
+            } label: {
+                Text("Deny request from \(request)")
+            }
+
 
             
         }
@@ -278,9 +347,9 @@ struct FriendRequestTestView: View {
         ForEach(uq.currentUser!.friends, id: \.self) { friend in
             
             Button {
-                um.removeFriend(userId: friend)
+                um.removeFriend(id: friend)
             } label: {
-                Text(friend)
+                Text("Remove \(friend)")
             }
 
             
