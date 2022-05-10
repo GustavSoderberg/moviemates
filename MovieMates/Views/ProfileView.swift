@@ -179,7 +179,9 @@ struct AboutMeView: View {
                         }
                         
                         }.onAppear {
-                            self.bio = user.bio!
+                            if let bio = user.bio {
+                                self.bio = bio
+                            }
                         
                         }
                         Spacer()
