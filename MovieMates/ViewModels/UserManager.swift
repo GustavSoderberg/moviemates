@@ -18,7 +18,7 @@ class UserManager: ObservableObject {
     
     func register(username: String) {
         
-        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: nil, friends: [String](), frequests: [String](), themeId: 0)
+        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: "Hello! I am new here 📺.", friends: [String](), frequests: [String](), themeId: 0)
         
         fm.saveUserToFirestore(user: user)
         currentUser = user

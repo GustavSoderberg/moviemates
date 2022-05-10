@@ -15,6 +15,9 @@ struct ProfileView: View {
     @State private var showingSheet = false
     @State private var changeUsername = ""
     @State private var addFriend = false
+    var user: User
+    
+    
     
     var body: some View {
         ZStack{
@@ -92,7 +95,7 @@ struct ProfileView: View {
                 case "watchlist":
                     WatchListView()
                 case "about":
-                    AboutMeView()
+                    AboutMeView(user: user)
                 default:
                     UserReviewView()
                 }
@@ -138,10 +141,14 @@ struct WatchListView: View {
 
 struct AboutMeView: View {
     
-    @State var bio: String = "this is my bio fix me later this is my bio fix me later this is my this is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterthis is my bio fix me laterbio fix me later"
+    let user: User
+    @State var bio = ""
     
-    init() {
+    
+    init(user: User) {
         UITextView.appearance().backgroundColor = .clear
+        self.user = user
+         
     }
     
     var body: some View{
@@ -160,7 +167,7 @@ struct AboutMeView: View {
                     
                     VStack{
                         if um.currentUser!.id != um.currentUser!.id {
-                            Text(bio)
+                            Text("Hej")
                                 .padding()
                         }else if um.currentUser!.id == um.currentUser!.id {
                             TextEditor(text: $bio)
@@ -171,10 +178,13 @@ struct AboutMeView: View {
                             
                         }
                         
+                        }.onAppear {
+                            self.bio = user.bio!
                         
+                        }
                         Spacer()
                         
-                    }
+                    
                 }.padding()
                 HStack{
                     Text("Summary of \(um.currentUser!.username)")
@@ -198,9 +208,6 @@ struct AboutMeView: View {
         }
     }
 }
-
-
-
 
 struct MyReviewCardView: View {
     

@@ -70,7 +70,7 @@ struct ContentView: View {
             case .HomeView:
                 
                 TabView {
-                    ProfileView()
+                    ProfileView(user: um.currentUser!)
                         .tabItem {
                             Image(systemName: "person.fill")
                             Text("Profile")
