@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Alamofire
+import UIKit
 
 enum Sheet {
     case MovieView, ReviewSheet
@@ -19,7 +21,7 @@ struct MovieViewController: View {
         switch self.sheetShowing {
             
         case .MovieView:
-            MovieView(sheetShowing: $sheetShowing)
+            MovieView(sheetShowing: $sheetShowing, movieID: "268")
             
         case .ReviewSheet:
             ReviewSheet()
@@ -31,6 +33,8 @@ struct MovieViewController: View {
 
 struct MovieView: View {
     @Binding var sheetShowing: Sheet
+    var movieID: String
+    @State var currentMovie: Movie?
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
@@ -46,8 +50,8 @@ struct MovieView: View {
                     .resizable()
                     .frame(width: 80, height: 140)
                 VStack {
-                    Text("Movie Title")
-                    Text("Movie Description")
+                    Text(title)
+                    Text(description)
                 }
             }
             HStack{
@@ -115,6 +119,18 @@ struct MovieView: View {
             }
         }
         .onAppear(perform: {
+            guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieID)?api_key=\(API_KEY)&language=en-US") else {return}
+            
+            AF.request(url).response { responce in
+                switch responce.result {
+                case.success(let value):
+                    print("val: \(value)") 
+                    //self.title = value.title ?? "Title"
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
             ratingGlobalWidth = Float(Int.random(in: 1...100))
             ratingLocalWidth = Float(Int.random(in: 1...100))
             ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
@@ -161,7 +177,7 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-            print("pos: \(pos), score: \(score), width: \(width)")
+            //print("pos: \(pos), score: \(score), width: \(width)")
         })
     }
 }
