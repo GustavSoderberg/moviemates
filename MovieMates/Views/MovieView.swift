@@ -15,120 +15,209 @@ enum Sheet {
 
 struct MovieViewController: View {
     @State var sheetShowing: Sheet = .MovieView
+    @State var movie: Movie
+    @Binding var showMovieView: Bool
     
     var body: some View {
         
-        switch self.sheetShowing {
-            
-        case .MovieView:
-            MovieView(sheetShowing: $sheetShowing, movieID: "268")
-            
-        case .ReviewSheet:
-            ReviewSheet()
+        VStack {
+            switch self.sheetShowing {
+                
+            case .MovieView:
+                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView)
+                
+            case .ReviewSheet:
+                ReviewSheet()
+            }
         }
-        
-        //sheetShowing = .ReviewSheet
+        .interactiveDismissDisabled()
     }
 }
 
 struct MovieView: View {
     @Binding var sheetShowing: Sheet
-    var movieID: String
-    @State var currentMovie: Movie?
+    @Binding var currentMovie: Movie
+    @Binding var showMovieView: Bool
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
+    @State var poster : Image = Image("bill_poster")
     @State var ratingGlobalWidth : Float = 67
     @State var ratingLocalWidth : Float = 14
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
+    @State var index = "friends"
+    
     var body: some View {
         VStack(spacing: 0){
-            HStack{
-                Image("bill_poster")
-                    .resizable()
-                    .frame(width: 80, height: 140)
-                VStack {
-                    Text(title)
-                    Text(description)
+            ZStack{
+                HStack{
+                    Text("Done")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            showMovieView = false
+                        }
+                    Spacer()
+                }
+                .padding(.leading)
+                
+                HStack{
+                    Text("Done")
+                        .foregroundColor(.clear)
+                    VStack{
+                        gap(height: 2)
+                        Text(title)
+                            .font(Font.headline.weight(.bold))
+                    }
+                    Text("Done")
+                        .foregroundColor(.clear)
                 }
             }
-            HStack{
-                Text("RATINGS:")
-                    .padding(.leading)
-                Spacer()
-            }
-        
-            ZStack{
-                Rectangle()
-                    .padding(.horizontal)
-                    .frame(height: 80)
-                    .foregroundColor(.gray)
+            
+            gap(height: 5)
+            
+            ScrollView{
+                VStack{
+                    line()
+                    gap(height: 5)
+                    HStack{
+                        AsyncImage(url: currentMovie.backdropURL){ image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: .infinity, height: 200, alignment: .center)
+                    }
+                    ScrollView {
+                        Text(description)
+                    }
+                }
+                .padding(.horizontal)
+                
+                
+                gap(height: 10)
                 
                 HStack{
                     Text("RATINGS:")
-                        .padding(.leading)
+                        .font(Font.headline.weight(.bold))
                     Spacer()
-                }
-            
-                ZStack{
-                    Rectangle()
-                        .padding(.horizontal)
-                        .frame(height: 80)
-                        .foregroundColor(.gray)
-                    VStack {
-                        
-                        HStack{
-                            Text("GLOBAL")
-                                .foregroundColor(.white)
-                            Spacer()
-                            HStack(spacing: 2) {
-                                ForEach(1..<6) { i in
-                                    ReviewClapper(pos: i, score: $ratingGlobalScore)
-                                }
-                            }
-                            .frame(height: 20)
-                            
-                            Text("\(ratingGlobalScore)")
-                                .foregroundColor(.white)
-                                .frame(maxWidth: 30, alignment: .leading)
-                            Spacer()
+                    Text("Watchlist +")
+                        .background(Color.red)
+                        .cornerRadius(15)
+                        .foregroundColor(.white)
+                        .onTapGesture {
+                            //TODO ad to wishlist and change + to -
                         }
-                        .padding(.horizontal, 30.0)
+                }
+                .padding(.horizontal)
+                
+                
+                
+                ZStack{
+                    
+                    ZStack{
+                        Rectangle()
+                            .cornerRadius(15)
+                            .padding(.horizontal)
+                            .frame(height: 80)
+                            .foregroundColor(.gray)
                         
-                        HStack{
-                            Text("FRIENDS")
-                                .foregroundColor(.white)
-                            Spacer()
-                            HStack(spacing: 2) {
+                        VStack {
+                            HStack{
+                                Text("GLOBAL")
+                                    .foregroundColor(.white)
+                                Spacer()
+                                HStack(spacing: 2) {
+                                    ForEach(1..<6) { i in
+                                        ReviewClapper(pos: i, score: $ratingGlobalScore)
+                                    }
+                                }
+                                .frame(height: 20)
+                                
+                                Text("\(ratingGlobalScore)")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: 30, alignment: .leading)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 30.0)
+                            
+                            HStack{
+                                Text("FRIENDS")
+                                    .foregroundColor(.white)
+                                Spacer()
+                                HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
                                         ReviewClapper(pos: i, score: $ratingLocalScore)
                                     }
                                 }
-                            .frame(height: 20)
-                            
-                            Text("\(ratingLocalScore)")
-                                .foregroundColor(.white)
-                                .frame(maxWidth: 30, alignment: .leading)
-                            Spacer()
+                                .frame(height: 20)
+                                
+                                Text("\(ratingLocalScore)")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: 30, alignment: .leading)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 30.0)
                         }
-                        .padding(.horizontal, 30.0)
                     }
                 }
+                
+                //gap()
+                
+                Picker(selection: $index, label: Text("Review List"), content: {
+                    Text("Friends").tag("friends")
+                    Text("Global").tag("global")
+                    
+                })
+                    .padding(.horizontal)
+                    .pickerStyle(SegmentedPickerStyle())
+                    .colorMultiply(.red)
+                
+                HStack{
+                    Text("REVIEWS:")
+                        .font(Font.headline.weight(.bold))
+                    Spacer()
+                    Text("Leave a Review +")
+                        .padding(.horizontal)
+                        .background(Color.red)
+                        .cornerRadius(15)
+                        .foregroundColor(.white)
+                        .onTapGesture {
+                            sheetShowing = .ReviewSheet
+                        }
+                }
+                .padding(.horizontal)
+                
+                LazyVStack(spacing: 2) {
+                    switch index {
+                    case "friends":
+                        ForEach(friendsReviews) { review in
+                            MovieReviewCardView(review: review)
+                        }
+                    case "gloabal":
+                        ForEach(globalReviews) { review in
+                            MovieReviewCardView(review: review)
+                        }
+                        
+                    default:
+                        ForEach(friendsReviews) { review in
+                            MovieReviewCardView(review: review)
+                        }
+                    }
+                }
+                .padding(.horizontal)
             }
+            
         }
         .onAppear(perform: {
-            guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieID)?api_key=\(API_KEY)&language=en-US") else {return}
-            
-            AF.request(url).response { responce in
-                switch responce.result {
-                case.success(let value):
-                    print("val: \(value)") 
-                    //self.title = value.title ?? "Title"
-                case .failure(let error):
-                    print(error)
-                }
+            title = currentMovie.title ?? "Title"
+            description = currentMovie.overview ?? "Description"
+            //Search for "O", think it's the third movie
+            if description == "" {
+                description = "No further description"
             }
             
             ratingGlobalWidth = Float(Int.random(in: 1...100))
@@ -145,6 +234,7 @@ struct MovieView: View {
         })
     }
 }
+
 
 struct ReviewClapper: View {
     var pos : Int
@@ -182,9 +272,93 @@ struct ReviewClapper: View {
     }
 }
 
-//struct MovieView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MovieView()
-//    }
-//}
+struct ClapperImage: View {
+    var pos : Int
+    var score : String
+    @State var filled : Bool = false
+    
+    var body: some View {
+        Image("clapper-big")
+            .resizable()
+            .frame(width: 20, height: 20)
+            .foregroundColor(filled ? .black : .white)
+            .onAppear(perform: {
+                if Int(score.prefix(1)) ?? 0 >= pos {
+                    filled = true
+                } else {
+                    filled = false
+                }
+            })
+    }
+}
+
+private var friendsReviews = [
+    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+]
+
+private var globalReviews = [
+    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
+    Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
+    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "0/5", reviewText: "Vad var detta?"),
+    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig")
+]
+
+struct MovieReviewCardView: View {
+    
+    let review: Review
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(.gray)
+            HStack(alignment: .top){
+                VStack(alignment: .leading){
+                    HStack{
+                        Text(review.username)
+                        Spacer()
+                        Text(formatDate(date: review.timestamp))
+                            .font(.system(size: 12))
+                    }
+                    HStack{
+                        ForEach(1..<6) { i in
+                            ClapperImage(pos: i, score: review.rating)
+                        }
+                        Spacer()
+                    }
+                    Text(review.reviewText)
+                        .font(.system(size: 15))
+                        .lineLimit(3)
+                    Spacer()
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+struct gap :View {
+    var height: CGFloat?
+    var body: some View {
+        Rectangle()
+            .frame(height: height)
+            .foregroundColor(.clear)
+    }
+}
+
+struct line :View {
+    var body: some View {
+        Rectangle()
+            .frame(height: 0.1)
+            .foregroundColor(.black)
+    }
+}
+
+struct MovieView_Previews: PreviewProvider {
+    static var previews: some View {
+        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), showMovieView: .constant(true))
+    }
+}
 

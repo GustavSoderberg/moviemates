@@ -10,26 +10,33 @@ import SwiftUI
 struct MovieCardView: View {
     
     let movie: Movie
+    @State var showMovieView = false
     
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
             HStack {
-                if movie.posterPath != nil {
-                AsyncImage(url: URL(string: "\(BACKDROP_BASE_URL)\(movie.posterPath!)")){ image in
-                    image.resizable()
-                    .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
-                    .frame(width: 100, height: 150, alignment: .center)
-                    .border(Color.black, width: 3)
-                } placeholder: {
-                    ProgressView()
+                ZStack{
+                    if movie.posterPath != nil {
+                        AsyncImage(url: URL(string: "\(BACKDROP_BASE_URL)\(movie.posterPath!)")){ image in
+                            image.resizable()
+                                .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                                .frame(width: 100, height: 150, alignment: .center)
+                                .border(Color.black, width: 3)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                    } else {
+                        Image(systemName: "film")
+                            .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
+                            .frame(width: 100, height: 150, alignment: .center)
+                            .border(Color.black, width: 3)
+                    }
                 }
-                } else {
-                    Image(systemName: "film")
-                        .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
-                        .frame(width: 100, height: 150, alignment: .center)
-                        .border(Color.black, width: 3)
+                .onTapGesture {
+                    print("click!")
+                    showMovieView = true
                 }
                 VStack(alignment: .leading){
                     Text(movie.title!)
@@ -45,6 +52,11 @@ struct MovieCardView: View {
                 Spacer()
             }
             .padding()
+        }
+        .sheet(isPresented: $showMovieView) {
+            MovieViewController(movie: movie, showMovieView: $showMovieView)
+                .preferredColorScheme(.dark)
+//                        .preferredColorScheme( true ? .dark : .light)
         }
     }
 }
