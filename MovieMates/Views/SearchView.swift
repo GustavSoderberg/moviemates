@@ -84,18 +84,31 @@ struct SearchView: View {
 struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
+    @State var infoText = "Type to search"
     
     var body: some View{
         VStack{
             SearchBar(text: $viewModel.searchTerm,
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
-            List(viewModel.movies, id: \.id) { movie in
-                MovieCardView(movie: movie)
-                    .onAppear(){
-                        viewModel.loadMoreContent(currentItem: movie)
-                    }
+            if viewModel.searchTerm.isEmpty {
+//                infoText = "Type to search"
+                SearchViewInfo(infoText: $viewModel.infoText)
+                    .frame(maxHeight: .infinity)
+            } else if viewModel.movies.isEmpty && !viewModel.searchTerm.isEmpty {
+//                infoText = "Nothing to display"
+                SearchViewInfo(infoText: $viewModel.infoText)
+                    .frame(maxHeight: .infinity)
+            } else {
+                List(viewModel.movies, id: \.id) { movie in
+                    MovieCardView(movie: movie)
+                        .onAppear(){
+                            viewModel.loadMoreContent(currentItem: movie)
+                        }
+                }
             }
+            
+
 
 //            ScrollView{
 //                LazyVStack{
