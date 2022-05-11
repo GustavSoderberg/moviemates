@@ -372,13 +372,15 @@ struct FriendListView: View{
             
             ForEach (um.currentUser!.friends, id:\.self) { friend in
                 
-                Text(friend)
+                Text(um.getUsername(id: friend))
                 
                 
             }
             
         }
     }
+    
+    
     
 }
 
