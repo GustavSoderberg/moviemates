@@ -79,6 +79,7 @@ struct ReviewCardView: View {
                 .fill(.gray)
             HStack(alignment: .top){
                 if let movie = movie {
+                    
                     AsyncImage(url: movie.posterURL){ image in
                         image
                             .resizable()
@@ -94,18 +95,22 @@ struct ReviewCardView: View {
                     }
                     
                     VStack(alignment: .leading){
+                        
                         HStack{
                             Text(review.username)
                             Spacer()
                             Text(formatDate(date: review.timestamp))
                                 .font(.system(size: 12))
                         }
+                        
                         Text(movie.title ?? "no title")
                             .font(.title2)
                             .minimumScaleFactor(0.7)
                             .lineLimit(1)
+                        
                         Text(review.rating)
                             .padding(.bottom, 4)
+                        
                         Text(review.reviewText)
                             .font(.system(size: 15))
                             .lineLimit(isExpanded ? nil : 4)
