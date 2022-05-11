@@ -11,116 +11,175 @@ struct ReviewSheet: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @State private var selectedIndex = 0
-    @State var review: String = "Amazing Movie"
+    @Binding var sheetShowing: Sheet
+    @Binding var currentMovie: Movie
     
-    init() {
-            UITextView.appearance().backgroundColor = .clear
-        }
+    @State private var score = 0
+    @State private var whereIndex = 0
+    @State private var withIndex = 0
+    @State var review: String = ""
     
     var body: some View {
-        Spacer()
-        VStack {
-            
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 25)
-                    .frame(width: 350, height: 200)
-                    .foregroundColor(.red)
+        VStack{
+            ScrollView{
+                HStack {
+                    Text("Cancel")
+                        .foregroundColor(.blue)
+                        .padding(.top, 4)
+                        .onTapGesture {
+                            sheetShowing = .MovieView
+                        }
+                    Spacer()
+                }
+                .padding(.horizontal)
                 
-                HStack{
-                    VStack{
-                        Image("clapper-big")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                    }.padding()
-                    
-                    VStack{
-                        Text("BATMAN")
-                            .foregroundColor(.white)
-                            .padding(.bottom, 10)
-                        Text("Pick your rating")
-                            .foregroundColor(.white)
-                        HStack {
-                            ForEach(0 ..< 5, id: \.self){i in
-                                Image("clapper-big")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
+                VStack {
+                    ZStack() {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundColor(.red)
+                        
+                        HStack{
+                            VStack{
+                                AsyncImage(url: currentMovie.posterURL) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(width: 100, height: 150, alignment: .center)
+                                .border(Color.black, width: 1)
+                            }
+                            
+                            VStack{
+                                Text(currentMovie.title ?? "Title")
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.bottom, 10)
+                                    .padding(.trailing)
+                                Text("Pick your rating")
+                                    .foregroundColor(.white)
+                                HStack {
+                                    ForEach(1..<6, id: \.self){ i in
+                                        ClapperScoreSetter(pos: i, score: $score)
+                                    }
+                                }
                             }
                         }
+                        .padding()
+                    }
+                    .padding(.horizontal)
+                    
+                    VStack(spacing: 0){
+                        ZStack{
+                            Rectangle()
+                                .cornerRadius(15, corners: [.topLeft, .topRight])
+                                .frame(height: 30)
+                                .foregroundColor(.gray)
+                            VStack(spacing: 0) {
+                                Text("Write your review")
+                                    .font(Font.headline.weight(.bold))
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 5)
+                                
+                                Divider()
+                            }
+                        }
+                        .padding(.horizontal)
+                        
+                        ZStack{
+                            Rectangle()
+                                .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                                .frame(height: 170)
+                                .foregroundColor(.gray)
+                            VStack(spacing: 0){
+                                ScrollView{
+                                    TextEditor(text: $review)
+                                        .foregroundColor(.white)
+                                        .background(.clear)
+                                        .frame(height: 170)
+                                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                                }
+                                .frame(maxHeight: 170)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    VStack{
+                        
+                        Text("Where did you watch the movie?")
+                        
+                        
+                        Picker(selection: $whereIndex, label: Text("Question one")){
+                            Text("Home").tag(1)
+                            Text("Cinema").tag(2)
+                        }.pickerStyle(SegmentedPickerStyle())
+                            .frame(width: 300)
+                        
+                        Text("How did you watch the movie?")
+                        
+                        Picker(selection: $withIndex, label: Text("Question one")){
+                            Text("Alone").tag(1)
+                            Text("With friends").tag(2)
+                        }.pickerStyle(SegmentedPickerStyle())
+                            .frame(width: 300)
+                        
+                    }
+                    .padding(.bottom, 50)
+                    
+                    HStack {
+                        Button {
+                            print("Leave Review")
+                        } label: {
+                            Text("Leave Review")
+                                .frame(width: 200, height: 50)
+                        }
+                        .frame(width: 200, height: 50)
+                        .foregroundColor(.white)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                        
                         
                     }
                     
+                    Spacer()
                 }
-            }.padding(.bottom)
-            
-            
-            VStack {
-                Text("Write your review:")
-                
-                TextEditor(text: $review)
-                    .background(Color("secondary-background"))
-                    .foregroundColor(.white)
-                    .frame(width: 350, height: 200)
-                    .cornerRadius(10)
-        
-            }.padding()
-            
-            
-            VStack{
-                
-                Text("Where did you watch the movie?")
-                
-                
-                Picker(selection: $selectedIndex, label: Text("Question one")){
-                    Text("Home").tag(1)
-                    Text("Cinema").tag(2)
-                }.pickerStyle(SegmentedPickerStyle())
-                    .frame(width: 300)
-                
-                Text("How did you watch the movie?")
-                
-                Picker(selection: $selectedIndex, label: Text("Question one")){
-                    Text("Alone").tag(1)
-                    Text("With friends").tag(2)
-                }.pickerStyle(SegmentedPickerStyle())
-                    .frame(width: 300)
-                
             }
-            
-            Spacer()
-            
-            HStack {
-                Button {
-                    print("Cancel")
-                } label: {
-                    Text("Cancel")
-                }
-                .frame(width: 100, height: 50)
-                .foregroundColor(.white)
-                .background(Color.red)
-                
-                Button {
-                    print("Save")
-                } label: {
-                    Text("Save")
-                }
-                .frame(width: 100, height: 50)
-                .foregroundColor(.white)
-                .background(Color.green)
-                
-                
-            }
-            
-            Spacer()
         }
-        
+        .onAppear(perform: {
+            UITextView.appearance().backgroundColor = .clear
+        })
     }
 }
 
-
+struct ClapperScoreSetter: View {
+    var pos : Int
+    @Binding var score : Int
+    @State var filled : Bool = false
+    
+    var body: some View {
+        Image("clapper-big")
+            .resizable()
+            .frame(width: 25, height: 25)
+            .foregroundColor(filled ? .black : .white)
+            .onTapGesture {
+                score = pos
+            }
+            .onChange(of: score) { _ in
+                withAnimation(.linear) {
+                    if score >= pos {
+                        filled = true
+                    } else {
+                        filled = false
+                    }
+                }
+            }
+    }
+}
 
 struct ProfileSheet_Previews: PreviewProvider {
     static var previews: some View {
-        ReviewSheet()
+        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales more text to make it long", video: nil, voteAverage: nil, voteCount: nil)))
     }
 }
