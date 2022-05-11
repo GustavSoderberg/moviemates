@@ -113,4 +113,26 @@ class UserManager: ObservableObject {
         
     }
     
+    func changeUsername(username: String) {
+        
+        if fm.changeUsername(you: currentUser!, username: username) {
+            print("✔️ Successfully changed username")
+        }
+        else {
+            print("E: UserManager - changeUsername() Failed to change username")
+        }
+        
+    }
+    
+    func updateBiography(biography: String) {
+        
+        if fm.updateBiography(you: currentUser!, biography: biography) {
+            print("✔️ Successfully updated users biography")
+        }
+        else {
+            print("E: UserManager - updateBiography() Failed to update biography")
+        }
+        
+    }
+    
 }

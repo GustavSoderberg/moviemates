@@ -47,22 +47,19 @@ struct MovieView: View {
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
+    @State var onWatchlist = false
+    @State var watchlistText  = "Add to Watchlist"
+    
+    @State var descFull = false
+    @State var descHeight: CGFloat? = 110
+    
     @State var index = "friends"
+    @State var watchlist = false
     
     var body: some View {
-        VStack(spacing: 0){
-            ZStack{
-                HStack{
-                    Text("Done")
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            showMovieView = false
-                        }
-                    Spacer()
-                }
-                .padding(.leading)
-                
-                HStack{
+        VStack(spacing: 0) {
+            ZStack {
+                HStack {
                     Text("Done")
                         .foregroundColor(.clear)
                     VStack{
@@ -70,62 +67,100 @@ struct MovieView: View {
                         Text(title)
                             .font(Font.headline.weight(.bold))
                     }
-                    Text("Done")
+                    Text("Review")
                         .foregroundColor(.clear)
                 }
+                .padding(.horizontal)
+                
+                HStack {
+                    Text("Done")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            showMovieView = false
+                        }
+                    Spacer()
+                    Text("Review")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            sheetShowing = .ReviewSheet
+                        }
+                }
+                .padding(.horizontal)
             }
             
             gap(height: 5)
+            Divider()
             
             ScrollView{
                 VStack{
-                    line()
-                    gap(height: 5)
-                    HStack{
-                        AsyncImage(url: currentMovie.backdropURL){ image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            ProgressView()
-                        }
-                        .frame(width: .infinity, height: 200, alignment: .center)
+                    AsyncImage(url: currentMovie.backdropURL){ image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
                     }
-                    ScrollView {
-                        Text(description)
-                    }
-                }
-                .padding(.horizontal)
-                
-                
-                gap(height: 10)
-                
-                HStack{
-                    Text("RATINGS:")
-                        .font(Font.headline.weight(.bold))
-                    Spacer()
-                    Text("Watchlist +")
-                        .background(Color.red)
-                        .cornerRadius(15)
-                        .foregroundColor(.white)
-                        .onTapGesture {
-                            //TODO ad to wishlist and change + to -
-                        }
-                }
-                .padding(.horizontal)
-                
-                
-                
-                ZStack{
+                    .frame(width: .infinity, height: 220, alignment: .center)
                     
+                    Text(description)
+                        .onTapGesture {
+                            if descFull {
+                                descFull = false
+                                descHeight = .infinity
+                            } else {
+                                descFull = true
+                                descHeight = 110
+                            }
+                        }
+                        .frame(maxHeight: descHeight)
+                }
+                .padding(.horizontal)
+                
+                HStack {
+                    Text("\(watchlistText)")
+                        .padding(.horizontal)
+                        .background(Color.red)
+                        .cornerRadius(5)
+                        .foregroundColor(.white)
+                        .font(.largeTitle)
+                        .onTapGesture {
+                            //TODO ad to wishlist
+                            if onWatchlist {
+                                onWatchlist = false
+                                watchlistText = "Add to Watchlist?"
+                            } else {
+                                onWatchlist = true
+                                watchlistText = "On Watchlist"
+                            }
+                        }
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, -3)
+                
+                VStack(spacing:0){
                     ZStack{
                         Rectangle()
                             .cornerRadius(15)
                             .padding(.horizontal)
-                            .frame(height: 80)
+                            .frame(height: 90)
                             .foregroundColor(.gray)
                         
-                        VStack {
+                        VStack(spacing:0) {
+                            HStack{
+                                Text("RATINGS")
+                                    .font(Font.headline.weight(.bold))
+                                    .foregroundColor(.white)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            .padding(.leading, 12)
+                            
+                            Divider()
+                                .padding(.horizontal)
+                            
+                            gap(height: 5)
+                            
                             HStack{
                                 Text("GLOBAL")
                                     .foregroundColor(.white)
@@ -143,6 +178,8 @@ struct MovieView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 30.0)
+                            
+                            gap(height: 5)
                             
                             HStack{
                                 Text("FRIENDS")
@@ -165,50 +202,54 @@ struct MovieView: View {
                     }
                 }
                 
-                //gap()
+                Divider()
                 
-                Picker(selection: $index, label: Text("Review List"), content: {
-                    Text("Friends").tag("friends")
-                    Text("Global").tag("global")
+                VStack(spacing:0){
+                    ZStack{
+                        VStack(spacing: 0){
+                            HStack{
+                                Text("REVIEWS")
+                                    .font(Font.headline.weight(.bold))
+                                    //.foregroundColor(.white)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            .padding(.leading, 12)
+                            
+                            
+                            
+                            Picker(selection: $index, label: Text("Review List"), content: {
+                                Text("Friends").tag("friends")
+                                Text("Global").tag("global")
+                            })
+                            .padding(.horizontal, 14)
+                            .pickerStyle(SegmentedPickerStyle())
+                            .colorMultiply(.red)
+                        }
+                
+                    }
                     
-                })
-                    .padding(.horizontal)
-                    .pickerStyle(SegmentedPickerStyle())
-                    .colorMultiply(.red)
-                
-                HStack{
-                    Text("REVIEWS:")
-                        .font(Font.headline.weight(.bold))
-                    Spacer()
-                    Text("Leave a Review +")
-                        .padding(.horizontal)
-                        .background(Color.red)
-                        .cornerRadius(15)
-                        .foregroundColor(.white)
-                        .onTapGesture {
-                            sheetShowing = .ReviewSheet
-                        }
-                }
-                .padding(.horizontal)
-                
-                LazyVStack(spacing: 2) {
-                    switch index {
-                    case "friends":
-                        ForEach(friendsReviews) { review in
-                            MovieReviewCardView(review: review)
-                        }
-                    case "gloabal":
-                        ForEach(globalReviews) { review in
-                            MovieReviewCardView(review: review)
-                        }
-                        
-                    default:
-                        ForEach(friendsReviews) { review in
-                            MovieReviewCardView(review: review)
+                    gap(height: 5)
+                    
+                    LazyVStack(spacing: 2) {
+                        switch index {
+                        case "friends":
+                            ForEach(friendsReviews) { review in
+                                MovieReviewCardView(review: review)
+                            }
+                        case "global":
+                            ForEach(globalReviews) { review in
+                                MovieReviewCardView(review: review)
+                            }
+                            
+                        default:
+                            ForEach(friendsReviews) { review in
+                                MovieReviewCardView(review: review)
+                            }
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
             
         }
@@ -303,7 +344,8 @@ private var globalReviews = [
     Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
     Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
     Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "0/5", reviewText: "Vad var detta?"),
-    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig")
+    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
+    Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
 ]
 
 struct MovieReviewCardView: View {
@@ -349,10 +391,28 @@ struct gap :View {
 }
 
 struct line :View {
+    var color: Color?
     var body: some View {
         Rectangle()
-            .frame(height: 0.1)
-            .foregroundColor(.black)
+            .frame(height: 1)
+            .foregroundColor(color)
+    }
+}
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+struct RoundedCorner: Shape {
+    
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
     }
 }
 
