@@ -12,12 +12,12 @@ import FirebaseAuth
 struct ProfileView: View {
     
     @State var index = "reviews"
-    @State private var showingSheet = false
+    @State private var showSettingsSheet = false
     @State private var showingNotificationSheet = false
     
-    @State private var changeUsername = ""
     @State private var addFriend = false
     var user: User
+    @Binding var viewShowing: Status
     @State var test = 0
     @ObservedObject var ooum = um
     
@@ -45,6 +45,7 @@ struct ProfileView: View {
                                 Button {
                                     //ooum.notification = true
                                     showingNotificationSheet = true
+                                    viewShowing = .Loading
                                 } label: {
                                     Image(systemName: "bell")
                                         .resizable()
@@ -110,15 +111,18 @@ struct ProfileView: View {
                         } else {
                             
                             Button {
-                                showingSheet = true
+                                showSettingsSheet = true
                             } label: {
                                 Image(systemName: "slider.horizontal.3")
                                     .resizable()
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
-                            }.sheet(isPresented: $showingSheet) {
-                                FriendRequestTestView(showProfileSheet: $showingSheet)
-                                //SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
+                            }.sheet(isPresented: $showSettingsSheet, onDismiss: {
+                                if Auth.auth().currentUser == nil { viewShowing = .WelcomeView }
+                            }) {
+                                //FriendRequestTestView(showProfileSheet: $showingSheet)
+                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
+                                    .preferredColorScheme(.dark)
                                 
                             }
                         }
