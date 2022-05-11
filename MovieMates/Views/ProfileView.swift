@@ -56,8 +56,8 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showingSheet) {
-                                //FriendRequestTestView(showProfileSheet: $showingSheet)
-                                SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
+                                FriendRequestTestView(showProfileSheet: $showingSheet)
+                                //SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
                                 
                             }
                         }
@@ -84,9 +84,9 @@ struct ProfileView: View {
                     Text("About").tag("about")
                     
                 })
-                    .padding()
-                    .pickerStyle(SegmentedPickerStyle())
-                    .colorMultiply(.red)
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
+                .colorMultiply(.red)
                 
                 
                 switch index {
@@ -148,7 +148,7 @@ struct AboutMeView: View {
     init(user: User) {
         UITextView.appearance().backgroundColor = .clear
         self.user = user
-         
+        
     }
     
     var body: some View{
@@ -178,14 +178,14 @@ struct AboutMeView: View {
                             
                         }
                         
-                        }.onAppear {
-                            if let bio = user.bio {
-                                self.bio = bio
-                            }
-                        
+                    }.onAppear {
+                        if let bio = user.bio {
+                            self.bio = bio
                         }
-                        Spacer()
                         
+                    }
+                    Spacer()
+                    
                     
                 }.padding()
                 HStack{
@@ -300,61 +300,92 @@ struct FriendRequestTestView: View {
     @Binding var showProfileSheet: Bool
     @ObservedObject var uq = um
     
+    @State var username = ""
+    @State var biography = ""
+    
     var body: some View {
-        ForEach(uq.listOfUsers) { user in
+        VStack{
             
-            if user.id != um.currentUser!.id! {
+            ForEach(uq.listOfUsers) { user in
                 
-                if um.currentUser!.friends.contains(user.id!) {
-                    Text("\(user.username) is your friend")
-                }
-                else if um.currentUser!.frequests.contains(user.id!) {
-                    Text("\(user.username) has sent you a request")
-                }
-                else if user.frequests.contains(um.currentUser!.id!) {
-                    Text("You've sent \(user.username) a request")
-                }
-                else {
-                    Button {
-                        um.friendRequest(to: user)
-                    } label: {
-                        Text("Add \(user.username)")
+                if user.id != um.currentUser!.id! {
+                    
+                    if um.currentUser!.friends.contains(user.id!) {
+                        Text("\(user.username) is your friend")
                     }
+                    else if um.currentUser!.frequests.contains(user.id!) {
+                        Text("\(user.username) has sent you a request")
+                    }
+                    else if user.frequests.contains(um.currentUser!.id!) {
+                        Text("You've sent \(user.username) a request")
+                    }
+                    else {
+                        Button {
+                            um.friendRequest(to: user)
+                        } label: {
+                            Text("Add \(user.username)")
+                        }
+                    }
+                    
+                    
                 }
-
                 
             }
             
+            Text("Requests:").padding().padding(.top,40)
+            ForEach(uq.currentUser!.frequests, id: \.self) { request in
+                
+                Button {
+                    uq.manageFriendRequests(forId: request, accept: true)
+                } label: {
+                    Text("Accept request from \(request)")
+                }
+                Button {
+                    uq.manageFriendRequests(forId: request, accept: false)
+                } label: {
+                    Text("Deny request from \(request)")
+                }
+                
+                
+                
+            }
+            
+            Text("Friends:").padding().padding(.top,40)
+            ForEach(uq.currentUser!.friends, id: \.self) { friend in
+                
+                Button {
+                    um.removeFriend(id: friend)
+                } label: {
+                    Text("Remove \(friend)")
+                }
+                
+                
+            }
+            
+            Text("Change Username:").padding().padding(.top,40)
+            TextField("username", text: $username)
+            
+            Button {
+                if !username.isEmpty {
+                    um.changeUsername(username: username)
+                    username = ""
+                }
+            } label: {
+                Text("Change username")
+            }
         }
+        Text("Change Biography:").padding().padding(.top,40)
         
-        Text("Requests:").padding().padding(.top,40)
-        ForEach(uq.currentUser!.frequests, id: \.self) { request in
-            
-            Button {
-                uq.manageFriendRequests(forId: request, accept: true)
-            } label: {
-                Text("Accept request from \(request)")
-            }
-            Button {
-                uq.manageFriendRequests(forId: request, accept: false)
-            } label: {
-                Text("Deny request from \(request)")
-            }
-
-
-            
-        }
+        TextField("biography", text: $biography)
         
-        Text("Friends:").padding().padding(.top,40)
-        ForEach(uq.currentUser!.friends, id: \.self) { friend in
-            
-            Button {
-                um.removeFriend(id: friend)
-            } label: {
-                Text("Remove \(friend)")
+        Button {
+            if !biography.isEmpty {
+                um.updateBiography(biography: biography)
+                biography = ""
             }
-
-            
+        } label: {
+            Text("Change biography")
         }
     }
 }
+
