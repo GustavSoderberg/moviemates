@@ -12,6 +12,8 @@ struct HomeView: View {
     @State var index = "friends"
     @State var showMovieView = false
     
+    @ObservedObject var viewModel = MovieListViewModel()
+    
     var body: some View {
         ZStack{
             Color("background")
@@ -21,6 +23,7 @@ struct HomeView: View {
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag("friends")
                     Text("Trending").tag("trending")
+                    Text("Popular").tag("popular")
                     
                 })
                 .padding(.horizontal)
@@ -39,6 +42,10 @@ struct HomeView: View {
                             ForEach(trendingReviews) { review in
                                 ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
+                        case "popular":
+                            ForEach(viewModel.popularMovies) { movie in
+                                MovieCardView(movie: movie)
+                            }
                             
                         default:
                             ForEach(friendsReviews) { review in
@@ -46,14 +53,11 @@ struct HomeView: View {
                             }
                         }
                     }.padding()
+                        .onAppear {
+                            viewModel.fetchPopularMovies()
+                        }
+                        
                 }
-                //TODO: The sheet needs darkmode/lightmode specified based on the device colorScheme
-
-//                .sheet(isPresented: $showMovieView) {
-//                    MovieViewController(movie: movie)
-//                        .preferredColorScheme(.dark)
-////                        .preferredColorScheme( true ? .dark : .light)
-//                }
             }
         }
     }
@@ -75,6 +79,7 @@ struct ReviewCardView: View {
                 .fill(.gray)
             HStack(alignment: .top){
                 if let movie = movie {
+                    
                     AsyncImage(url: movie.posterURL){ image in
                         image
                             .resizable()
@@ -90,18 +95,22 @@ struct ReviewCardView: View {
                     }
                     
                     VStack(alignment: .leading){
+                        
                         HStack{
                             Text(review.username)
                             Spacer()
                             Text(formatDate(date: review.timestamp))
                                 .font(.system(size: 12))
                         }
+                        
                         Text(movie.title ?? "no title")
                             .font(.title2)
                             .minimumScaleFactor(0.7)
                             .lineLimit(1)
+                        
                         Text(review.rating)
                             .padding(.bottom, 4)
+                        
                         Text(review.reviewText)
                             .font(.system(size: 15))
                             .lineLimit(isExpanded ? nil : 4)
