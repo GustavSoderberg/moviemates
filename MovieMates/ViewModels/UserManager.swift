@@ -13,6 +13,7 @@ class UserManager: ObservableObject {
     var listOfUsers = [User]()
     var currentUser: User? = nil
     
+    @Published var notification = false
     @Published var isLoading = true
     @Published var refresh = 0
     

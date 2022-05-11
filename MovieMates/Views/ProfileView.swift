@@ -13,9 +13,13 @@ struct ProfileView: View {
     
     @State var index = "reviews"
     @State private var showingSheet = false
+    @State private var showingNotificationSheet = false
+    
     @State private var changeUsername = ""
     @State private var addFriend = false
     var user: User
+    @State var test = 0
+    @ObservedObject var ooum = um
     
     
     
@@ -28,22 +32,79 @@ struct ProfileView: View {
                 
                 ZStack{
                     
-                    Text(um.currentUser!.username)
+                    Text(ooum.currentUser!.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
+                        
+                        if ooum.currentUser!.id == ooum.currentUser!.id {
+                            if !ooum.notification {
+                                
+                                Button {
+                                    //ooum.notification = true
+                                    showingNotificationSheet = true
+                                } label: {
+                                    Image(systemName: "bell")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.leading, 20)
+                                }.sheet(isPresented: $showingNotificationSheet) {
+                                    NotificationSheet(showNotificationSheet: $showingNotificationSheet)
+                                }
+                            } else {
+                                Button {
+                                    //ooum.notification = false
+                                } label: {
+                                    Image(systemName: "bell.badge")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.leading, 20)
+                                }
+                                
+                            }
+                        }
+                        
+                        
                         Spacer()
                         
-                        if um.currentUser!.id != um.currentUser!.id {
-                            Button {
-                                print("added friendo")
-                            } label: {
-                                Image(systemName: "person.crop.circle.badge.plus")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .padding(.trailing, 20)
+                        if ooum.currentUser!.id != ooum.currentUser!.id {
+                            
+                            switch test {
+                            case 0:
+                                Button {
+                                    test = 1
+                                } label: {
+                                    Image(systemName: "person.crop.circle.badge.plus")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.white)
+                                }
+                            case 1:
+                                Button {
+                                    test = 2
+                                } label: {
+                                    Image(systemName: "hourglass")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.yellow)
+                                    
+                                }
+                            case 2:
+                                Button {
+                                    print("friend accepted")
+                                } label: {
+                                    Image(systemName: "person.fill.checkmark")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.green)
+                                }
+                            default:
+                                Text("error")
                             }
                             
                         } else {
@@ -65,7 +126,7 @@ struct ProfileView: View {
                     
                 }
                 Spacer()
-                AsyncImage(url: um.currentUser!.photoUrl) { image in
+                AsyncImage(url: ooum.currentUser!.photoUrl) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
@@ -82,6 +143,7 @@ struct ProfileView: View {
                     Text("Reviews").tag("reviews")
                     Text("Watchlist").tag("watchlist")
                     Text("About").tag("about")
+                    Text("Friends").tag("friends")
                     
                 })
                 .padding()
@@ -96,6 +158,8 @@ struct ProfileView: View {
                     WatchListView()
                 case "about":
                     AboutMeView(user: user)
+                case "friends":
+                    FriendListView()
                 default:
                     UserReviewView()
                 }
@@ -295,6 +359,28 @@ private var myReviews = [
 ////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
 ////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
 //]
+
+struct FriendListView: View{
+    
+    @ObservedObject var ooum = um
+    
+    var body: some View {
+        
+        
+        
+        ScrollView{
+            
+            ForEach (um.currentUser!.friends, id:\.self) { friend in
+                
+                Text(friend)
+                
+                
+            }
+            
+        }
+    }
+    
+}
 
 struct FriendRequestTestView: View {
     @Binding var showProfileSheet: Bool
