@@ -27,7 +27,7 @@ struct MovieViewController: View {
                 MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView)
                 
             case .ReviewSheet:
-                ReviewSheet()
+                ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
             }
         }
         .interactiveDismissDisabled()
@@ -66,6 +66,7 @@ struct MovieView: View {
                         gap(height: 2)
                         Text(title)
                             .font(Font.headline.weight(.bold))
+                            .multilineTextAlignment(.center)
                     }
                     Text("Review")
                         .foregroundColor(.clear)
@@ -93,7 +94,7 @@ struct MovieView: View {
             
             ScrollView{
                 VStack{
-                    AsyncImage(url: currentMovie.backdropURL){ image in
+                    AsyncImage(url: currentMovie.backdropURL) { image in
                         image
                             .resizable()
                             .scaledToFill()
@@ -343,7 +344,7 @@ private var friendsReviews = [
 private var globalReviews = [
     Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
     Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
-    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "0/5", reviewText: "Vad var detta?"),
+    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "1/5", reviewText: "Vad var detta?"),
     Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
     Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
 ]
@@ -416,6 +417,9 @@ struct RoundedCorner: Shape {
     }
 }
 
+
+
+//Preview!!
 struct MovieView_Previews: PreviewProvider {
     static var previews: some View {
         MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), showMovieView: .constant(true))
