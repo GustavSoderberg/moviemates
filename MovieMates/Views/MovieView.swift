@@ -48,7 +48,7 @@ struct MovieView: View {
     @State var ratingLocalScore : String = "0"
     
     @State var onWatchlist = false
-    @State var watchlistText  = "Add to Watchlist"
+    @State var watchlistText  = "Add to Watchlist?"
     
     @State var descFull = false
     @State var descHeight: CGFloat? = 110
@@ -118,12 +118,13 @@ struct MovieView: View {
                 .padding(.horizontal)
                 
                 HStack {
+                    Spacer()
                     Text("\(watchlistText)")
                         .padding(.horizontal)
-                        .background(Color.red)
+                        .background(.gray)
                         .cornerRadius(5)
                         .foregroundColor(.white)
-                        .font(.largeTitle)
+                        .font(Font.headline.weight(.bold))
                         .onTapGesture {
                             //TODO ad to wishlist
                             if onWatchlist {
