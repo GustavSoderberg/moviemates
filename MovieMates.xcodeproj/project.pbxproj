@@ -40,6 +40,7 @@
 		B548919E282800B000B9ABF4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919D282800B000B9ABF4 /* Constants.swift */; };
 		B54891A0282830F100B9ABF4 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919F282830F100B9ABF4 /* APIResponse.swift */; };
 		B54891A32828FB6F00B9ABF4 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = B54891A22828FB6F00B9ABF4 /* AlamofireImage */; };
+		B54891A9282B15F700B9ABF4 /* SearchViewInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54891A8282B15F700B9ABF4 /* SearchViewInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,7 @@
 		B548919B2827F97F00B9ABF4 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		B548919D282800B000B9ABF4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B548919F282830F100B9ABF4 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		B54891A8282B15F700B9ABF4 /* SearchViewInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
 				3F2972C12822C92D00D1616D /* ViewComponents */,
 				B548919B2827F97F00B9ABF4 /* SearchBar.swift */,
+				B54891A8282B15F700B9ABF4 /* SearchViewInfo.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				1FABF9012822B734006F5259 /* MovieView.swift in Sources */,
 				3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */,
 				55738AC52823CF6F00A5ED38 /* Movie.swift in Sources */,
+				B54891A9282B15F700B9ABF4 /* SearchViewInfo.swift in Sources */,
 				3FC3D1B52823C9970005E8BD /* FirestoreManager.swift in Sources */,
 				B548919A2827F68500B9ABF4 /* MovieListViewModel.swift in Sources */,
 				3F396FE728229F0100E1D336 /* User.swift in Sources */,

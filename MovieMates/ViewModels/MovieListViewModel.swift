@@ -15,6 +15,7 @@ final class MovieListViewModel: ObservableObject {
     @Published var movies: [Movie] = []
     @Published var page: Int = 1
     @Published var totalPages: Int = 1
+    @Published var infoText: String = "Type to search"
     var lastmovieId = 1
 
     var searchTerm: String = ""
@@ -28,6 +29,7 @@ final class MovieListViewModel: ObservableObject {
         page = 1
         totalPages = 1
         lastmovieId = 1
+        infoText = "Type to search"
     }
     
     func loadMoreContent(currentItem item: Movie){
@@ -40,7 +42,11 @@ final class MovieListViewModel: ObservableObject {
 
     private func requestMovies(searchTerm: String){
         
-        guard let url = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&language=en-US&query=\(searchTerm)&page=\(page)&include_adult=false")  else {return}
+        guard let encodedString  =  searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let url = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&language=en-US&query=\(encodedString)&page=\(page)&include_adult=false")  else {
+            print("invalid URL")
+            return
+            
+        }
         
         AF.request(url).responseDecodable(of: APIMovieResponse.self) { responce in
                 switch responce.result {
@@ -49,6 +55,9 @@ final class MovieListViewModel: ObservableObject {
                     
                     self.movies.append(contentsOf: value.results ?? [Movie]())
                     self.lastmovieId = self.movies.last?.id ?? 1
+                    if self.movies.isEmpty {
+                        self.infoText = "Nothing to display"
+                    }
                 case .failure(let error):
                     print(error)
                 }
