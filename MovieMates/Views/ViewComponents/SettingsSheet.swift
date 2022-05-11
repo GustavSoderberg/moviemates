@@ -6,50 +6,131 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SettingsSheet: View {
-    @Binding var showProfileSheet: Bool
-    @Binding var changeUsername: String
-    @State private var changeTheme = 0
-    @State private var changeRegion = 0
+    
+    @Binding var showSettingsSheet: Bool
+    var user: User
+    @Binding var viewShowing: Status
+    
+    @State var isEditingUsername = false
+    @State var isEditingBiography = false
+    @State var username = ""
+    @State var biography = ""
     
     var body: some View {
         
-        Text("Username: ")
-        TextField("Change username: ", text: $changeUsername)
-        
-        Text("Theme: ")
-        Picker("Theme", selection: $changeTheme){
-            Text("Theme 1").tag(0)
-            Text("Theme 2").tag(1)
-            Text("Theme 3").tag(2)
-        }.pickerStyle(SegmentedPickerStyle())
-            .colorMultiply(.red)
-        
-        Text("Region: ")
-        Picker("Region", selection: $changeRegion){
-            Text("Sweden").tag(0)
-                .background(.green)
-            Text("USA").tag(1)
-                .background(.blue)
-            Text("China").tag(2)
-                .background(.pink)
-        }.pickerStyle(SegmentedPickerStyle())
-            .colorMultiply(.red)
-        
-        Button("Press to dismiss") {
-            showProfileSheet = false
+        VStack{
+            
+            HStack {
+                Button {
+                    showSettingsSheet = false
+                } label: {
+                    Text("Back")
+                        .padding()
+                }
+                
+                Spacer()
+            }
+            
+            Spacer()
+            
+            HStack{
+                Text("Change Username")
+                    .font(.title2)
+                Spacer()
+            }
+            ZStack(){
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .fill(Color("secondary-background"))
+                    .frame(height: 50)
+                
+                TextField("username", text: $username)
+                    .lineLimit(1)
+                    .padding(.leading, 10)
+                    .onAppear(perform: {
+                        username = user.username
+                    })
+                    .onTapGesture {
+                        isEditingUsername = true
+                    }
+                
+            }
+            
+            HStack {
+                Spacer()
+                Button {
+                    um.changeUsername(username: username)
+                    isEditingUsername = false
+                } label: {
+                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingUsername ? .white : .gray)
+                }
+                Button {
+                    username = user.username
+                    isEditingUsername = false
+                } label: {
+                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingUsername ? .white : .gray)
+                }
+                
+            }.padding()
+                
+            HStack{
+                Text("Change Biography")
+                    .font(.title2)
+                Spacer()
+            }
+            ZStack(){
+                RoundedRectangle(cornerRadius: 15, style: .continuous)
+                    .fill(Color("secondary-background"))
+                    .frame(minHeight: 100)
+                
+                TextField("username", text: $biography)
+                    .padding(.leading, 10)
+                    .onAppear(perform: {
+                        biography = user.bio!
+                    })
+                    .onTapGesture {
+                        isEditingBiography = true
+                    }
+                
+            }
+            
+            HStack {
+                Spacer()
+                Button {
+                    um.updateBiography(biography: biography)
+                    isEditingBiography = false
+                } label: {
+                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingBiography ? .white : .gray)
+                }
+                Button {
+                    biography = user.bio!
+                    isEditingBiography = false
+                } label: {
+                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingBiography ? .white : .gray)
+                }
+                
+            }.padding()
+            
+                Spacer()
+            
+            Button {
+                
+                try! Auth.auth().signOut()
+                showSettingsSheet = false
+                
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                        .fill(Color("secondary-background"))
+                        .frame(height: 50)
+                    Text("SIGN OUT").font(.headline).foregroundColor(.white)
+                }
+            }
+
+                
         }
-        .font(.title2)
         .padding()
-        .cornerRadius(25)
-        .background(Color("inputs"))
-        .foregroundColor(.red)
     }
 }
-
-//struct SettingsSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SettingsSheet()
-//    }
-//}

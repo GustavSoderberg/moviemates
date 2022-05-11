@@ -20,6 +20,7 @@ struct ContentView: View {
     
     @ObservedObject var uw = um
     @State var viewShowing: Status = .Loading
+    @State private var selection = 2
     @State var text = ""
     
     init() {
@@ -69,22 +70,28 @@ struct ContentView: View {
                 
             case .HomeView:
                 
-                TabView {
-                    ProfileView(user: um.currentUser!)
+                TabView(selection: $selection) {
+                    ProfileView(user: um.currentUser!, viewShowing: $viewShowing)
                         .tabItem {
                             Image(systemName: "person.fill")
                             Text("Profile")
                         }
+                        .tag(1)
+                    
                     HomeView()
                         .tabItem {
                             Image(systemName: "house")
                             Text("Home")
                         }
+                        .tag(2)
+                    
                     SearchView(text: $text)
                         .tabItem {
                             Image(systemName: "magnifyingglass")
                             Text("Search")
                         }
+                        .tag(3)
+                    
                 }
             }
         }
