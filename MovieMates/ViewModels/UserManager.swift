@@ -13,6 +13,7 @@ class UserManager: ObservableObject {
     var listOfUsers = [User]()
     var currentUser: User? = nil
     
+    @Published var notification = false
     @Published var isLoading = true
     @Published var refresh = 0
     
@@ -135,4 +136,15 @@ class UserManager: ObservableObject {
         
     }
     
+    func getUser(id: String) -> User{
+        
+        for user in listOfUsers {
+            if user.id == id {
+                return user
+                
+            }
+        }
+        //Retunerar en testuser om if satsen misslyckas
+        return User(id: "", username: "", photoUrl: URL(string: "")!, bio: "", friends: ["",""], frequests: ["",""], themeId: 0)
+    }
 }
