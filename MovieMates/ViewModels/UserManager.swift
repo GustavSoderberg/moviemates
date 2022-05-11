@@ -136,14 +136,15 @@ class UserManager: ObservableObject {
         
     }
     
-    func getUsername(id: String) -> String {
+    func getUser(id: String) -> User{
         
         for user in listOfUsers {
             if user.id == id {
-                return user.username
+                return user
                 
             }
         }
-        return "E: UserManger - getUsername() Could not find user"
+        //Retunerar en testuser om if satsen misslyckas
+        return User(id: "", username: "", photoUrl: URL(string: "")!, bio: "", friends: ["",""], frequests: ["",""], themeId: 0)
     }
 }

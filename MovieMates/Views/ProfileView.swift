@@ -366,14 +366,37 @@ struct FriendListView: View{
     
     var body: some View {
         
-        
-        
         ScrollView{
             
             ForEach (um.currentUser!.friends, id:\.self) { friend in
                 
-                Text(um.getUsername(id: friend))
-                
+                let user = um.getUser(id: friend)
+                HStack{
+                    
+                    AsyncImage(url: user.photoUrl) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(50)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    Text(user.username)
+                    
+                    Button {
+                        um.removeFriend(id: user.id!)
+                    } label: {
+                        Image(systemName: "trash.circle")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.red)
+                            
+                    }
+
+                    
+                    
+                    
+                }
                 
             }
             
