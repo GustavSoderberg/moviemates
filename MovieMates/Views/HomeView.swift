@@ -12,6 +12,8 @@ struct HomeView: View {
     @State var index = "friends"
     @State var showMovieView = false
     
+    @ObservedObject var viewModel = MovieListViewModel()
+    
     var body: some View {
         ZStack{
             Color("background")
@@ -21,6 +23,7 @@ struct HomeView: View {
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag("friends")
                     Text("Trending").tag("trending")
+                    Text("Popular").tag("popular")
                     
                 })
                 .padding(.horizontal)
@@ -39,6 +42,10 @@ struct HomeView: View {
                             ForEach(trendingReviews) { review in
                                 ReviewCardView(review: review, showMovieView: $showMovieView)
                             }
+                        case "popular":
+                            ForEach(viewModel.popularMovies) { movie in
+                                MovieCardView(movie: movie)
+                            }
                             
                         default:
                             ForEach(friendsReviews) { review in
@@ -46,14 +53,11 @@ struct HomeView: View {
                             }
                         }
                     }.padding()
+                        .onAppear {
+                            viewModel.fetchPopularMovies()
+                        }
+                        
                 }
-                //TODO: The sheet needs darkmode/lightmode specified based on the device colorScheme
-
-//                .sheet(isPresented: $showMovieView) {
-//                    MovieViewController(movie: movie)
-//                        .preferredColorScheme(.dark)
-////                        .preferredColorScheme( true ? .dark : .light)
-//                }
             }
         }
     }
