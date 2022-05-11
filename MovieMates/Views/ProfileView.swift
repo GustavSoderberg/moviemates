@@ -13,9 +13,13 @@ struct ProfileView: View {
     
     @State var index = "reviews"
     @State private var showingSheet = false
+    @State private var showingNotificationSheet = false
+    
     @State private var changeUsername = ""
     @State private var addFriend = false
     var user: User
+    @State var test = 0
+    @ObservedObject var ooum = um
     
     
     
@@ -28,22 +32,79 @@ struct ProfileView: View {
                 
                 ZStack{
                     
-                    Text(um.currentUser!.username)
+                    Text(ooum.currentUser!.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
+                        
+                        if ooum.currentUser!.id == ooum.currentUser!.id {
+                            if !ooum.notification {
+                                
+                                Button {
+                                    //ooum.notification = true
+                                    showingNotificationSheet = true
+                                } label: {
+                                    Image(systemName: "bell")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.leading, 20)
+                                }.sheet(isPresented: $showingNotificationSheet) {
+                                    NotificationSheet(showNotificationSheet: $showingNotificationSheet)
+                                }
+                            } else {
+                                Button {
+                                    //ooum.notification = false
+                                } label: {
+                                    Image(systemName: "bell.badge")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.leading, 20)
+                                }
+                                
+                            }
+                        }
+                        
+                        
                         Spacer()
                         
-                        if um.currentUser!.id != um.currentUser!.id {
-                            Button {
-                                print("added friendo")
-                            } label: {
-                                Image(systemName: "person.crop.circle.badge.plus")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .padding(.trailing, 20)
+                        if ooum.currentUser!.id != ooum.currentUser!.id {
+                            
+                            switch test {
+                            case 0:
+                                Button {
+                                    test = 1
+                                } label: {
+                                    Image(systemName: "person.crop.circle.badge.plus")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.white)
+                                }
+                            case 1:
+                                Button {
+                                    test = 2
+                                } label: {
+                                    Image(systemName: "hourglass")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.yellow)
+                                    
+                                }
+                            case 2:
+                                Button {
+                                    print("friend accepted")
+                                } label: {
+                                    Image(systemName: "person.fill.checkmark")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.green)
+                                }
+                            default:
+                                Text("error")
                             }
                             
                         } else {
@@ -56,8 +117,8 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showingSheet) {
-                                //FriendRequestTestView(showProfileSheet: $showingSheet)
-                                SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
+                                FriendRequestTestView(showProfileSheet: $showingSheet)
+                                //SettingsSheet(showProfileSheet: $showingSheet, changeUsername: $changeUsername)
                                 
                             }
                         }
@@ -65,7 +126,7 @@ struct ProfileView: View {
                     
                 }
                 Spacer()
-                AsyncImage(url: um.currentUser!.photoUrl) { image in
+                AsyncImage(url: ooum.currentUser!.photoUrl) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
@@ -82,11 +143,12 @@ struct ProfileView: View {
                     Text("Reviews").tag("reviews")
                     Text("Watchlist").tag("watchlist")
                     Text("About").tag("about")
+                    Text("Friends").tag("friends")
                     
                 })
-                    .padding()
-                    .pickerStyle(SegmentedPickerStyle())
-                    .colorMultiply(.red)
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
+                .colorMultiply(.red)
                 
                 
                 switch index {
@@ -96,6 +158,8 @@ struct ProfileView: View {
                     WatchListView()
                 case "about":
                     AboutMeView(user: user)
+                case "friends":
+                    FriendListView()
                 default:
                     UserReviewView()
                 }
@@ -148,7 +212,7 @@ struct AboutMeView: View {
     init(user: User) {
         UITextView.appearance().backgroundColor = .clear
         self.user = user
-         
+        
     }
     
     var body: some View{
@@ -178,14 +242,14 @@ struct AboutMeView: View {
                             
                         }
                         
-                        }.onAppear {
-                            if let bio = user.bio {
-                                self.bio = bio
-                            }
-                        
+                    }.onAppear {
+                        if let bio = user.bio {
+                            self.bio = bio
                         }
-                        Spacer()
                         
+                    }
+                    Spacer()
+                    
                     
                 }.padding()
                 HStack{
@@ -296,65 +360,143 @@ private var myReviews = [
 ////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
 //]
 
+struct FriendListView: View{
+    
+    @ObservedObject var ooum = um
+    
+    var body: some View {
+        
+        ScrollView{
+            
+            ForEach (um.currentUser!.friends, id:\.self) { friend in
+                
+                let user = um.getUser(id: friend)
+                HStack{
+                    
+                    AsyncImage(url: user.photoUrl) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(50)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    Text(user.username)
+                    
+                    Button {
+                        um.removeFriend(id: user.id!)
+                    } label: {
+                        Image(systemName: "trash.circle")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.red)
+                            
+                    }
+
+                    
+                    
+                    
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+}
+
 struct FriendRequestTestView: View {
     @Binding var showProfileSheet: Bool
     @ObservedObject var uq = um
     
+    @State var username = ""
+    @State var biography = ""
+    
     var body: some View {
-        ForEach(uq.listOfUsers) { user in
+        VStack{
             
-            if user.id != um.currentUser!.id! {
+            ForEach(uq.listOfUsers) { user in
                 
-                if um.currentUser!.friends.contains(user.id!) {
-                    Text("\(user.username) is your friend")
-                }
-                else if um.currentUser!.frequests.contains(user.id!) {
-                    Text("\(user.username) has sent you a request")
-                }
-                else if user.frequests.contains(um.currentUser!.id!) {
-                    Text("You've sent \(user.username) a request")
-                }
-                else {
-                    Button {
-                        um.friendRequest(to: user)
-                    } label: {
-                        Text("Add \(user.username)")
+                if user.id != um.currentUser!.id! {
+                    
+                    if um.currentUser!.friends.contains(user.id!) {
+                        Text("\(user.username) is your friend")
                     }
+                    else if um.currentUser!.frequests.contains(user.id!) {
+                        Text("\(user.username) has sent you a request")
+                    }
+                    else if user.frequests.contains(um.currentUser!.id!) {
+                        Text("You've sent \(user.username) a request")
+                    }
+                    else {
+                        Button {
+                            um.friendRequest(to: user)
+                        } label: {
+                            Text("Add \(user.username)")
+                        }
+                    }
+                    
+                    
                 }
-
                 
             }
             
+            Text("Requests:").padding().padding(.top,40)
+            ForEach(uq.currentUser!.frequests, id: \.self) { request in
+                
+                Button {
+                    uq.manageFriendRequests(forId: request, accept: true)
+                } label: {
+                    Text("Accept request from \(request)")
+                }
+                Button {
+                    uq.manageFriendRequests(forId: request, accept: false)
+                } label: {
+                    Text("Deny request from \(request)")
+                }
+                
+                
+                
+            }
+            
+            Text("Friends:").padding().padding(.top,40)
+            ForEach(uq.currentUser!.friends, id: \.self) { friend in
+                
+                Button {
+                    um.removeFriend(id: friend)
+                } label: {
+                    Text("Remove \(friend)")
+                }
+                
+                
+            }
+            
+            Text("Change Username:").padding().padding(.top,40)
+            TextField("username", text: $username)
+            
+            Button {
+                if !username.isEmpty {
+                    um.changeUsername(username: username)
+                    username = ""
+                }
+            } label: {
+                Text("Change username")
+            }
         }
+        Text("Change Biography:").padding().padding(.top,40)
         
-        Text("Requests:").padding().padding(.top,40)
-        ForEach(uq.currentUser!.frequests, id: \.self) { request in
-            
-            Button {
-                uq.manageFriendRequests(forId: request, accept: true)
-            } label: {
-                Text("Accept request from \(request)")
-            }
-            Button {
-                uq.manageFriendRequests(forId: request, accept: false)
-            } label: {
-                Text("Deny request from \(request)")
-            }
-
-
-            
-        }
+        TextField("biography", text: $biography)
         
-        Text("Friends:").padding().padding(.top,40)
-        ForEach(uq.currentUser!.friends, id: \.self) { friend in
-            
-            Button {
-                um.removeFriend(id: friend)
-            } label: {
-                Text("Remove \(friend)")
+        Button {
+            if !biography.isEmpty {
+                um.updateBiography(biography: biography)
+                biography = ""
             }
-
-            
+        } label: {
+            Text("Change biography")
         }
     }
 }
+

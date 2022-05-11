@@ -22,48 +22,11 @@ struct SearchView: View {
                 .ignoresSafeArea()
             VStack{
                 
-//                HStack{
-//
-//                    TextField("Search....", text: $text)
-//                        .padding(10)
-//                        .padding(.horizontal, 25)
-//                        .foregroundColor(.white)
-//                        .background(Color(.lightGray))
-//                        .cornerRadius(10)
-//                        .padding(.horizontal, 10 )
-//                        .onTapGesture {
-//                            self.isEditing = true
-//                        }
-//                        .overlay(
-//                            HStack{
-//                                Image(systemName: "magnifyingglass")
-//                                    .foregroundColor(.red)
-//                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-//                                    .padding(.leading, 20)
-//
-//
-//                                if isEditing{
-//                                    Button(action: {
-//                                        self.text = ""
-//                                        isEditing = false
-//                                    }) {
-//                                        Image(systemName: "multiply.circle.fill")
-//                                            .foregroundColor(.white)
-//                                            .padding(.trailing, 20)
-//                                    }
-//                                }
-//                            }
-//                        )
-//                }
-                
                 Picker(selection: $index,
                        label: Text("Reviews"),
                        content: {
                     Text("Movies/Series").tag("movies")
                     Text("Users").tag("users")
-                    
-                    
-                    
                 })
                     .padding()
                     .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
@@ -84,18 +47,31 @@ struct SearchView: View {
 struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
+    @State var infoText = "Type to search"
     
     var body: some View{
         VStack{
             SearchBar(text: $viewModel.searchTerm,
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
-            List(viewModel.movies, id: \.id) { movie in
-                MovieCardView(movie: movie)
-                    .onAppear(){
-                        viewModel.loadMoreContent(currentItem: movie)
-                    }
+            if viewModel.searchTerm.isEmpty {
+//                infoText = "Type to search"
+                SearchViewInfo(infoText: $viewModel.infoText)
+                    .frame(maxHeight: .infinity)
+            } else if viewModel.movies.isEmpty && !viewModel.searchTerm.isEmpty {
+//                infoText = "Nothing to display"
+                SearchViewInfo(infoText: $viewModel.infoText)
+                    .frame(maxHeight: .infinity)
+            } else {
+                List(viewModel.movies, id: \.id) { movie in
+                    MovieCardView(movie: movie)
+                        .onAppear(){
+                            viewModel.loadMoreContent(currentItem: movie)
+                        }
+                }
             }
+            
+
 
 //            ScrollView{
 //                LazyVStack{
@@ -150,10 +126,10 @@ struct UserCardView: View {
 }
 
 private var searchResultsUsers = [
-    User(id: "", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
+    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
 ]
 
 //private var searchResultsMovies = [

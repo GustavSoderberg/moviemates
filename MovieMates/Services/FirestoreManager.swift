@@ -155,4 +155,32 @@ class FirestoreManager {
         return false
         
     }
+    
+    func changeUsername(you: User, username: String) -> Bool {
+        
+        db.collection("users").document(you.id!)
+            
+                .updateData([
+                    
+                    "username": username
+                    
+                ])
+        
+        return true
+        
+    }
+    
+    func updateBiography(you: User, biography: String) -> Bool {
+        
+        db.collection("users").document(you.id!)
+            
+                .updateData([
+                    
+                    "bio": biography
+                    
+                ])
+        
+        return true
+        
+    }
 }
