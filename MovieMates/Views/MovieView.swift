@@ -105,12 +105,15 @@ struct MovieView: View {
                     
                     Text(description)
                         .onTapGesture {
-                            if descFull {
-                                descFull = false
-                                descHeight = .infinity
-                            } else {
-                                descFull = true
-                                descHeight = 110
+                            withAnimation() {
+                                if !descFull {
+                                    descFull = true
+                                    descHeight = .infinity
+                                }
+//                                else {
+//                                    descFull = false
+//                                    descHeight = 110
+//                                }
                             }
                         }
                         .frame(maxHeight: descHeight)
@@ -121,7 +124,7 @@ struct MovieView: View {
                     Spacer()
                     Text("\(watchlistText)")
                         .padding(.horizontal)
-                        .background(.gray)
+                        .background(onWatchlist ? .red : .gray)
                         .cornerRadius(5)
                         .foregroundColor(.white)
                         .font(Font.headline.weight(.bold))
