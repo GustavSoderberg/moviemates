@@ -53,6 +53,7 @@ struct ProfileView: View {
                                         .padding(.leading, 20)
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
+                                        .preferredColorScheme(.dark)
                                 }
                             } else {
                                 Button {
@@ -70,12 +71,40 @@ struct ProfileView: View {
                         
                         Spacer()
                         
-                        if user.id != ooum.currentUser!.id {
+                        if user.id != ooum.currentUser!.id! {
                             
-                            switch test {
-                            case 0:
+                            if ooum.currentUser!.friends.contains(user.id!) {
+
+                                Image(systemName: "person.fill.checkmark")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing, 20)
+                                    .foregroundColor(.green)
+                                
+                            }
+                            else if ooum.currentUser!.frequests.contains(user.id!) {
                                 Button {
-                                    test = 1
+                                    um.manageFriendRequests(forId: user.id!, accept: true)
+                                } label: {
+                                    Image(systemName: "checkmark.circle")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.green)
+                                }.buttonStyle(.plain)
+
+                                
+                            }
+                            else if user.frequests.contains(um.currentUser!.id!) {
+                                Image(systemName: "hourglass")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing, 20)
+                                    .foregroundColor(.yellow)
+                            }
+                            else {
+                                Button {
+                                    um.friendRequest(to: user)
                                 } label: {
                                     Image(systemName: "person.crop.circle.badge.plus")
                                         .resizable()
@@ -83,32 +112,11 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.white)
                                 }
-                            case 1:
-                                Button {
-                                    test = 2
-                                } label: {
-                                    Image(systemName: "hourglass")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .padding(.trailing, 20)
-                                        .foregroundColor(.yellow)
-                                    
-                                }
-                            case 2:
-                                Button {
-                                    print("friend accepted")
-                                } label: {
-                                    Image(systemName: "person.fill.checkmark")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .padding(.trailing, 20)
-                                        .foregroundColor(.green)
-                                }
-                            default:
-                                Text("error")
                             }
                             
-                        } else {
+                            
+                        }
+                        else {
                             
                             Button {
                                 showSettingsSheet = true

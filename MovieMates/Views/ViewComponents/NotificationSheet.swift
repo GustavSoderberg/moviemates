@@ -24,12 +24,19 @@ struct NotificationSheet: View {
             
             Divider()
             
-            ForEach(oum.currentUser!.frequests, id: \.self) { request in
-                
-                mockupNotification(user: um.getUser(id: request))
-                    .padding()
-                
+            if oum.currentUser!.frequests.isEmpty {
+                Spacer()
+                Text("You have no new notifications")
             }
+            else {
+                ForEach(oum.currentUser!.frequests, id: \.self) { request in
+                    
+                    mockupNotification(user: um.getUser(id: request))
+                        .padding()
+                    
+                }
+            }
+            
             
             
             
