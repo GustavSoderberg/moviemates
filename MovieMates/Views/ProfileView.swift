@@ -120,8 +120,8 @@ struct ProfileView: View {
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
                                 if Auth.auth().currentUser == nil { viewShowing = .WelcomeView }
                             }) {
-                                //FriendRequestTestView(showProfileSheet: $showingSheet)
-                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
+                                FriendRequestTestView(showProfileSheet: $showSettingsSheet)
+                                //SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
                                     .preferredColorScheme(.dark)
                                 
                             }
@@ -361,33 +361,40 @@ struct FriendListView: View{
             ForEach (um.currentUser!.friends, id:\.self) { friend in
                 
                 let user = um.getUser(id: friend)
-                HStack{
-                    
-                    AsyncImage(url: user.photoUrl) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    Text(user.username)
-                    
-                    Button {
-                        um.removeFriend(id: user.id!)
-                    } label: {
-                        Image(systemName: "trash.circle")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.red)
+                VStack {
+                    HStack{
+                        
+                        AsyncImage(url: user.photoUrl) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(50)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        
+                        VStack(alignment: .leading){
+                            Text(user.username)
                             
+                            // Add number of reviews object
+                            Text("Reviews: 25")
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            um.removeFriend(id: user.id!)
+                        } label: {
+                            Image(systemName: "trash.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.red)
+                        }
                     }
-
-                    
-                    
-                    
+                    .padding()
                 }
-                
+                .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
+                .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
             }
             
         }
