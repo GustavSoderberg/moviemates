@@ -128,8 +128,8 @@ struct ProfileView: View {
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
                                 if Auth.auth().currentUser == nil { viewShowing = .WelcomeView }
                             }) {
-                                FriendRequestTestView(showProfileSheet: $showSettingsSheet)
-                                //SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
+                                //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
+                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
                                     .preferredColorScheme(.dark)
                                 
                             }
