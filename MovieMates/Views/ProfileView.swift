@@ -146,8 +146,8 @@ struct ProfileView: View {
                        content: {
                     Text("Reviews").tag("reviews")
                     Text("Watchlist").tag("watchlist")
-                    Text("About").tag("about")
                     Text("Friends").tag("friends")
+                    Text("About").tag("about")
                     
                 })
                 .padding()
@@ -160,10 +160,10 @@ struct ProfileView: View {
                     UserReviewView()
                 case "watchlist":
                     WatchListView()
-                case "about":
-                    AboutMeView(user: user)
                 case "friends":
                     FriendListView()
+                case "about":
+                    AboutMeView(user: user)
                 default:
                     UserReviewView()
                 }
@@ -234,27 +234,13 @@ struct AboutMeView: View {
                         .frame(minHeight: 100)
                     
                     VStack{
-                        if um.currentUser!.id != um.currentUser!.id {
-                            Text("Hej")
-                                .padding()
-                        }else if um.currentUser!.id == um.currentUser!.id {
-                            TextEditor(text: $bio)
-                                .background(Color("secondary-background"))
-                                .foregroundColor(.white)
-                                .frame(minHeight: 100)
-                                .cornerRadius(25)
-                            
-                        }
-                        
-                    }.onAppear {
-                        if let bio = user.bio {
-                            self.bio = bio
-                        }
-                        
+                        Text(user.bio!)
+                            .background(Color("secondary-background"))
+                            .frame(minHeight: 100)
+                            .cornerRadius(25)
+                            .padding()
+                        Spacer()
                     }
-                    Spacer()
-                    
-                    
                 }.padding()
                 HStack{
                     Text("Summary of \(um.currentUser!.username)")
