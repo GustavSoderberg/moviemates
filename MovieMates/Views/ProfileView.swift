@@ -32,14 +32,14 @@ struct ProfileView: View {
                 
                 ZStack{
                     
-                    Text(ooum.currentUser!.username)
+                    Text(user.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
                         
-                        if ooum.currentUser!.id == ooum.currentUser!.id {
+                        if user.id == ooum.currentUser!.id {
                             if !ooum.notification {
                                 
                                 Button {
@@ -70,7 +70,7 @@ struct ProfileView: View {
                         
                         Spacer()
                         
-                        if ooum.currentUser!.id != ooum.currentUser!.id {
+                        if user.id != ooum.currentUser!.id {
                             
                             switch test {
                             case 0:
@@ -130,7 +130,7 @@ struct ProfileView: View {
                     
                 }
                 Spacer()
-                AsyncImage(url: ooum.currentUser!.photoUrl) { image in
+                AsyncImage(url: user.photoUrl) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
@@ -243,7 +243,7 @@ struct AboutMeView: View {
                     }
                 }.padding()
                 HStack{
-                    Text("Summary of \(um.currentUser!.username)")
+                    Text("Summary of \(user.username)")
                         .font(.title2)
                         .padding()
                     Spacer()
@@ -358,7 +358,7 @@ struct FriendListView: View{
         
         ScrollView{
             
-            ForEach (um.currentUser!.friends, id:\.self) { friend in
+            ForEach (ooum.currentUser!.friends, id:\.self) { friend in
                 
                 let user = um.getUser(id: friend)
                 VStack {
