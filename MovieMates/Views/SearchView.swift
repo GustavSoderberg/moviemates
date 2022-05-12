@@ -88,28 +88,33 @@ struct usersView: View {
     @Binding var viewShowing: Status
     @ObservedObject var oum = um
     @State var showProfileView = false
-    @State var index = 0
+    @State var index1 = 0
     
     var body: some View{
         VStack{
             ScrollView{
                 VStack{
                     ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
-                        Button {
-                            self.index = index
-                            showProfileView = true
-                        } label: {
-                            UserCardView(user: user)
+                        
+                        if user.id != um.currentUser!.id {
+                            Button {
+                                index1 = index
+                                um.refresh += 1
+                                
+                                showProfileView = true
+                            } label: {
+                                UserCardView(user: user)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
                 .padding()
-                .sheet(isPresented: $showProfileView) {
-                    ProfileView(user: oum.listOfUsers[index], viewShowing: $viewShowing)
-                        .preferredColorScheme(.dark)
-                }
+                
             }
+        }.sheet(isPresented: $showProfileView) {
+            ProfileView(user: oum.listOfUsers[self.index1], viewShowing: $viewShowing)
+                .preferredColorScheme(.dark)
         }
     }
 }

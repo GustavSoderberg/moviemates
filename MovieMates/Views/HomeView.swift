@@ -97,6 +97,7 @@ struct ReviewCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                     .onTapGesture {
+                        um.refresh += 1
                         print("click!")
                         presentMovie = movie
                         showMovieView = true
