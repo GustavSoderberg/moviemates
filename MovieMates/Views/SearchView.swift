@@ -107,6 +107,7 @@ struct usersView: View {
                 .padding()
                 .sheet(isPresented: $showProfileView) {
                     ProfileView(user: oum.listOfUsers[index], viewShowing: $viewShowing)
+                        .preferredColorScheme(.dark)
                 }
             }
         }
