@@ -10,9 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @Binding var text: String
-
-    
-    
+    @Binding var viewShowing: Status
     @State var index = "movies"
     @State private var isEditing = false
     
@@ -36,7 +34,7 @@ struct SearchView: View {
                 case "movies":
                     moviesAndSeriesView()
                 case "users":
-                    usersView()
+                    usersView(viewShowing: $viewShowing)
                 default:
                     moviesAndSeriesView()
                 }
@@ -87,15 +85,30 @@ struct moviesAndSeriesView: View {
 
 struct usersView: View {
     
+    @Binding var viewShowing: Status
+    @ObservedObject var oum = um
+    @State var showProfileView = false
+    @State var index = 0
+    
     var body: some View{
         VStack{
             ScrollView{
-                LazyVStack{
-                    ForEach(searchResultsUsers) { result in
-                        UserCardView(user: result)
+                VStack{
+                    ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
+                        Button {
+                            self.index = index
+                            showProfileView = true
+                        } label: {
+                            UserCardView(user: user)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding()
+                .sheet(isPresented: $showProfileView) {
+                    ProfileView(user: oum.listOfUsers[index], viewShowing: $viewShowing)
+                        .preferredColorScheme(.dark)
+                }
             }
         }
     }
@@ -110,11 +123,14 @@ struct UserCardView: View {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
             HStack{
-                Image(systemName: "person.crop.circle")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(25)
+                AsyncImage(url: user.photoUrl) { image in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(50)
+                } placeholder: {
+                    ProgressView()
+                }
                 VStack(alignment: .leading){
                     Text(user.username)
                 }
@@ -139,8 +155,8 @@ private var searchResultsUsers = [
 //]
 
 
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchView(text: .constant(""))
-    }
-}
+//struct SearchView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SearchView(text: .constant(""))
+//    }
+//}

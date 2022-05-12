@@ -18,6 +18,7 @@ struct SettingsSheet: View {
     @State var isEditingBiography = false
     @State var username = ""
     @State var biography = ""
+    @State var index = "friends"
     
     var body: some View {
         
@@ -38,7 +39,6 @@ struct SettingsSheet: View {
             
             HStack{
                 Text("Change Username")
-                    .font(.title2)
                 Spacer()
             }
             ZStack(){
@@ -74,24 +74,30 @@ struct SettingsSheet: View {
                 }
                 
             }.padding()
-                
+                .padding(.top, -15)
+            
             HStack{
                 Text("Change Biography")
-                    .font(.title2)
                 Spacer()
             }
-            ZStack(){
+            ZStack(alignment: .leading){
                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                     .fill(Color("secondary-background"))
                     .frame(minHeight: 100)
                 
-                TextField("username", text: $biography)
-                    .padding(.leading, 10)
+                TextEditor(text: $biography)
+                    .background(Color("secondary-background"))
+                    .foregroundColor(Color.white)
+                    .frame(minHeight: 100)
+                    .cornerRadius(15)
                     .onAppear(perform: {
                         biography = user.bio!
                     })
                     .onTapGesture {
                         isEditingBiography = true
+                    }
+                    .onAppear {
+                        UITextView.appearance().backgroundColor = .clear
                     }
                 
             }
@@ -112,8 +118,12 @@ struct SettingsSheet: View {
                 }
                 
             }.padding()
+                .padding(.top, -15)
             
-                Spacer()
+        }.padding()
+        VStack {
+            
+            Spacer()
             
             Button {
                 
@@ -128,8 +138,8 @@ struct SettingsSheet: View {
                     Text("SIGN OUT").font(.headline).foregroundColor(.white)
                 }
             }
-
-                
+            
+            
         }
         .padding()
     }

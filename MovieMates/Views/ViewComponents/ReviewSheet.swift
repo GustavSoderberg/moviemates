@@ -15,6 +15,7 @@ struct ReviewSheet: View {
     @Binding var currentMovie: Movie
     
     @State private var score = 0
+    @State private var scoreWidth: CGFloat = 0
     @State private var whereIndex = 0
     @State private var withIndex = 0
     @State var review: String = ""
@@ -51,7 +52,7 @@ struct ReviewSheet: View {
                                 .border(Color.black, width: 1)
                             }
                             
-                            VStack{
+                            VStack(spacing: 0){
                                 Text(currentMovie.title ?? "Title")
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
@@ -59,12 +60,37 @@ struct ReviewSheet: View {
                                     .padding(.trailing)
                                 Text("Pick your rating")
                                     .foregroundColor(.white)
-                                HStack {
-                                    ForEach(1..<6, id: \.self){ i in
-                                        ClapperScoreSetter(pos: i, score: $score)
+                                    .font(Font.headline.weight(.bold))
+                                    .padding(.bottom, 5)
+                                
+                                
+                                //Score Picker "Slider"
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .frame(width: 145, height: 25)
+                                        .foregroundColor(.white)
+                                    
+                                    Rectangle()
+                                        .frame(width: scoreWidth, height: 25)
+                                        .foregroundColor(.black)
+                                    
+                                    HStack(spacing: 0) {
+                                        ForEach(1..<6, id: \.self){ i in
+                                            ClapperScoreSlider(pos: i, score: $score)
+                                            Rectangle()
+                                                .frame(width: 5, height: 25)
+                                                .foregroundColor(.red)
+                                        }
+                                    }
+                                    .onChange(of: score) { _ in
+                                        withAnimation(.easeIn(duration: 0.3)) {
+                                            scoreWidth = CGFloat(score*30)
+                                        }
                                     }
                                 }
+                                .frame(width: 145, height: 25)
                             }
+                            .frame(width: 200)
                         }
                         .padding()
                     }
@@ -153,33 +179,23 @@ struct ReviewSheet: View {
     }
 }
 
-struct ClapperScoreSetter: View {
+struct ClapperScoreSlider: View {
     var pos : Int
     @Binding var score : Int
-    @State var filled : Bool = false
     
     var body: some View {
-        Image("clapper-big")
+        Image("clapper_hollow")
             .resizable()
             .frame(width: 25, height: 25)
-            .foregroundColor(filled ? .black : .white)
+            .foregroundColor(.red)
             .onTapGesture {
                 score = pos
-            }
-            .onChange(of: score) { _ in
-                withAnimation(.linear) {
-                    if score >= pos {
-                        filled = true
-                    } else {
-                        filled = false
-                    }
-                }
             }
     }
 }
 
 struct ProfileSheet_Previews: PreviewProvider {
     static var previews: some View {
-        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales more text to make it long", video: nil, voteAverage: nil, voteCount: nil)))
+        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil)))
     }
 }

@@ -32,14 +32,14 @@ struct ProfileView: View {
                 
                 ZStack{
                     
-                    Text(ooum.currentUser!.username)
+                    Text(user.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
                         
-                        if ooum.currentUser!.id == ooum.currentUser!.id {
+                        if user.id == ooum.currentUser!.id {
                             if !ooum.notification {
                                 
                                 Button {
@@ -53,6 +53,7 @@ struct ProfileView: View {
                                         .padding(.leading, 20)
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
+                                        .preferredColorScheme(.dark)
                                 }
                             } else {
                                 Button {
@@ -70,12 +71,40 @@ struct ProfileView: View {
                         
                         Spacer()
                         
-                        if ooum.currentUser!.id != ooum.currentUser!.id {
+                        if user.id != ooum.currentUser!.id! {
                             
-                            switch test {
-                            case 0:
+                            if ooum.currentUser!.friends.contains(user.id!) {
+
+                                Image(systemName: "person.fill.checkmark")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing, 20)
+                                    .foregroundColor(.green)
+                                
+                            }
+                            else if ooum.currentUser!.frequests.contains(user.id!) {
                                 Button {
-                                    test = 1
+                                    um.manageFriendRequests(forId: user.id!, accept: true)
+                                } label: {
+                                    Image(systemName: "checkmark.circle")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .padding(.trailing, 20)
+                                        .foregroundColor(.green)
+                                }.buttonStyle(.plain)
+
+                                
+                            }
+                            else if user.frequests.contains(um.currentUser!.id!) {
+                                Image(systemName: "hourglass")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.trailing, 20)
+                                    .foregroundColor(.yellow)
+                            }
+                            else {
+                                Button {
+                                    um.friendRequest(to: user)
                                 } label: {
                                     Image(systemName: "person.crop.circle.badge.plus")
                                         .resizable()
@@ -83,32 +112,11 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.white)
                                 }
-                            case 1:
-                                Button {
-                                    test = 2
-                                } label: {
-                                    Image(systemName: "hourglass")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .padding(.trailing, 20)
-                                        .foregroundColor(.yellow)
-                                    
-                                }
-                            case 2:
-                                Button {
-                                    print("friend accepted")
-                                } label: {
-                                    Image(systemName: "person.fill.checkmark")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .padding(.trailing, 20)
-                                        .foregroundColor(.green)
-                                }
-                            default:
-                                Text("error")
                             }
                             
-                        } else {
+                            
+                        }
+                        else {
                             
                             Button {
                                 showSettingsSheet = true
@@ -120,8 +128,8 @@ struct ProfileView: View {
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
                                 if Auth.auth().currentUser == nil { viewShowing = .WelcomeView }
                             }) {
-                                //FriendRequestTestView(showProfileSheet: $showingSheet)
-                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
+                                FriendRequestTestView(showProfileSheet: $showSettingsSheet)
+                                //SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
                                     .preferredColorScheme(.dark)
                                 
                             }
@@ -130,7 +138,7 @@ struct ProfileView: View {
                     
                 }
                 Spacer()
-                AsyncImage(url: ooum.currentUser!.photoUrl) { image in
+                AsyncImage(url: user.photoUrl) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
@@ -146,8 +154,8 @@ struct ProfileView: View {
                        content: {
                     Text("Reviews").tag("reviews")
                     Text("Watchlist").tag("watchlist")
-                    Text("About").tag("about")
                     Text("Friends").tag("friends")
+                    Text("About").tag("about")
                     
                 })
                 .padding()
@@ -160,10 +168,10 @@ struct ProfileView: View {
                     UserReviewView()
                 case "watchlist":
                     WatchListView()
-                case "about":
-                    AboutMeView(user: user)
                 case "friends":
                     FriendListView()
+                case "about":
+                    AboutMeView(user: user)
                 default:
                     UserReviewView()
                 }
@@ -234,30 +242,16 @@ struct AboutMeView: View {
                         .frame(minHeight: 100)
                     
                     VStack{
-                        if um.currentUser!.id != um.currentUser!.id {
-                            Text("Hej")
-                                .padding()
-                        }else if um.currentUser!.id == um.currentUser!.id {
-                            TextEditor(text: $bio)
-                                .background(Color("secondary-background"))
-                                .foregroundColor(.white)
-                                .frame(minHeight: 100)
-                                .cornerRadius(25)
-                            
-                        }
-                        
-                    }.onAppear {
-                        if let bio = user.bio {
-                            self.bio = bio
-                        }
-                        
+                        Text(user.bio!)
+                            .background(Color("secondary-background"))
+                            .frame(minHeight: 100)
+                            .cornerRadius(25)
+                            .padding()
+                        Spacer()
                     }
-                    Spacer()
-                    
-                    
                 }.padding()
                 HStack{
-                    Text("Summary of \(um.currentUser!.username)")
+                    Text("Summary of \(user.username)")
                         .font(.title2)
                         .padding()
                     Spacer()
@@ -372,36 +366,43 @@ struct FriendListView: View{
         
         ScrollView{
             
-            ForEach (um.currentUser!.friends, id:\.self) { friend in
+            ForEach (ooum.currentUser!.friends, id:\.self) { friend in
                 
                 let user = um.getUser(id: friend)
-                HStack{
-                    
-                    AsyncImage(url: user.photoUrl) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    Text(user.username)
-                    
-                    Button {
-                        um.removeFriend(id: user.id!)
-                    } label: {
-                        Image(systemName: "trash.circle")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.red)
+                VStack {
+                    HStack{
+                        
+                        AsyncImage(url: user.photoUrl) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(50)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        
+                        VStack(alignment: .leading){
+                            Text(user.username)
                             
+                            // Add number of reviews object
+                            Text("Reviews: 25")
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            um.removeFriend(id: user.id!)
+                        } label: {
+                            Image(systemName: "trash.circle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.red)
+                        }
                     }
-
-                    
-                    
-                    
+                    .padding()
                 }
-                
+                .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
+                .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
             }
             
         }

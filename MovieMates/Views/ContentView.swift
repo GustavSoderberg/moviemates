@@ -85,7 +85,7 @@ struct ContentView: View {
                         }
                         .tag(2)
                     
-                    SearchView(text: $text)
+                    SearchView(text: $text, viewShowing: $viewShowing)
                         .tabItem {
                             Image(systemName: "magnifyingglass")
                             Text("Search")

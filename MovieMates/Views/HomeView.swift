@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @State var index = "friends"
+    @State var presentMovie: Movie? = nil
     @State var showMovieView = false
     
     @ObservedObject var viewModel = MovieListViewModel()
@@ -36,11 +37,11 @@ struct HomeView: View {
                         switch index {
                         case "friends":
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review, showMovieView: $showMovieView)
+                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "trending":
                             ForEach(trendingReviews) { review in
-                                ReviewCardView(review: review, showMovieView: $showMovieView)
+                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "popular":
                             ForEach(viewModel.popularMovies) { movie in
@@ -49,14 +50,19 @@ struct HomeView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review, showMovieView: $showMovieView)
+                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         }
                     }.padding()
                         .onAppear {
                             viewModel.fetchPopularMovies()
                         }
-                        
+                        .sheet(isPresented: $showMovieView) {
+                            if let presentMovie = presentMovie {
+                                MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                                    .preferredColorScheme(.dark)
+                            }
+                        }
                 }
             }
         }
@@ -67,6 +73,7 @@ struct ReviewCardView: View {
     
     let review: Review
     @State var movie: Movie?
+    @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
     
     @State private var isExpanded: Bool = false
@@ -91,6 +98,7 @@ struct ReviewCardView: View {
                     .border(Color.black, width: 3)
                     .onTapGesture {
                         print("click!")
+                        presentMovie = movie
                         showMovieView = true
                     }
                     
