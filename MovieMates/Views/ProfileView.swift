@@ -184,16 +184,26 @@ struct ProfileView: View {
 }
 
 struct UserReviewView: View {
+    
+    @State var presentMovie: Movie? = nil
+    @State var showMovieView = false
+    
     var body: some View{
         VStack{
             Text("Hej min favoritfilm är Batman!!")
             ScrollView{
                 LazyVStack{
                     ForEach(myReviews) { review in
-                        ProfileReviewCardView(review: review)
+                        ProfileReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
                     }
                 }
                 .padding()
+                .sheet(isPresented: $showMovieView) {
+                    if let presentMovie = presentMovie {
+                        MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                            .preferredColorScheme(.dark)
+                    }
+                }
             }
         }
     }
@@ -275,6 +285,8 @@ struct ProfileReviewCardView: View {
     
     let review: Review
     @State var movie: Movie?
+    @Binding var presentMovie: Movie?
+    @Binding var showMovieView : Bool
     
     @State private var isExpanded: Bool = false
     
@@ -296,7 +308,10 @@ struct ProfileReviewCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                     .onTapGesture {
-                        print("click!")
+                        um.refresh += 2
+                        presentMovie = movie
+                        print(movie)
+                        showMovieView = true
                     }
                     
                     VStack(alignment: .leading){

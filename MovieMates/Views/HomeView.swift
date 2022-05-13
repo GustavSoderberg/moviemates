@@ -53,16 +53,17 @@ struct HomeView: View {
                                 ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         }
-                    }.padding()
-                        .onAppear {
-                            viewModel.fetchPopularMovies()
+                    }
+                    .padding()
+                    .onAppear {
+                        viewModel.fetchPopularMovies()
+                    }
+                    .sheet(isPresented: $showMovieView) {
+                        if let presentMovie = presentMovie {
+                            MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                                .preferredColorScheme(.dark)
                         }
-                        .sheet(isPresented: $showMovieView) {
-                            if let presentMovie = presentMovie {
-                                MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                                    .preferredColorScheme(.dark)
-                            }
-                        }
+                    }
                 }
             }
         }
