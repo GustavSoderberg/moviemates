@@ -169,7 +169,7 @@ struct ProfileView: View {
                 case "watchlist":
                     WatchListView()
                 case "friends":
-                    FriendListView()
+                    FriendListView(user: user)
                 case "about":
                     AboutMeView(user: user)
                 default:
@@ -236,6 +236,7 @@ struct AboutMeView: View {
                         .padding()
                     Spacer()
                 }
+                
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
                         .fill(Color("secondary-background"))
@@ -243,9 +244,6 @@ struct AboutMeView: View {
                     
                     VStack{
                         Text(user.bio!)
-                            .background(Color("secondary-background"))
-                            .frame(minHeight: 100)
-                            .cornerRadius(25)
                             .padding()
                         Spacer()
                     }
@@ -360,19 +358,19 @@ private var myReviews = [
 
 struct FriendListView: View{
     
-    @ObservedObject var ooum = um
+    var user: User
     
     var body: some View {
         
         ScrollView{
             
-            ForEach (ooum.currentUser!.friends, id:\.self) { friend in
+            ForEach (user.friends, id:\.self) { friend in
                 
-                let user = um.getUser(id: friend)
+                let userToDisplay = um.getUser(id: friend)
                 VStack {
                     HStack{
                         
-                        AsyncImage(url: user.photoUrl) { image in
+                        AsyncImage(url: userToDisplay.photoUrl) { image in
                             image.resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 50, height: 50)
@@ -382,7 +380,7 @@ struct FriendListView: View{
                         }
                         
                         VStack(alignment: .leading){
-                            Text(user.username)
+                            Text(userToDisplay.username)
                             
                             // Add number of reviews object
                             Text("Reviews: 25")
@@ -390,13 +388,15 @@ struct FriendListView: View{
                         
                         Spacer()
                         
-                        Button {
-                            um.removeFriend(id: user.id!)
-                        } label: {
-                            Image(systemName: "trash.circle")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.red)
+                        if um.currentUser!.id! == user.id! {
+                            Button {
+                                um.removeFriend(id: user.id!)
+                            } label: {
+                                Image(systemName: "trash.circle")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.red)
+                            }
                         }
                     }
                     .padding()
