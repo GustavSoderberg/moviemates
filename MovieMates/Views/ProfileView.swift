@@ -366,11 +366,11 @@ struct FriendListView: View{
             
             ForEach (user.friends, id:\.self) { friend in
                 
-                let user = um.getUser(id: friend)
+                let userToDisplay = um.getUser(id: friend)
                 VStack {
                     HStack{
                         
-                        AsyncImage(url: user.photoUrl) { image in
+                        AsyncImage(url: userToDisplay.photoUrl) { image in
                             image.resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 50, height: 50)
@@ -380,7 +380,7 @@ struct FriendListView: View{
                         }
                         
                         VStack(alignment: .leading){
-                            Text(user.username)
+                            Text(userToDisplay.username)
                             
                             // Add number of reviews object
                             Text("Reviews: 25")
@@ -388,7 +388,7 @@ struct FriendListView: View{
                         
                         Spacer()
                         
-                        if user.id == um.currentUser!.id {
+                        if um.currentUser!.id! == user.id! {
                             Button {
                                 um.removeFriend(id: user.id!)
                             } label: {
