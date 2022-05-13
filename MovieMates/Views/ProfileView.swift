@@ -169,7 +169,7 @@ struct ProfileView: View {
                 case "watchlist":
                     WatchListView()
                 case "friends":
-                    FriendListView()
+                    FriendListView(user: user)
                 case "about":
                     AboutMeView(user: user)
                 default:
@@ -236,6 +236,7 @@ struct AboutMeView: View {
                         .padding()
                     Spacer()
                 }
+                
                 ZStack(alignment: .leading){
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
                         .fill(Color("secondary-background"))
@@ -243,9 +244,6 @@ struct AboutMeView: View {
                     
                     VStack{
                         Text(user.bio!)
-                            .background(Color("secondary-background"))
-                            .frame(minHeight: 100)
-                            .cornerRadius(25)
                             .padding()
                         Spacer()
                     }
@@ -360,13 +358,13 @@ private var myReviews = [
 
 struct FriendListView: View{
     
-    @ObservedObject var ooum = um
+    var user: User
     
     var body: some View {
         
         ScrollView{
             
-            ForEach (ooum.currentUser!.friends, id:\.self) { friend in
+            ForEach (user.friends, id:\.self) { friend in
                 
                 let user = um.getUser(id: friend)
                 VStack {
@@ -390,13 +388,15 @@ struct FriendListView: View{
                         
                         Spacer()
                         
-                        Button {
-                            um.removeFriend(id: user.id!)
-                        } label: {
-                            Image(systemName: "trash.circle")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.red)
+                        if user.id == um.currentUser!.id {
+                            Button {
+                                um.removeFriend(id: user.id!)
+                            } label: {
+                                Image(systemName: "trash.circle")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.red)
+                            }
                         }
                     }
                     .padding()
