@@ -9,7 +9,7 @@ import Foundation
 
 struct Review: Identifiable, Codable {
     
-    let id: UUID //Unique id for each review
+    var id: String = UUID().uuidString //Unique id for each review
     let authorId: String
     let rating: Int
     let reviewText: String
