@@ -66,7 +66,7 @@ class ReviewManager : ObservableObject {
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            fm.saveReviewToFirestore(movieId: "\(movie.id)", review: Review(id: UUID(), authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: cinema, withWho: friends, timestamp: Date.now))
+            fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review)
         }
         else {
             
