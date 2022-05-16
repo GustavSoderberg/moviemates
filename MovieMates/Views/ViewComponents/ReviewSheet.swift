@@ -16,8 +16,8 @@ struct ReviewSheet: View {
     
     @State private var score = 0
     @State private var scoreWidth: CGFloat = 0
-    @State private var whereIndex = 0
-    @State private var withIndex = 0
+    @State private var whereAt = ""
+    @State private var withWho = ""
     @State var review: String = ""
     
     var body: some View {
@@ -137,17 +137,17 @@ struct ReviewSheet: View {
                         Text("Where did you watch the movie?")
                         
                         
-                        Picker(selection: $whereIndex, label: Text("Question one")){
-                            Text("Home").tag(1)
-                            Text("Cinema").tag(2)
+                        Picker(selection: $whereAt, label: Text("Question one")){
+                            Text("Home").tag("home")
+                            Text("Cinema").tag("cinema")
                         }.pickerStyle(SegmentedPickerStyle())
                             .frame(width: 300)
                         
                         Text("How did you watch the movie?")
                         
-                        Picker(selection: $withIndex, label: Text("Question one")){
-                            Text("Alone").tag(1)
-                            Text("With friends").tag(2)
+                        Picker(selection: $withWho, label: Text("Question one")){
+                            Text("Alone").tag("alone")
+                            Text("With friends").tag("friends")
                         }.pickerStyle(SegmentedPickerStyle())
                             .frame(width: 300)
                         
@@ -157,6 +157,11 @@ struct ReviewSheet: View {
                     HStack {
                         Button {
                             print("Leave Review")
+                            rm.saveReview(movie: currentMovie,
+                                          rating: score,
+                                          text: review,
+                                          cinema: whereAt,
+                                          friends: withWho)
                         } label: {
                             Text("Leave Review")
                                 .frame(width: 200, height: 50)

@@ -107,7 +107,7 @@ struct ReviewCardView: View {
                     VStack(alignment: .leading){
                         
                         HStack{
-                            Text(review.username)
+                            Text(um.getUser(id: review.authorId).username)
                             Spacer()
                             Text(formatDate(date: review.timestamp))
                                 .font(.system(size: 12))
@@ -118,7 +118,7 @@ struct ReviewCardView: View {
                             .minimumScaleFactor(0.7)
                             .lineLimit(1)
                         
-                        Text(review.rating)
+                        Text("\(review.rating)")
                             .padding(.bottom, 4)
                         
                         Text(review.reviewText)
@@ -131,9 +131,10 @@ struct ReviewCardView: View {
                 }
             }
             .padding()
-        }.onAppear {
-            loadMovie(id: review.movieId)
         }
+//        .onAppear {
+//            loadMovie(id: review.movieId)
+//        }
     }
     
     func loadMovie(id: Int){
@@ -157,19 +158,19 @@ func formatDate(date: Date) -> String{
 }
 
 
-private var friendsReviews = [
-    Review(movieId: 10612, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-    Review(movieId: 634649, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-]
+private var friendsReviews = [Review
+//    Review(movieId: 10612, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+//    Review(movieId: 634649, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+]()
 
-private var trendingReviews = [
-    Review(movieId: 414906, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(movieId: 284052, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(movieId: 406759, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!"),
-    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!")
-]
+private var trendingReviews = [Review
+//    Review(movieId: 414906, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 284052, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 406759, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!"),
+//    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!")
+]()
 
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {

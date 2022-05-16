@@ -48,6 +48,38 @@ class FirestoreManager {
                 
             }
         }
+        
+        db.collection("movies").addSnapshotListener { snapshot, err in
+            
+            guard let snapshot = snapshot else { return }
+            
+            if let err = err {
+                print("Error getting user movieFS object \(err)")
+                
+            } else {
+                rm.listOfMovieFS.removeAll()
+                
+                for document in snapshot.documents {
+                    let result = Result {
+                        
+                        try document.data(as: MovieFS.self)
+                        
+                    }
+                    
+                    switch result {
+                    case.success(let user) :
+                        
+                        rm.listOfMovieFS.append(user!)
+                        
+                    case.failure(let error) :
+                        print("Error decoding movieFS \(error)")
+                    }
+                }
+                
+                rm.refresh += 1
+                
+            }
+        }
     }
     
     func saveUserToFirestore(user: User) {
@@ -182,5 +214,32 @@ class FirestoreManager {
         
         return true
         
+    }
+    
+    func saveMovieToFirestore(movieFS: MovieFS, review: Review) -> Bool{
+        
+        do {
+            try db.collection("movies").document(movieFS.id!).setData(from: movieFS)
+            try db.collection("movies").document(movieFS.id!).collection("reviews").document(review.id).setData(from: review)
+            return true
+        }
+        catch {
+            return false
+        }
+    }
+    
+    func saveReviewToFirestore(movieId: String, review: Review) {
+        
+
+        db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
+            for doc in QuerySnapshot!.documents {
+                
+                if (doc.documentID != review.id) {
+                    self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
+                }
+                break;
+            }
+        }
+        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
     }
 }

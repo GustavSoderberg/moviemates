@@ -7,13 +7,14 @@
 
 import Foundation
 
-struct Review: Identifiable {
+struct Review: Identifiable, Codable {
     
-    let id = UUID()
-    let movieId: Int
-    let username: String
-    let title: String
-    let rating: String
+    var id: String = UUID().uuidString //Unique id for each review
+    let authorId: String
+    let rating: Int
     let reviewText: String
-    let timestamp = Date.now
+    let whereAt: String
+    let withWho: String
+    let timestamp: Date
+    
 }
