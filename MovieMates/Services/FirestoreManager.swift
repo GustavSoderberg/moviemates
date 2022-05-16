@@ -216,36 +216,27 @@ class FirestoreManager {
         
     }
     
-    func saveMovieToFirestore(movieFS: MovieFS) -> Bool{
+    func saveMovieToFirestore(movieFS: MovieFS, review: Review) -> Bool{
         
         do {
             try db.collection("movies").document(movieFS.id!).setData(from: movieFS)
+            try db.collection("movies").document(movieFS.id!).collection("reviews").document(review.id).setData(from: review)
             return true
         }
         catch {
             return false
         }
-        
     }
     
     func saveReviewToFirestore(movieId: String, review: Review) {
         
-        let xReview = ["id" : "\(review.id)",
-                       "authorId" : review.authorId,
-                       "rating" : review.rating,
-                       "reviewText" : review.reviewText,
-                       "whereAt" : review.whereAt,
-                       "withWho" : review.withWho,
-                       "timestamp" : review.timestamp] as [String : Any]
-        
-            db.collection("movies").document(movieId)
-            
-                .updateData([
-                    
-                    "reviews": FieldValue.arrayUnion([xReview])
 
-                    
-                ])
-        
+        db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
+            for doc in QuerySnapshot!.documents {
+                self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
+                try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
+                break;
+            }
+        }
     }
 }
