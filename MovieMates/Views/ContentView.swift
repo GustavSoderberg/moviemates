@@ -11,6 +11,7 @@ import FirebaseAuth
 //Global singleton instances
 var um = UserManager()
 var fm = FirestoreManager()
+var rm = ReviewManager()
 
 enum Status {
     case Loading, WelcomeView, HomeView
