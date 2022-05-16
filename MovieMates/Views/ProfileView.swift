@@ -193,8 +193,12 @@ struct UserReviewView: View {
             Text("Hej min favoritfilm är Batman!!")
             ScrollView{
                 LazyVStack{
-                    ForEach(myReviews) { review in
-                        ProfileReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                    ForEach(rm.listOfMovieFS) { movie in
+                        
+                        ForEach(movie.reviews) { review in
+                            ProfileReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                        }
+                        
                     }
                 }
                 .padding()
@@ -323,7 +327,7 @@ struct ProfileReviewCardView: View {
                         }
                         Text(movie.title ?? "no title")
                             .font(.title2)
-                        Text(review.rating)
+                        Text("\(review.rating)")
                             .padding(.bottom, 4)
                         Text(review.reviewText)
                             .font(.system(size: 15))
@@ -336,9 +340,10 @@ struct ProfileReviewCardView: View {
                 }
             }
             .padding()
-        }.onAppear {
-            loadMovie(id: review.movieId)
         }
+//        .onAppear {
+//            loadMovie(id: review.movieId)
+//        }
     }
     
     func loadMovie(id: Int){
@@ -357,12 +362,12 @@ struct ProfileReviewCardView: View {
 
 
 
-private var myReviews = [
-    Review(movieId: 414, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-    Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(movieId: 272, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(movieId: 406759, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-]
+//private var myReviews = [
+//    Review(movieId: 414, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+//    Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 272, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 406759, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+//]
 
 //private var watchlist = [
 //    Movie(id: 1, adult: false, backdropPath: nil, genreIDS: nil, originalLanguage: nil, originalTitle: "spider man", overview: "fasdfdsafasdf", releaseDate: nil, posterPath: nil, popularity: nil, title: "Spooder-Man", video: nil, voteAverage: nil, voteCount: nil)

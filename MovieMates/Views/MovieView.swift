@@ -338,20 +338,20 @@ struct ClapperImage: View {
     }
 }
 
-private var friendsReviews = [
-    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-]
+private var friendsReviews = [Review
+//    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+//    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+]()
 
-private var globalReviews = [
-    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
-    Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
-    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "1/5", reviewText: "Vad var detta?"),
-    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
-    Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
-]
+private var globalReviews = [Review
+//    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
+//    Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
+//    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "1/5", reviewText: "Vad var detta?"),
+//    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
+//    Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
+]()
 
 struct MovieReviewCardView: View {
     
@@ -364,14 +364,14 @@ struct MovieReviewCardView: View {
             HStack(alignment: .top){
                 VStack(alignment: .leading){
                     HStack{
-                        Text(review.username)
+                        Text(um.getUser(id: review.authorId).username)
                         Spacer()
                         Text(formatDate(date: review.timestamp))
                             .font(.system(size: 12))
                     }
                     HStack{
                         ForEach(1..<6) { i in
-                            ClapperImage(pos: i, score: review.rating)
+                            ClapperImage(pos: i, score: "\(review.rating)")
                         }
                         Spacer()
                     }
