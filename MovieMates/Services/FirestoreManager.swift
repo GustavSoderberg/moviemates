@@ -233,10 +233,13 @@ class FirestoreManager {
 
         db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
             for doc in QuerySnapshot!.documents {
-                self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
-                try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
+                
+                if (doc.documentID != review.id) {
+                    self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
+                }
                 break;
             }
         }
+        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
     }
 }
