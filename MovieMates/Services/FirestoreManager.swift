@@ -230,11 +230,19 @@ class FirestoreManager {
     
     func saveReviewToFirestore(movieId: String, review: Review) {
         
+        let xReview = ["id" : "\(review.id)",
+                       "authorId" : review.authorId,
+                       "rating" : review.rating,
+                       "reviewText" : review.reviewText,
+                       "whereAt" : review.whereAt,
+                       "withWho" : review.withWho,
+                       "timestamp" : review.timestamp] as [String : Any]
+        
             db.collection("movies").document(movieId)
             
                 .updateData([
                     
-                    "reviews": FieldValue.arrayUnion([review])
+                    "reviews": FieldValue.arrayUnion([xReview])
                     
                 ])
         
