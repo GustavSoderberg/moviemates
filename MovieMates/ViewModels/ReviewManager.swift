@@ -62,13 +62,23 @@ class ReviewManager : ObservableObject {
     
     func saveReview(movie: Movie, rating: Int, text: String, cinema: String, friends: String) {
         
-        let review = Review(id: UUID(), authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: cinema, withWho: friends, timestamp: Date.now)
+        
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review)
+            for movieFS in listOfMovieFS {
+                for reviewFS in movieFS.reviews {
+                    if reviewFS.authorId == um.currentUser!.id! {
+                        fm.saveReviewToFirestore(movieId: "\(movie.id)", review: reviewFS)
+                    }
+                }
+            }
+            
+            
         }
         else {
+            
+            let review = Review(id: UUID(), authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: cinema, withWho: friends, timestamp: Date.now)
             
             if fm.saveMovieToFirestore(movieFS: MovieFS(id: "\(movie.id)", title: movie.title!, photoUrl: movie.posterURL, rating: Double(rating), description: movie.overview!, reviews: [review])) {
                 
