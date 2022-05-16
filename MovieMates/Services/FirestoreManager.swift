@@ -243,6 +243,7 @@ class FirestoreManager {
                 .updateData([
                     
                     "reviews": FieldValue.arrayUnion([xReview])
+
                     
                 ])
         
