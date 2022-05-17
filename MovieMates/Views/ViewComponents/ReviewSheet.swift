@@ -31,6 +31,12 @@ struct ReviewSheet: View {
                             sheetShowing = .MovieView
                         }
                     Spacer()
+                }.onAppear {
+                    var existingReview = rm.getReview()
+                    score = existingReview.rating
+                    review = existingReview.reviewText
+                    whereAt = existingReview.whereAt
+                    withWho = existingReview.withWho
                 }
                 .padding(.horizontal)
                 
@@ -160,8 +166,9 @@ struct ReviewSheet: View {
                             rm.saveReview(movie: currentMovie,
                                           rating: score,
                                           text: review,
-                                          cinema: whereAt,
-                                          friends: withWho)
+                                          whereAt: whereAt,
+                                          withWho: withWho)
+                            sheetShowing = .MovieView
                         } label: {
                             Text("Leave Review")
                                 .frame(width: 200, height: 50)

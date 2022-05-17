@@ -192,7 +192,7 @@ struct UserReviewView: View {
         VStack{
             Text("Hej min favoritfilm är Batman!!")
             ScrollView{
-                LazyVStack{
+                VStack{
                     ForEach(rm.listOfMovieFS) { movie in
                         
                         ForEach(movie.reviews) { review in
