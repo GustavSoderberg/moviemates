@@ -47,7 +47,7 @@ struct ProfileView: View {
                                     showingNotificationSheet = true
                                     viewShowing = .Loading
                                 } label: {
-                                    Image(systemName: "bell")
+                                    Image(systemName: um.currentUser!.frequests.count > 0 ? "bell.badge" : "bell")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
@@ -410,7 +410,7 @@ struct FriendListView: View{
                         
                         if um.currentUser!.id! == user.id! {
                             Button {
-                                um.removeFriend(id: user.id!)
+                                um.removeFriend(id: userToDisplay.id!)
                             } label: {
                                 Image(systemName: "trash.circle")
                                     .resizable()
