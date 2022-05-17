@@ -19,7 +19,7 @@ class UserManager: ObservableObject {
     
     func register(username: String) {
         
-        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: "Hello! I am new here 📺.", friends: [String](), frequests: [String](), themeId: 0)
+        let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: "Hello! I am new here 📺.", friends: [String](), frequests: [String](), watchlist: [String](),  themeId: 0)
         
         fm.saveUserToFirestore(user: user)
         currentUser = user
@@ -144,7 +144,30 @@ class UserManager: ObservableObject {
                 
             }
         }
-        //Retunerar en testuser om if satsen misslyckas
-        return User(id: "", username: "", photoUrl: URL(string: "")!, bio: "", friends: ["",""], frequests: ["",""], themeId: 0)
+        
+                //Retunerar en testuser om if satsen misslyckas
+        return User(id: "", username: "", photoUrl: URL(string: "")!, bio: "", friends: ["",""], frequests: ["",""], watchlist: [""], themeId: 0)
+    }
+    
+    func addToWatchlist(movieID: String){
+        
+        if fm.saveWatchlistToFirebase(user: um.currentUser!, movieID: movieID) {
+            print("Succefully added movie to watchlist")
+            
+        }else{
+            print("ERROR!! You did not succefully save the movie")
+        }
+         
+    }
+    
+    func getMovie(movieID: String) -> MovieFS?{
+        
+        for movie in rm.listOfMovieFS {
+            if movie.id == movieID {
+                return movie
+            }
+            
+        }
+            return nil
     }
 }

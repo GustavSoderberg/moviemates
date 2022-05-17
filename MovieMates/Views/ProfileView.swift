@@ -167,7 +167,7 @@ struct ProfileView: View {
                 case "reviews":
                     UserReviewView()
                 case "watchlist":
-                    WatchListView()
+                    WatchListView(user: user)
                 case "friends":
                     FriendListView(user: user)
                 case "about":
@@ -214,19 +214,47 @@ struct UserReviewView: View {
 }
 
 struct WatchListView: View {
+    
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
+    let user: User
+    @State var movieWatchlist = [Movie]()
+    
     var body: some View{
+        
+        
         VStack{
-            Text("Jag vill se den nya Dr Strange!!")
+           
             ScrollView{
-                LazyVStack{
-                    //                    ForEach(watchlist) { movie in
-                    //                        MovieCardView(movie: movie)
-                    //                    }
+                
+                ForEach(movieWatchlist, id: \.self) { movie in
+                    MovieCardView(movie: movie)
+                
                 }
-                .padding()
+
             }
+        }.onAppear {
+            getMovies()
         }
     }
+    func getMovies() {
+        
+        for movies in user.watchlist {
+            
+            movieViewModel.fetchMovie(id: Int(movies)!) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let movie):
+                        movieWatchlist.append(movie)
+                    }
+                }
+            }
+
+        }
+        
+    }
+    
 }
 
 struct AboutMeView: View {

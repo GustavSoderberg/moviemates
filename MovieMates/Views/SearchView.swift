@@ -160,12 +160,12 @@ struct UserCardView: View {
     }
 }
 
-private var searchResultsUsers = [
-    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
-]
+//private var searchResultsUsers = [
+//    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
+//]
 
 //private var searchResultsMovies = [
 ////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),

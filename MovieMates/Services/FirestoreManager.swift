@@ -304,4 +304,21 @@ class FirestoreManager {
         
         return true
     }
+    
+    func saveWatchlistToFirebase(user: User, movieID: String) -> Bool {
+        
+        print("fitrebasece")
+            
+        db.collection("users").document(user.id!)
+            
+                .updateData([
+                    
+                    "watchlist": FieldValue.arrayUnion([movieID])
+                    
+                ])
+            
+        
+            return true
+            
+    }
 }
