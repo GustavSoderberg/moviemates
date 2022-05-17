@@ -46,6 +46,8 @@ struct MovieView: View {
     @Binding var showMovieView: Bool
     @Binding var movieFS: MovieFS?
     
+    @State var friendsReviews = [Review]()
+    
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var poster : Image = Image("bill_poster")
@@ -246,8 +248,8 @@ struct MovieView: View {
                     LazyVStack(spacing: 2) {
                         switch index {
                         case "friends":
-                            if let movieFS = movieFS {
-                                ForEach(movieFS.reviews) { review in
+                            if movieFS != nil {
+                                ForEach(friendsReviews) { review in
                                     MovieReviewCardView(review: review)
                                 }
                             } else {
@@ -270,6 +272,11 @@ struct MovieView: View {
                         }
                     }
                     .padding(.horizontal)
+                    .onAppear {
+                        if let movieFS = movieFS {
+                            friendsReviews = getFriendsReviews(movieFS: movieFS)
+                        }
+                    }
                 }
             }
             
@@ -295,6 +302,16 @@ struct MovieView: View {
             }
         })
     }
+}
+
+func getFriendsReviews(movieFS: MovieFS) -> [Review]{
+    var friendsReviews = [Review]()
+    for review in movieFS.reviews {
+        if um.currentUser!.friends.contains(review.authorId) {
+            friendsReviews.append(review)
+        }
+    }
+    return friendsReviews
 }
 
 
@@ -354,12 +371,12 @@ struct ClapperImage: View {
     }
 }
 
-private var friendsReviews = [Review
-//    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-//    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-//    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-//    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-]()
+//private var friendsReviews = [Review
+////    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+////    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+////    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+////    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+//]()
 
 private var globalReviews = [Review
 //    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
