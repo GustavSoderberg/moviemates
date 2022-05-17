@@ -90,6 +90,7 @@ struct usersView: View {
     @State var showProfileView = false
     @State var index1 = 0
     @State var searchText = ""
+    @State var templateText = "Type to search"
     
     var body: some View{
         
@@ -97,8 +98,8 @@ struct usersView: View {
             SearchBar(text: $searchText)
             Spacer()
             if searchText.isEmpty {
-                Text("Type to search")
-                Spacer()
+                SearchViewInfo(infoText: $templateText)
+                    .frame(maxHeight: .infinity)
             }
             else {
                 ScrollView{
