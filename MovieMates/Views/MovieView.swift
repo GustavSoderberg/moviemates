@@ -145,6 +145,8 @@ struct MovieView: View {
                             } else {
                                 onWatchlist = true
                                 watchlistText = "On Watchlist"
+                                
+                                um.addToWatchlist(movieID: "\(currentMovie.id)")
                             }
                         }
                     Spacer()
