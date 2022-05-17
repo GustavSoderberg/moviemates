@@ -70,14 +70,18 @@ class ReviewManager : ObservableObject {
                 if (movieFS.id! == "\(movie.id)")  {
                     
                     for (index, reviewFS) in movieFS.reviews.enumerated() {
-                        
+
                         if reviewFS.authorId == um.currentUser!.id {
                             
                             let newReview = Review(id: reviewFS.id, authorId: reviewFS.authorId, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
                             
-                            
-                            if fm.saveReviewToFirestore(movieId: "\(movie.id)", review: newReview, oldReview: reviewFS) {
+                            if fm.updateReviewToFirestore(movieId: "\(movie.id)", review: newReview, oldReview: reviewFS) {
                                 print("Successfully found existing review")
+                                break;
+                            }
+                        } else {
+                            if fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review) {
+                                print("Successfully saved new review")
                                 break;
                             }
                         }
@@ -112,6 +116,16 @@ class ReviewManager : ObservableObject {
         }
         
         return Review(id: "\(UUID())", authorId: um.currentUser!.id!, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+    }
+    
+    func getMovieFS(movieId: String) -> MovieFS? {
+        
+        for movieFS in listOfMovieFS {
+            if movieFS.id == movieId {
+                return movieFS
+            }
+        }
+        return nil
     }
 }
 
