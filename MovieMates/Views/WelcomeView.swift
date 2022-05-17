@@ -21,6 +21,9 @@ struct WelcomeView: View {
         ZStack {
             Color("background")
                 .ignoresSafeArea()
+                .onAppear {
+                    if Auth.auth().currentUser == nil { showLoginView = true }
+                }
             
             VStack {
                 
@@ -94,6 +97,8 @@ struct WelcomeView: View {
         }) {
             
             LoginView(showLoginView: $showLoginView)
+                .preferredColorScheme(.dark)
+                .ignoresSafeArea()
             
         }
 
