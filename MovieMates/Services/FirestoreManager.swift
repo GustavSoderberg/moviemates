@@ -228,7 +228,7 @@ class FirestoreManager {
         }
     }
     
-    func saveReviewToFirestore(movieId: String, review: Review, oldReview: Review) -> Bool {
+    func updateReviewToFirestore(movieId: String, review: Review, oldReview: Review) -> Bool {
         
         
         
@@ -281,5 +281,27 @@ class FirestoreManager {
         //            }
         //        }
         //        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
+    }
+    
+    func saveReviewToFirestore(movieId: String, review: Review) -> Bool {
+        
+        let newReview = ["id" : "\(review.id)",
+                         "authorId" : review.authorId,
+                         "rating" : review.rating,
+                         "reviewText" : review.reviewText,
+                         "whereAt" : review.whereAt,
+                         "withWho" : review.withWho,
+                         "timestamp" : review.timestamp] as [String : Any]
+        
+        
+        db.collection("movies").document(movieId)
+        
+            .updateData([
+                
+                "reviews": FieldValue.arrayUnion([newReview])
+                
+            ])
+        
+        return true
     }
 }
