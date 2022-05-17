@@ -60,15 +60,32 @@ class ReviewManager : ObservableObject {
         
     }
     
-    func saveReview(movie: Movie, rating: Int, text: String, cinema: String, friends: String) {
+    func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
         
-        let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: cinema, withWho: friends, timestamp: Date.now)
+        let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
             for movieFS in listOfMovieFS {
                 if (movieFS.id! == "\(movie.id)")  {
-                    fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review)
+                    
+                    for (index, reviewFS) in movieFS.reviews.enumerated() {
+
+                        if reviewFS.authorId == um.currentUser!.id {
+                            
+                            let newReview = Review(id: reviewFS.id, authorId: reviewFS.authorId, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+                            
+                            if fm.updateReviewToFirestore(movieId: "\(movie.id)", review: newReview, oldReview: reviewFS) {
+                                print("Successfully found existing review")
+                                break;
+                            }
+                        } else {
+                            if fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review) {
+                                print("Successfully saved new review")
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -88,4 +105,27 @@ class ReviewManager : ObservableObject {
         
     }
     
+    func getReview() -> Review {
+        
+        for movie in listOfMovieFS {
+            for review in movie.reviews {
+                if review.authorId == um.currentUser!.id! {
+                    return review
+                }
+            }
+        }
+        
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+    }
+    
+    func getMovieFS(movieId: String) -> MovieFS? {
+        
+        for movieFS in listOfMovieFS {
+            if movieFS.id == movieId {
+                return movieFS
+            }
+        }
+        return nil
+    }
 }
+

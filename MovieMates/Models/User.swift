@@ -18,6 +18,7 @@ struct User: Codable, Identifiable {
     
     let friends: [String]
     let frequests: [String]
+    let watchlist: [String]
     
     let themeId: Int
     

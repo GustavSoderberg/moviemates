@@ -47,7 +47,7 @@ struct ProfileView: View {
                                     showingNotificationSheet = true
                                     viewShowing = .Loading
                                 } label: {
-                                    Image(systemName: "bell")
+                                    Image(systemName: um.currentUser!.frequests.count > 0 ? "bell.badge" : "bell")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
@@ -167,7 +167,7 @@ struct ProfileView: View {
                 case "reviews":
                     UserReviewView()
                 case "watchlist":
-                    WatchListView()
+                    WatchListView(user: user)
                 case "friends":
                     FriendListView(user: user)
                 case "about":
@@ -192,7 +192,7 @@ struct UserReviewView: View {
         VStack{
             Text("Hej min favoritfilm är Batman!!")
             ScrollView{
-                LazyVStack{
+                VStack{
                     ForEach(rm.listOfMovieFS) { movie in
                         
                         ForEach(movie.reviews) { review in
@@ -214,19 +214,47 @@ struct UserReviewView: View {
 }
 
 struct WatchListView: View {
+    
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
+    let user: User
+    @State var movieWatchlist = [Movie]()
+    
     var body: some View{
+        
+        
         VStack{
-            Text("Jag vill se den nya Dr Strange!!")
+           
             ScrollView{
-                LazyVStack{
-                    //                    ForEach(watchlist) { movie in
-                    //                        MovieCardView(movie: movie)
-                    //                    }
+                
+                ForEach(movieWatchlist, id: \.self) { movie in
+                    MovieCardView(movie: movie)
+                
                 }
-                .padding()
+
             }
+        }.onAppear {
+            getMovies()
         }
     }
+    func getMovies() {
+        
+        for movies in user.watchlist {
+            
+            movieViewModel.fetchMovie(id: Int(movies)!) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let movie):
+                        movieWatchlist.append(movie)
+                    }
+                }
+            }
+
+        }
+        
+    }
+    
 }
 
 struct AboutMeView: View {
@@ -410,7 +438,7 @@ struct FriendListView: View{
                         
                         if um.currentUser!.id! == user.id! {
                             Button {
-                                um.removeFriend(id: user.id!)
+                                um.removeFriend(id: userToDisplay.id!)
                             } label: {
                                 Image(systemName: "trash.circle")
                                     .resizable()

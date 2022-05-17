@@ -89,25 +89,39 @@ struct usersView: View {
     @ObservedObject var oum = um
     @State var showProfileView = false
     @State var index1 = 0
+    @State var searchText = ""
     
     var body: some View{
+        
         VStack{
+            SearchBar(text: $searchText)
             ScrollView{
                 VStack{
+                    if searchText.isEmpty {
+                        Text("Type to search")
+                    } else {
+                        
                     ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                         
                         if user.id != um.currentUser!.id {
-                            Button {
-                                index1 = index
-                                um.refresh += 1
+                            if user.username.lowercased().contains(searchText.lowercased())  {
                                 
-                                showProfileView = true
-                            } label: {
-                                UserCardView(user: user)
+                                Button {
+                                    index1 = index
+                                    um.refresh += 1
+                                    
+                                    showProfileView = true
+                                } label: {
+                                    UserCardView(user: user)
+                                }
+                                .buttonStyle(.plain)
+                                
                             }
-                            .buttonStyle(.plain)
+                                
+                            
                         }
                     }
+                }
                 }
                 .padding()
                 
@@ -146,12 +160,12 @@ struct UserCardView: View {
     }
 }
 
-private var searchResultsUsers = [
-    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
-]
+//private var searchResultsUsers = [
+//    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
+//    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
+//]
 
 //private var searchResultsMovies = [
 ////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
