@@ -96,12 +96,12 @@ class FirestoreManager {
         if from.id != nil && to.id != nil {
             
             db.collection("users").document(to.id!)
-                
-                    .updateData([
-                        
-                        "frequests": FieldValue.arrayUnion([from.id!])
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "frequests": FieldValue.arrayUnion([from.id!])
+                    
+                ])
             
             return true
             
@@ -116,26 +116,26 @@ class FirestoreManager {
         if you.id != nil {
             
             db.collection("users").document(you.id!)
-                
-                    .updateData([
-                        
-                        "frequests": FieldValue.arrayRemove([newFriendId]),
-                        "friends": FieldValue.arrayUnion([newFriendId])
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "frequests": FieldValue.arrayRemove([newFriendId]),
+                    "friends": FieldValue.arrayUnion([newFriendId])
+                    
+                ])
             
             db.collection("users").document(newFriendId)
-                
-                    .updateData([
-                        
-                        "friends": FieldValue.arrayUnion([you.id!])
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "friends": FieldValue.arrayUnion([you.id!])
+                    
+                ])
             
             return true
             
         }
-            
+        
         return false
         
     }
@@ -145,17 +145,17 @@ class FirestoreManager {
         if you.id != nil {
             
             db.collection("users").document(you.id!)
-                
-                    .updateData([
-                        
-                        "frequests": FieldValue.arrayRemove([denyFriendId])
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "frequests": FieldValue.arrayRemove([denyFriendId])
+                    
+                ])
             
             return true
             
         }
-            
+        
         return false
         
     }
@@ -165,20 +165,20 @@ class FirestoreManager {
         if you.id != nil {
             
             db.collection("users").document(you.id!)
-                
-                    .updateData([
-                        
-                        "friends": FieldValue.arrayRemove([removeUserId]),
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "friends": FieldValue.arrayRemove([removeUserId]),
+                    
+                ])
             
             db.collection("users").document(removeUserId)
-                
-                    .updateData([
-                        
-                        "friends": FieldValue.arrayRemove([you.id!]),
-                        
-                    ])
+            
+                .updateData([
+                    
+                    "friends": FieldValue.arrayRemove([you.id!]),
+                    
+                ])
             
             return true
             
@@ -191,12 +191,12 @@ class FirestoreManager {
     func changeUsername(you: User, username: String) -> Bool {
         
         db.collection("users").document(you.id!)
-            
-                .updateData([
-                    
-                    "username": username
-                    
-                ])
+        
+            .updateData([
+                
+                "username": username
+                
+            ])
         
         return true
         
@@ -205,12 +205,12 @@ class FirestoreManager {
     func updateBiography(you: User, biography: String) -> Bool {
         
         db.collection("users").document(you.id!)
-            
-                .updateData([
-                    
-                    "bio": biography
-                    
-                ])
+        
+            .updateData([
+                
+                "bio": biography
+                
+            ])
         
         return true
         
@@ -220,7 +220,7 @@ class FirestoreManager {
         
         do {
             try db.collection("movies").document(movieFS.id!).setData(from: movieFS)
-            try db.collection("movies").document(movieFS.id!).collection("reviews").document(review.id).setData(from: review)
+//            try db.collection("movies").document(movieFS.id!).collection("reviews").document(review.id).setData(from: review)
             return true
         }
         catch {
@@ -228,18 +228,58 @@ class FirestoreManager {
         }
     }
     
-    func saveReviewToFirestore(movieId: String, review: Review) {
+    func saveReviewToFirestore(movieId: String, review: Review, oldReview: Review) -> Bool {
         
-
-        db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
-            for doc in QuerySnapshot!.documents {
+        
+        
+        let xReview = ["id" : "\(oldReview.id)",
+                       "authorId" : oldReview.authorId,
+                       "rating" : oldReview.rating,
+                       "reviewText" : oldReview.reviewText,
+                       "whereAt" : oldReview.whereAt,
+                       "withWho" : oldReview.withWho,
+                       "timestamp" : oldReview.timestamp] as [String : Any]
+        
+        let newReview = ["id" : "\(review.id)",
+                         "authorId" : review.authorId,
+                         "rating" : review.rating,
+                         "reviewText" : review.reviewText,
+                         "whereAt" : review.whereAt,
+                         "withWho" : review.withWho,
+                         "timestamp" : review.timestamp] as [String : Any]
+        
+        
+        db.collection("movies").document(movieId)
+        
+            .updateData([
                 
-                if (doc.documentID != review.id) {
-                    self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
-                }
-                break;
-            }
-        }
-        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
+                "reviews": FieldValue.arrayUnion([newReview])
+                
+            ])
+        
+        db.collection("movies").document(movieId)
+        
+            .updateData([
+                
+                "reviews": FieldValue.arrayRemove([xReview])
+                
+            ])
+        
+        
+        return true
+        
+        
+        
+        
+        //        db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
+        //            for doc in QuerySnapshot!.documents {
+        //
+        //                if (doc.documentID != review.id) {
+        //                    self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
+        //                }
+        //                break;
+        //            }
+        //        }
+        //        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
     }
 }
