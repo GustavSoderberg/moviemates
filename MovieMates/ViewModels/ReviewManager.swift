@@ -62,55 +62,55 @@ class ReviewManager : ObservableObject {
     
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
-        
-        let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            for movieFS in listOfMovieFS {
-                if (movieFS.id! == "\(movie.id)")  {
-                    
-                    for (index, reviewFS) in movieFS.reviews.enumerated() {
-
-                        if reviewFS.authorId == um.currentUser!.id {
-                            
-                            let newReview = Review(id: reviewFS.id, authorId: reviewFS.authorId, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
-                            
-                            if fm.updateReviewToFirestore(movieId: "\(movie.id)", review: newReview, oldReview: reviewFS) {
-                                print("Successfully found existing review")
-                                break;
-                            }
-                        } else {
-                            if fm.saveReviewToFirestore(movieId: "\(movie.id)", review: review) {
-                                print("Successfully saved new review")
-                                break;
-                            }
-                        }
-                    }
+            let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            
+            var reviews = getReviews(movieId: movie.id, onlyFriends: false)
+            
+            for (index, review1) in reviews.enumerated() {
+                if review1.authorId == um.currentUser!.id! {
+                    reviews.remove(at: index)
+                    break;
                 }
             }
+            
+            reviews.append(review)
+            
+            if fm.updateReviewsToFirestore(movieId: "\(movie.id)", reviews: reviews) {
+                print("Successfully created a new movie with the new review")
+            }
+            else {
+                print("E: ReviewManager - saveReview() Failed to create a new movie + add the review")
+            }
+
+            
         }
         else {
             
+            let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
             
+            var reviews = getReviews(movieId: movie.id, onlyFriends: false)
+            reviews.append(review)
             
-            if fm.saveMovieToFirestore(movieFS: MovieFS(id: "\(movie.id)", title: movie.title!, photoUrl: movie.posterURL, rating: Double(rating), description: movie.overview!, reviews: [review]), review: review) {
-                
-                print("Successfully saved new movieFS + Review")
+            if fm.saveMovieToFirestore(movieFS: MovieFS(id: "\(movie.id)", title: movie.title!, photoUrl: movie.posterURL, rating: Double(rating), description: movie.overview!, reviews: reviews)) {
+                print("Successfully added the review to an existing movie")
             }
             else {
-                print("E: ReviewManager - saveReview() Failed to create MovieFS object and save review")
+                print("E: ReviewManager - saveReview() Failed to add review to an existing movie")
             }
-            
         }
         
     }
     
-    func getReview() -> Review {
+    func getReview(movieId: String) -> Review {
         
         for movie in listOfMovieFS {
-            for review in movie.reviews {
-                if review.authorId == um.currentUser!.id! {
-                    return review
+            if movie.id == movieId {
+                for review in movie.reviews {
+                    if review.authorId == um.currentUser!.id! {
+                        return review
+                    }
                 }
             }
         }
