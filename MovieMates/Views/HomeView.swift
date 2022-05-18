@@ -17,6 +17,7 @@ struct HomeView: View {
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
     @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
     
+    
     var body: some View {
         ZStack{
             Color("background")
@@ -68,10 +69,14 @@ struct HomeView: View {
                     }
                 }
             }
-        }.onAppear {
+        }.onChange(of: rm.listOfMovieFS, perform: { newValue in
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
-        }
+        })
+//        .onAppear {
+//            allReviewsViewModel.getAllReviews()
+//            friendsReviewsViewModel.getFriendsReviews()
+//        }
     }
 }
 
