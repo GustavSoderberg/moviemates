@@ -51,7 +51,7 @@ class ReviewManager : ObservableObject {
         for review in allReviews {
             totalScore += review.rating
         }
-        return Float(totalScore/allReviews.count)
+        return Float(totalScore/(allReviews.count + 1))
     }
     
     func checkIfMovieExists(movieId: String) -> Bool {

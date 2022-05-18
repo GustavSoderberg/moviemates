@@ -276,6 +276,7 @@ class FirestoreManager {
     
     func updateAverageRating(movieId: Int) {
         let average = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+        print("average rating: \(average)")
         db.collection("movies").document("\(movieId)").updateData(["rating" : average])
     }
 }
