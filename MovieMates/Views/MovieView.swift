@@ -51,8 +51,8 @@ struct MovieView: View {
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var poster : Image = Image("bill_poster")
-    @State var ratingGlobalWidth : Float = 67
-    @State var ratingLocalWidth : Float = 14
+    //@State var ratingGlobalWidth : Float = 67
+    //@State var ratingLocalWidth : Float = 14
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
@@ -297,16 +297,28 @@ struct MovieView: View {
                 description = "No further description"
             }
             
-            ratingGlobalWidth = Float(Int.random(in: 1...100))
-            ratingLocalWidth = Float(Int.random(in: 1...100))
-            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
+            ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
+            ratingLocalScore = "0.0"
+//            ratingGlobalWidth = Float(Int.random(in: 1...100))
+//            ratingLocalWidth = Float(Int.random(in: 1...100))
+            
+//            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
             if ratingGlobalScore.hasSuffix("0") {
                 ratingGlobalScore = String(ratingGlobalScore.prefix(1))
             }
             
-            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
+//            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
             if ratingLocalScore.hasSuffix("0") {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
+            }
+        })
+        .onChange(of: sheetShowing, perform: {newValue in
+            print("do something now?")
+            
+            ratingGlobalScore = "\(movieFS?.rating ?? 0)"
+
+            if ratingGlobalScore.hasSuffix("0") {
+                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
             }
         })
     }

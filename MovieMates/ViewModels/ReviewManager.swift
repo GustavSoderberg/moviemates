@@ -45,13 +45,14 @@ class ReviewManager : ObservableObject {
         return reviewArray
     }
     
-    func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
+    func getAverageRating(movieId: Int, newReview: Bool, rating: Int, onlyFriends: Bool) -> Float {
         let allReviews = getReviews(movieId: movieId, onlyFriends: onlyFriends)
-        var totalScore: Int = 0
+        var totalScore: Int = newReview ? rating : 0
         for review in allReviews {
             totalScore += review.rating
         }
-        return Float(totalScore/allReviews.count)
+        print("number of ratings: \(allReviews.count)")
+        return Float(totalScore)/Float(allReviews.count)
     }
     
     func checkIfMovieExists(movieId: String) -> Bool {
@@ -74,6 +75,7 @@ class ReviewManager : ObservableObject {
 
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
+            var newReview = true
             let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
@@ -81,10 +83,13 @@ class ReviewManager : ObservableObject {
             for (index, review1) in reviews.enumerated() {
                 if review1.authorId == um.currentUser!.id! {
                     reviews.remove(at: index)
+                    newReview = false
                     break;
-
                 }
             }
+            
+            //Updates Average Rating
+            fm.updateAverageRating(movieId: movie.id, newReview: newReview, rating: rating)
             
             reviews.append(review)
             
@@ -94,10 +99,6 @@ class ReviewManager : ObservableObject {
             else {
                 print("E: ReviewManager - saveReview() Failed to create a new movie + add the review")
             }
-            
-            //Updates Average Rating
-            fm.updateAverageRating(movieId: movie.id)
-
             
         }
         else {

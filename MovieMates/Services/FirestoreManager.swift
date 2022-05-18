@@ -234,13 +234,13 @@ class FirestoreManager {
         for review in reviews {
             
             let newReview = ["id" : "\(review.id)",
-                                     "authorId" : review.authorId,
-                                    "movieId" : review.movieId,
-                                     "rating" : review.rating,
-                                     "reviewText" : review.reviewText,
-                                     "whereAt" : review.whereAt,
-                                     "withWho" : review.withWho,
-                                     "timestamp" : review.timestamp] as [String : Any]
+                             "authorId" : review.authorId,
+                             "movieId" : review.movieId,
+                             "rating" : review.rating,
+                             "reviewText" : review.reviewText,
+                             "whereAt" : review.whereAt,
+                             "withWho" : review.withWho,
+                             "timestamp" : review.timestamp] as [String : Any]
             newArray.append(newReview)
             
         }
@@ -275,6 +275,7 @@ class FirestoreManager {
             
     }
     
+
     func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
         
 //        if you.id != nil {
