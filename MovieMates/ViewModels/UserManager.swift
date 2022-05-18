@@ -146,7 +146,7 @@ class UserManager: ObservableObject {
         }
         
                 //Retunerar en testuser om if satsen misslyckas
-        return User(id: "", username: "", photoUrl: URL(string: "")!, bio: "", friends: ["",""], frequests: ["",""], watchlist: [""], themeId: 0)
+        return User(id: "", username: "", photoUrl: URL(string: "no")!, bio: "", friends: ["",""], frequests: ["",""], watchlist: [""], themeId: 0)
     }
     
     func addToWatchlist(movieID: String){

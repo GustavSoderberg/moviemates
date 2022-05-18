@@ -62,9 +62,10 @@ class ReviewManager : ObservableObject {
     
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
+
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             
@@ -72,6 +73,7 @@ class ReviewManager : ObservableObject {
                 if review1.authorId == um.currentUser!.id! {
                     reviews.remove(at: index)
                     break;
+
                 }
             }
             
@@ -88,7 +90,7 @@ class ReviewManager : ObservableObject {
         }
         else {
             
-            let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             reviews.append(review)
@@ -115,7 +117,7 @@ class ReviewManager : ObservableObject {
             }
         }
         
-        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
     }
     
     func getMovieFS(movieId: String) -> MovieFS? {
