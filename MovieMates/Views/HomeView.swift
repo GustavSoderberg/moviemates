@@ -10,12 +10,13 @@ import SwiftUI
 struct HomeView: View {
     
     @State var index = "friends"
-    @State var presentMovie: Movie? = nil
     @State var showMovieView = false
+    @State var presentMovie: Movie? = nil
     
     @ObservedObject var viewModel = MovieListViewModel()
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
     @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
+    
     
     
     var body: some View {
@@ -73,10 +74,6 @@ struct HomeView: View {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
         })
-//        .onAppear {
-//            allReviewsViewModel.getAllReviews()
-//            friendsReviewsViewModel.getFriendsReviews()
-//        }
     }
 }
 
@@ -84,13 +81,12 @@ struct ReviewCardView: View {
     
     let review: Review
     var movieFS: MovieFS?
-    @State var movie: Movie?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
     
     @State private var isExpanded: Bool = false
     
-    private let apiService: MovieViewModel = MovieViewModel.shared
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack{
@@ -109,10 +105,11 @@ struct ReviewCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                     .onTapGesture {
-                        um.refresh += 1
+                        
                         print("click!")
-                        //presentMovie = movie
+                        loadMovie(id: movie.id!)
                         showMovieView = true
+                        //um.refresh += 1
                     }
                     
                     VStack(alignment: .leading){
@@ -144,7 +141,22 @@ struct ReviewCardView: View {
             .padding()
         }
     }
+    func loadMovie(id: String) {
+        presentMovie = nil
+        movieViewModel.fetchMovie(id: Int(id)!) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let movie):
+                    presentMovie = movie
+                }
+            }
+        }
+    }
 }
+
+
 
 func formatDate(date: Date) -> String{
     let dateFormatter = DateFormatter()
