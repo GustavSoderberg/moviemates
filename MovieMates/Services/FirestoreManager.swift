@@ -275,6 +275,27 @@ class FirestoreManager {
             
     }
     
+    func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
+        
+//        if you.id != nil {
+            
+            db.collection("users").document(userID)
+            
+                .updateData([
+                    
+                    "watchlist": FieldValue.arrayRemove([movieID]),
+                    
+                ])
+            
+            return true
+            
+//        }
+        
+//        return false
+        
+    }
+    
+    
     func updateAverageRating(movieId: Int) {
         let average = rm.getAverageRating(movieId: movieId, onlyFriends: false)
         print("average rating: \(average)")

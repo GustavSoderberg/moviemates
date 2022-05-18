@@ -139,15 +139,21 @@ struct MovieView: View {
                         .font(Font.headline.weight(.bold))
                         .onTapGesture {
                             //TODO ad to wishlist
-                            if onWatchlist {
-                                onWatchlist = false
-                                watchlistText = "Add to Watchlist?"
-                            } else {
-                                onWatchlist = true
-                                watchlistText = "On Watchlist"
+                            if !onWatchlist {
                                 
+                                watchlistText = "On Watchlist"
                                 um.addToWatchlist(movieID: "\(currentMovie.id)")
+                                onWatchlist = true
+                            } else {
+                                watchlistText = "Add to Watchlist"
+                                um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
+                                onWatchlist =  false
+
                             }
+                        }
+                        .onAppear {
+                            onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
+                                watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                         }
                     Spacer()
                 }
