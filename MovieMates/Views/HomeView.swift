@@ -14,6 +14,8 @@ struct HomeView: View {
     @State var showMovieView = false
     
     @ObservedObject var viewModel = MovieListViewModel()
+    @ObservedObject var allReviewsViewModel = ReviewListViewModel()
+    @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
     
     var body: some View {
         ZStack{
@@ -36,19 +38,12 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case "friends":
-                            ForEach(rm.listOfMovieFS) { movieFS in
-                                ForEach(movieFS.reviews) { review in
-                                    if um.currentUser!.friends.contains(review.authorId) {
-                                        ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
-                                    }
-                                }
-                                
+                            ForEach(friendsReviewsViewModel.reviews) { review in
+                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "trending":
-                            ForEach(rm.listOfMovieFS) { movieFS in
-                                ForEach(movieFS.reviews) { review in
-                                    ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
-                                }
+                            ForEach(allReviewsViewModel.reviews) { review in
+                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "popular":
                             ForEach(viewModel.popularMovies) { movie in
@@ -73,6 +68,9 @@ struct HomeView: View {
                     }
                 }
             }
+        }.onAppear {
+            allReviewsViewModel.getAllReviews()
+            friendsReviewsViewModel.getFriendsReviews()
         }
     }
 }
@@ -139,22 +137,6 @@ struct ReviewCardView: View {
                 }
             }
             .padding()
-        }
-//        .onAppear {
-//            loadMovie(id: review.movieId)
-//        }
-    }
-    
-    func loadMovie(id: Int){
-        apiService.fetchMovie(id: id) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let movie):
-                    self.movie = movie
-                }
-            }
         }
     }
 }
