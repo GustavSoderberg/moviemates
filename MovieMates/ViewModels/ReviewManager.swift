@@ -63,7 +63,7 @@ class ReviewManager : ObservableObject {
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
         
-        let review = Review(authorId: um.currentUser!.id!, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+        let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
             for movieFS in listOfMovieFS {
@@ -73,7 +73,7 @@ class ReviewManager : ObservableObject {
 
                         if reviewFS.authorId == um.currentUser!.id {
                             
-                            let newReview = Review(id: reviewFS.id, authorId: reviewFS.authorId, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+                            let newReview = Review(id: reviewFS.id, authorId: reviewFS.authorId, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
                             
                             if fm.updateReviewToFirestore(movieId: "\(movie.id)", review: newReview, oldReview: reviewFS) {
                                 print("Successfully found existing review")
@@ -115,7 +115,7 @@ class ReviewManager : ObservableObject {
             }
         }
         
-        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
     }
     
     func getMovieFS(movieId: String) -> MovieFS? {
