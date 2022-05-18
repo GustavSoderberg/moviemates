@@ -32,7 +32,7 @@ struct ReviewSheet: View {
                         }
                     Spacer()
                 }.onAppear {
-                    var existingReview = rm.getReview()
+                    let existingReview = rm.getReview(movieId: "\(currentMovie.id)")
                     score = existingReview.rating
                     review = existingReview.reviewText
                     whereAt = existingReview.whereAt

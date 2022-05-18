@@ -216,7 +216,7 @@ class FirestoreManager {
         
     }
     
-    func saveMovieToFirestore(movieFS: MovieFS, review: Review) -> Bool{
+    func saveMovieToFirestore(movieFS: MovieFS) -> Bool{
         
         do {
             try db.collection("movies").document(movieFS.id!).setData(from: movieFS)
@@ -228,81 +228,34 @@ class FirestoreManager {
         }
     }
     
-    func updateReviewToFirestore(movieId: String, review: Review, oldReview: Review) -> Bool {
+    func updateReviewsToFirestore(movieId: String, reviews: [Review]) -> Bool {
         
-        
-        
-        let xReview = ["id" : "\(oldReview.id)",
-                       "authorId" : oldReview.authorId,
-                       "rating" : oldReview.rating,
-                       "reviewText" : oldReview.reviewText,
-                       "whereAt" : oldReview.whereAt,
-                       "withWho" : oldReview.withWho,
-                       "timestamp" : oldReview.timestamp] as [String : Any]
-        
-        let newReview = ["id" : "\(review.id)",
-                         "authorId" : review.authorId,
-                         "rating" : review.rating,
-                         "reviewText" : review.reviewText,
-                         "whereAt" : review.whereAt,
-                         "withWho" : review.withWho,
-                         "timestamp" : review.timestamp] as [String : Any]
-        
+        var newArray = [Any]()
+        for review in reviews {
+            
+            let newReview = ["id" : "\(review.id)",
+                             "authorId" : review.authorId,
+                             "movieId" : review.movieId,
+                             "rating" : review.rating,
+                             "reviewText" : review.reviewText,
+                             "whereAt" : review.whereAt,
+                             "withWho" : review.withWho,
+                             "timestamp" : review.timestamp] as [String : Any]
+            newArray.append(newReview)
+            
+        }
         
         db.collection("movies").document(movieId)
         
             .updateData([
                 
-                "reviews": FieldValue.arrayUnion([newReview])
-                
-            ])
-        
-        db.collection("movies").document(movieId)
-        
-            .updateData([
-                
-                "reviews": FieldValue.arrayRemove([xReview])
+                "reviews": newArray
                 
             ])
         
         
         return true
         
-        
-        
-        
-        //        db.collection("movies").document(movieId).collection("reviews").whereField("authorId", isEqualTo: review.authorId).getDocuments() { (QuerySnapshot, error) in
-        //            for doc in QuerySnapshot!.documents {
-        //
-        //                if (doc.documentID != review.id) {
-        //                    self.db.collection("movies").document(movieId).collection("reviews").document(doc.documentID).delete()
-        //                }
-        //                break;
-        //            }
-        //        }
-        //        try! self.db.collection("movies").document(movieId).collection("reviews").document(review.id).setData(from: review)
-    }
-    
-    func saveReviewToFirestore(movieId: String, review: Review) -> Bool {
-        
-        let newReview = ["id" : "\(review.id)",
-                         "authorId" : review.authorId,
-                         "rating" : review.rating,
-                         "reviewText" : review.reviewText,
-                         "whereAt" : review.whereAt,
-                         "withWho" : review.withWho,
-                         "timestamp" : review.timestamp] as [String : Any]
-        
-        
-        db.collection("movies").document(movieId)
-        
-            .updateData([
-                
-                "reviews": FieldValue.arrayUnion([newReview])
-                
-            ])
-        
-        return true
     }
     
     func saveWatchlistToFirebase(user: User, movieID: String) -> Bool {
@@ -320,5 +273,33 @@ class FirestoreManager {
         
             return true
             
+    }
+    
+
+    func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
+        
+//        if you.id != nil {
+            
+            db.collection("users").document(userID)
+            
+                .updateData([
+                    
+                    "watchlist": FieldValue.arrayRemove([movieID]),
+                    
+                ])
+            
+            return true
+            
+//        }
+        
+//        return false
+        
+    }
+    
+    
+    func updateAverageRating(movieId: Int, newReview: Bool, rating: Int) {
+        let average = rm.getAverageRating(movieId: movieId, newReview: newReview, rating: rating, onlyFriends: false)
+        print("average rating: \(average)")
+        db.collection("movies").document("\(movieId)").updateData(["rating" : average])
     }
 }
