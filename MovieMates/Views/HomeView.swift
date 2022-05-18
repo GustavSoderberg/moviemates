@@ -36,12 +36,19 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case "friends":
-                            ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                            ForEach(rm.listOfMovieFS) { movieFS in
+                                ForEach(movieFS.reviews) { review in
+                                    if um.currentUser!.friends.contains(review.authorId) {
+                                        ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                                    }
+                                }
+                                
                             }
                         case "trending":
-                            ForEach(trendingReviews) { review in
-                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                            ForEach(rm.listOfMovieFS) { movieFS in
+                                ForEach(movieFS.reviews) { review in
+                                    ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                                }
                             }
                         case "popular":
                             ForEach(viewModel.popularMovies) { movie in
@@ -73,6 +80,7 @@ struct HomeView: View {
 struct ReviewCardView: View {
     
     let review: Review
+    var movieFS: MovieFS?
     @State var movie: Movie?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
@@ -86,9 +94,9 @@ struct ReviewCardView: View {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
             HStack(alignment: .top){
-                if let movie = movie {
+                if let movie = movieFS {
                     
-                    AsyncImage(url: movie.posterURL){ image in
+                    AsyncImage(url: movie.photoUrl){ image in
                         image
                             .resizable()
                             .scaledToFill()
@@ -100,7 +108,7 @@ struct ReviewCardView: View {
                     .onTapGesture {
                         um.refresh += 1
                         print("click!")
-                        presentMovie = movie
+                        //presentMovie = movie
                         showMovieView = true
                     }
                     
@@ -113,7 +121,7 @@ struct ReviewCardView: View {
                                 .font(.system(size: 12))
                         }
                         
-                        Text(movie.title ?? "no title")
+                        Text(movie.title)
                             .font(.title2)
                             .minimumScaleFactor(0.7)
                             .lineLimit(1)

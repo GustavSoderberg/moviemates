@@ -235,6 +235,7 @@ class FirestoreManager {
             
             let newReview = ["id" : "\(review.id)",
                                      "authorId" : review.authorId,
+                                    "movieId" : review.movieId,
                                      "rating" : review.rating,
                                      "reviewText" : review.reviewText,
                                      "whereAt" : review.whereAt,
@@ -246,7 +247,7 @@ class FirestoreManager {
         
         db.collection("movies").document(movieId)
         
-            .setData([
+            .updateData([
                 
                 "reviews": newArray
                 
@@ -295,4 +296,9 @@ class FirestoreManager {
     }
     
     
+    func updateAverageRating(movieId: Int) {
+        let average = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+        print("average rating: \(average)")
+        db.collection("movies").document("\(movieId)").updateData(["rating" : average])
+    }
 }
