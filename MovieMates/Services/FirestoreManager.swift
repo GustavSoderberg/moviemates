@@ -235,6 +235,7 @@ class FirestoreManager {
             
             let newReview = ["id" : "\(review.id)",
                                      "authorId" : review.authorId,
+                                    "movieId" : review.movieId,
                                      "rating" : review.rating,
                                      "reviewText" : review.reviewText,
                                      "whereAt" : review.whereAt,
