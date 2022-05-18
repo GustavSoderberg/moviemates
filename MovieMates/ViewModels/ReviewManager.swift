@@ -45,6 +45,15 @@ class ReviewManager : ObservableObject {
         return reviewArray
     }
     
+    func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
+        let allReviews = getReviews(movieId: movieId, onlyFriends: onlyFriends)
+        var totalScore: Int = 0
+        for review in allReviews {
+            totalScore += review.rating
+        }
+        return Float(totalScore/allReviews.count)
+    }
+    
     func checkIfMovieExists(movieId: String) -> Bool {
 
         for movieFS in listOfMovieFS {
