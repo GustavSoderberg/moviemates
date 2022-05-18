@@ -51,7 +51,7 @@ class ReviewManager : ObservableObject {
         for review in allReviews {
             totalScore += review.rating
         }
-        return Float(totalScore/(allReviews.count + 1))
+        return Float(totalScore/allReviews.count)
     }
     
     func checkIfMovieExists(movieId: String) -> Bool {
@@ -94,6 +94,9 @@ class ReviewManager : ObservableObject {
             else {
                 print("E: ReviewManager - saveReview() Failed to create a new movie + add the review")
             }
+            
+            //Updates Average Rating
+            fm.updateAverageRating(movieId: movie.id)
 
             
         }

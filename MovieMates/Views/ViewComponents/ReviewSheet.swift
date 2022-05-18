@@ -168,7 +168,6 @@ struct ReviewSheet: View {
                                           text: review,
                                           whereAt: whereAt,
                                           withWho: withWho)
-                            fm.updateAverageRating(movieId: currentMovie.id)
                             sheetShowing = .MovieView
                         } label: {
                             Text("Leave Review")
