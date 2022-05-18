@@ -94,6 +94,9 @@ class ReviewManager : ObservableObject {
             else {
                 print("E: ReviewManager - saveReview() Failed to create a new movie + add the review")
             }
+            
+            //Updates Average Rating
+            fm.updateAverageRating(movieId: movie.id)
 
             
         }
