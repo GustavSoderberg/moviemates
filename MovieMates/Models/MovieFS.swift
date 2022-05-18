@@ -8,7 +8,13 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct MovieFS: Codable, Identifiable {
+struct MovieFS: Codable, Identifiable, Equatable {
+    static func ==(lhs: MovieFS, rhs: MovieFS) -> Bool {
+        return lhs.id == rhs.id
+        }
+    
+    
+    
     
     @DocumentID var id : String?
     

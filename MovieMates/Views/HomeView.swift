@@ -10,10 +10,14 @@ import SwiftUI
 struct HomeView: View {
     
     @State var index = "friends"
-    @State var presentMovie: Movie? = nil
     @State var showMovieView = false
+    @State var presentMovie: Movie? = nil
     
     @ObservedObject var viewModel = MovieListViewModel()
+    @ObservedObject var allReviewsViewModel = ReviewListViewModel()
+    @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
+    
+    
     
     var body: some View {
         ZStack{
@@ -36,19 +40,12 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case "friends":
-                            ForEach(rm.listOfMovieFS) { movieFS in
-                                ForEach(movieFS.reviews) { review in
-                                    if um.currentUser!.friends.contains(review.authorId) {
-                                        ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
-                                    }
-                                }
-                                
+                            ForEach(friendsReviewsViewModel.reviews) { review in
+                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "trending":
-                            ForEach(rm.listOfMovieFS) { movieFS in
-                                ForEach(movieFS.reviews) { review in
-                                    ReviewCardView(review: review, movieFS: movieFS, presentMovie: $presentMovie, showMovieView: $showMovieView)
-                                }
+                            ForEach(allReviewsViewModel.reviews) { review in
+                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case "popular":
                             ForEach(viewModel.popularMovies) { movie in
@@ -73,7 +70,10 @@ struct HomeView: View {
                     }
                 }
             }
-        }
+        }.onChange(of: rm.listOfMovieFS, perform: { newValue in
+            allReviewsViewModel.getAllReviews()
+            friendsReviewsViewModel.getFriendsReviews()
+        })
     }
 }
 
@@ -81,13 +81,12 @@ struct ReviewCardView: View {
     
     let review: Review
     var movieFS: MovieFS?
-    @State var movie: Movie?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
     
     @State private var isExpanded: Bool = false
     
-    private let apiService: MovieViewModel = MovieViewModel.shared
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack{
@@ -106,10 +105,11 @@ struct ReviewCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                     .onTapGesture {
-                        um.refresh += 1
+                        
                         print("click!")
-                        //presentMovie = movie
+                        loadMovie(id: movie.id!)
                         showMovieView = true
+                        //um.refresh += 1
                     }
                     
                     VStack(alignment: .leading){
@@ -140,24 +140,23 @@ struct ReviewCardView: View {
             }
             .padding()
         }
-//        .onAppear {
-//            loadMovie(id: review.movieId)
-//        }
     }
-    
-    func loadMovie(id: Int){
-        apiService.fetchMovie(id: id) { result in
+    func loadMovie(id: String) {
+        presentMovie = nil
+        movieViewModel.fetchMovie(id: Int(id)!) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
                     print(error)
                 case .success(let movie):
-                    self.movie = movie
+                    presentMovie = movie
                 }
             }
         }
     }
 }
+
+
 
 func formatDate(date: Date) -> String{
     let dateFormatter = DateFormatter()
