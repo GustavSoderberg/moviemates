@@ -273,4 +273,26 @@ class FirestoreManager {
             return true
             
     }
+    
+    func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
+        
+//        if you.id != nil {
+            
+            db.collection("users").document(userID)
+            
+                .updateData([
+                    
+                    "watchlist": FieldValue.arrayRemove([movieID]),
+                    
+                ])
+            
+            return true
+            
+//        }
+        
+//        return false
+        
+    }
+    
+    
 }
