@@ -34,10 +34,7 @@ struct MovieCardView: View {
                             .border(Color.black, width: 3)
                     }
                 }
-                .onTapGesture {
-                    print("click!")
-                    showMovieView = true
-                }
+             
                 VStack(alignment: .leading){
                     Text(movie.title!)
                         .font(.title2)
@@ -52,6 +49,10 @@ struct MovieCardView: View {
                 Spacer()
             }
             .padding()
+        }
+        .onTapGesture {
+            print("click!")
+            showMovieView = true
         }
         .sheet(isPresented: $showMovieView) {
             MovieViewController(movie: movie, showMovieView: $showMovieView)
