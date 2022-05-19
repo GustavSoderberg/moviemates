@@ -131,7 +131,7 @@ struct MovieView: View {
                     Spacer()
                     Text("\(watchlistText)")
                         .padding(.horizontal)
-                        .background(onWatchlist ? Color("accent-color") : .gray)
+                        .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
                         .cornerRadius(5)
                         .font(Font.headline.weight(.bold))
                         .onTapGesture {
@@ -163,13 +163,12 @@ struct MovieView: View {
                             .cornerRadius(15)
                             .padding(.horizontal)
                             .frame(height: 90)
-                            .foregroundColor(.gray)
+                            .foregroundColor(Color("secondary-background"))
                         
                         VStack(spacing:0) {
                             HStack{
                                 Text("RATINGS")
                                     .font(Font.headline.weight(.bold))
-                                    .foregroundColor(.white)
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -182,7 +181,6 @@ struct MovieView: View {
                             
                             HStack{
                                 Text("GLOBAL")
-                                    .foregroundColor(.white)
                                 Spacer()
                                 HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
@@ -192,7 +190,6 @@ struct MovieView: View {
                                 .frame(height: 20)
                                 
                                 Text("\(ratingGlobalScore)")
-                                    .foregroundColor(.white)
                                     .frame(maxWidth: 30, alignment: .leading)
                                 Spacer()
                             }
@@ -202,7 +199,6 @@ struct MovieView: View {
                             
                             HStack{
                                 Text("FRIENDS")
-                                    .foregroundColor(.white)
                                 Spacer()
                                 HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
@@ -212,7 +208,6 @@ struct MovieView: View {
                                 .frame(height: 20)
                                 
                                 Text("\(ratingLocalScore)")
-                                    .foregroundColor(.white)
                                     .frame(maxWidth: 30, alignment: .leading)
                                 Spacer()
                             }
@@ -352,7 +347,7 @@ struct ReviewClapper: View {
             Image("clapper_hollow")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("secondary-background"))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {
@@ -410,7 +405,7 @@ struct MovieReviewCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack(alignment: .top){
                 VStack(alignment: .leading){
                     HStack{
@@ -480,3 +475,4 @@ struct MovieView_Previews: PreviewProvider {
     }
 }
 
+ 

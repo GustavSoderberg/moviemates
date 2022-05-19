@@ -65,13 +65,13 @@ struct SettingsSheet: View {
                     um.changeUsername(username: username)
                     isEditingUsername = false
                 } label: {
-                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingUsername ? .white : .gray)
+                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingUsername ? (darkmode ? .white : .black) : .gray )
                 }
                 Button {
                     username = user.username
                     isEditingUsername = false
                 } label: {
-                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingUsername ? .white : .gray)
+                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingUsername ? (darkmode ? .white : .black) : .gray )
                 }
                 
             }.padding()
@@ -88,7 +88,6 @@ struct SettingsSheet: View {
                 
                 TextEditor(text: $biography)
                     .background(Color("secondary-background"))
-                    .foregroundColor(Color.white)
                     .frame(minHeight: 100)
                     .cornerRadius(15)
                     .onAppear(perform: {
@@ -109,13 +108,13 @@ struct SettingsSheet: View {
                     um.updateBiography(biography: biography)
                     isEditingBiography = false
                 } label: {
-                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingBiography ? .white : .gray)
+                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingBiography ? (darkmode ? .white : .black) : .gray )
                 }
                 Button {
                     biography = user.bio!
                     isEditingBiography = false
                 } label: {
-                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingBiography ? .white : .gray)
+                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingBiography ? (darkmode ? .white : .black) : .gray )
                 }
                 
             }.padding()
@@ -156,3 +155,4 @@ struct SettingsSheet: View {
         .padding()
     }
 }
+ 

@@ -148,7 +148,7 @@ struct UserCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack{
                 AsyncImage(url: user.photoUrl) { image in
                     image.resizable()
@@ -187,3 +187,4 @@ struct UserCardView: View {
 //        SearchView(text: .constant(""))
 //    }
 //}
+ 

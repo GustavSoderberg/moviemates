@@ -23,3 +23,4 @@ struct SearchViewInfo: View {
 //        SearchViewInfo(infoText: infoText)
 //    }
 //}
+ 

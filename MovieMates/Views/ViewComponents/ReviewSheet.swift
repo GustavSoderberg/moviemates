@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ReviewSheet: View {
+    @AppStorage("darkmode") private var darkmode = false
     
     @Environment(\.dismiss) var dismiss
     
@@ -19,6 +20,7 @@ struct ReviewSheet: View {
     @State private var whereAt = ""
     @State private var withWho = ""
     @State var review: String = ""
+    @State var emptyRating = false
     
     var body: some View {
         VStack{
@@ -43,7 +45,7 @@ struct ReviewSheet: View {
                 VStack {
                     ZStack() {
                         RoundedRectangle(cornerRadius: 15)
-                            .foregroundColor(.red)
+                            .foregroundColor(Color("accent-color"))
                         
                         HStack{
                             VStack{
@@ -60,14 +62,13 @@ struct ReviewSheet: View {
                             
                             VStack(spacing: 0){
                                 Text(currentMovie.title ?? "Title")
-                                    .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
                                     .padding(.bottom, 10)
                                     .padding(.trailing)
-                                Text("Pick your rating")
-                                    .foregroundColor(.white)
+                                Text(emptyRating ? "Pick your rating *" : "Pick your rating")
                                     .font(Font.headline.weight(.bold))
                                     .padding(.bottom, 5)
+                                    .foregroundColor(emptyRating ? (darkmode ? .black : .red) : (darkmode ? .white : .black))
                                 
                                 
                                 //Score Picker "Slider"
@@ -85,7 +86,7 @@ struct ReviewSheet: View {
                                             ClapperScoreSlider(pos: i, score: $score)
                                             Rectangle()
                                                 .frame(width: 5, height: 25)
-                                                .foregroundColor(.red)
+                                                .foregroundColor(Color("accent-color"))
                                         }
                                     }
                                     .onChange(of: score) { _ in
@@ -107,12 +108,10 @@ struct ReviewSheet: View {
                             Rectangle()
                                 .cornerRadius(15, corners: [.topLeft, .topRight])
                                 .frame(height: 30)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("secondary-background"))
                             VStack(spacing: 0) {
                                 Text("Write your review")
-                                    .font(Font.headline.weight(.bold))
-                                    .foregroundColor(.white)
-                                    .padding(.vertical, 5)
+                                    .font(Font.headline.weight(.bold)) .padding(.vertical, 5)
                                 
                                 Divider()
                             }
@@ -123,7 +122,7 @@ struct ReviewSheet: View {
                             Rectangle()
                                 .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
                                 .frame(height: 170)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("secondary-background"))
                             VStack(spacing: 0){
                                 ScrollView{
                                     TextEditor(text: $review)
@@ -162,20 +161,23 @@ struct ReviewSheet: View {
                     
                     HStack {
                         Button {
-                            print("Leave Review")
-                            rm.saveReview(movie: currentMovie,
-                                          rating: score,
-                                          text: review,
-                                          whereAt: whereAt,
-                                          withWho: withWho)
-                            sheetShowing = .MovieView
+                            if score > 0 {
+                                print("Leave Review")
+                                rm.saveReview(movie: currentMovie,
+                                              rating: score,
+                                              text: review,
+                                              whereAt: whereAt,
+                                              withWho: withWho)
+                                sheetShowing = .MovieView
+                            } else {
+                                emptyRating = true
+                            }
                         } label: {
                             Text("Leave Review")
                                 .frame(width: 200, height: 50)
-                        }
+                        }.buttonStyle(.plain)
                         .frame(width: 200, height: 50)
-                        .foregroundColor(.white)
-                        .background(Color.red)
+                        .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
                         .cornerRadius(10)
                         
                         
@@ -199,7 +201,7 @@ struct ClapperScoreSlider: View {
         Image("clapper_hollow")
             .resizable()
             .frame(width: 25, height: 25)
-            .foregroundColor(.red)
+            .foregroundColor(Color("accent-color"))
             .onTapGesture {
                 score = pos
             }
@@ -211,3 +213,4 @@ struct ProfileSheet_Previews: PreviewProvider {
         ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil)))
     }
 }
+ 
