@@ -29,4 +29,15 @@ class ReviewListViewModel: ObservableObject {
             }
         }
     }
+    
+    func getUsersReviews(user: User){
+        reviews.removeAll()
+        for movieFS in rm.listOfMovieFS {
+            for review in movieFS.reviews {
+                if (user.id == review.authorId) {
+                    reviews.append(review)
+                }
+            }
+        }
+    }
 }
