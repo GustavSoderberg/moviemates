@@ -83,6 +83,10 @@ struct HomeView: View {
 
             }
         }
+        .onAppear {
+            allReviewsViewModel.getAllReviews()
+            friendsReviewsViewModel.getFriendsReviews()
+        }
         .onChange(of: index, perform: { newValue in
             switch newValue {
             case POPULAR:
