@@ -15,6 +15,8 @@ struct WelcomeView: View {
     
     @Binding var viewShowing: Status
     @State var showLoginView = showLoginViewGlobal
+    var welcomeClapperArray = [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]
+    var backgroundView: AnyView = AnyView(Color.white)
     
     @State var username = ""
     var body: some View {
@@ -29,18 +31,24 @@ struct WelcomeView: View {
                 
                 Text("MovieMate")
                     .font(.largeTitle)
-                    .foregroundColor(Color("accent-color"))
+                    .foregroundColor(Color("welcome-title"))
                     .padding()
                 
                 
-                Image("clapper-big")
-                    .resizable()
-                    .foregroundColor(Color.white)
-                    .frame(width: 200, height: 200)
-                    .padding()
+                LinearGradient(gradient: Gradient(colors: welcomeClapperArray), startPoint: .top, endPoint: .bottom)
+                            .mask(Image("clapper-big")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            )
+                            .frame(width: 200, height: 200)
+                            .shadow(radius: 10)
+//                Image("clapper-big")
+//                    .resizable()
+//                    .frame(width: 200, height: 200)
+//                    .padding()
                 
                 Text("Choose your username")
-                    .foregroundColor(Color("accent-color"))
+                    .foregroundColor(Color("welcome-title"))
                     .padding()
                 
                 TextField("ENTER YOUR USERNAME", text: $username).frame(width: 200)

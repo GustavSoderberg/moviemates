@@ -16,7 +16,7 @@ struct MovieMatesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.colorScheme, .dark)
+                .environment(\.colorScheme, .light)
         }
     }
 }
