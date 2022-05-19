@@ -28,7 +28,7 @@ struct SearchView: View {
                 })
                     .padding()
                     .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                    .colorMultiply(.red)
+                    .colorMultiply(Color("accent-color"))
                 
                 switch index {
                 case "movies":

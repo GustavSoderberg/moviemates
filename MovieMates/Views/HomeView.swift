@@ -33,7 +33,7 @@ struct HomeView: View {
                 .padding(.horizontal)
                 .padding(.top, 20)
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.red)
+                .colorMultiply(Color("accent-color"))
                 
                 ScrollView{
                     LazyVStack{
