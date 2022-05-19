@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct SettingsSheet: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @Binding var showSettingsSheet: Bool
     var user: User
@@ -122,6 +123,17 @@ struct SettingsSheet: View {
             
         }.padding()
         VStack {
+            HStack{
+                Text("Change Theme")
+                Spacer()
+            }
+            
+            Picker("Mode",selection: $darkmode) {
+                Text("Light")
+                    .tag(false)
+                Text("Dark")
+                    .tag(true)
+            }.pickerStyle(SegmentedPickerStyle())
             
             Spacer()
             
