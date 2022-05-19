@@ -52,6 +52,8 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
+                                        .foregroundColor(um.currentUser!.frequests.count > 0 ? .yellow : .blue)
+                                        
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
                                         .preferredColorScheme(darkmode ? .dark : .light)
@@ -64,12 +66,12 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
+                                        
+                                        
                                 }
                                 
                             }
                         }
-                        
-                        
                         Spacer()
                         
                         if user.id != ooum.currentUser!.id! {
