@@ -51,8 +51,6 @@ struct MovieView: View {
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var poster : Image = Image("bill_poster")
-    //@State var ratingGlobalWidth : Float = 67
-    //@State var ratingLocalWidth : Float = 14
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
@@ -299,27 +297,27 @@ struct MovieView: View {
             
             ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
             ratingLocalScore = "0.0"
-//            ratingGlobalWidth = Float(Int.random(in: 1...100))
-//            ratingLocalWidth = Float(Int.random(in: 1...100))
             
-//            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
             if ratingGlobalScore.hasSuffix("0") {
                 ratingGlobalScore = String(ratingGlobalScore.prefix(1))
             }
             
-//            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
             if ratingLocalScore.hasSuffix("0") {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
-        .onChange(of: sheetShowing, perform: {newValue in
+        .onChange(of: sheetShowing, perform: { _ in
             print("do something now?")
             
-            ratingGlobalScore = "\(movieFS?.rating ?? 0)"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                print("time")
+                print("Rating in time: \(movieFS?.rating ?? 0)")
+                ratingGlobalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))"
 
-            if ratingGlobalScore.hasSuffix("0") {
-                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-            }
+                if ratingGlobalScore.hasSuffix("0") {
+                    ratingGlobalScore = String(ratingGlobalScore.prefix(1))
+                }
+            })
         })
     }
 }
