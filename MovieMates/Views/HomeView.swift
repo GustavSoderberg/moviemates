@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "friends"
     @State var showMovieView = false
@@ -63,7 +64,7 @@ struct HomeView: View {
                     .sheet(isPresented: $showMovieView) {
                         if let presentMovie = presentMovie {
                             MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                                .preferredColorScheme(.dark)
+                                .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
                 }

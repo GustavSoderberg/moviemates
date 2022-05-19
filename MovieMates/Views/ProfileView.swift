@@ -10,6 +10,7 @@ import FirebaseAuth
 
 
 struct ProfileView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "reviews"
     @State private var showSettingsSheet = false
@@ -53,7 +54,7 @@ struct ProfileView: View {
                                         .padding(.leading, 20)
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
-                                        .preferredColorScheme(.dark)
+                                        .preferredColorScheme(darkmode ? .dark : .light)
                                 }
                             } else {
                                 Button {
@@ -130,7 +131,7 @@ struct ProfileView: View {
                             }) {
                                 //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
                                 SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
-                                    .preferredColorScheme(.dark)
+                                    .preferredColorScheme(darkmode ? .dark : .light)
                                 
                             }
                         }
@@ -184,6 +185,7 @@ struct ProfileView: View {
 }
 
 struct UserReviewView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     let user: User
     @State var presentMovie: Movie? = nil
@@ -205,7 +207,7 @@ struct UserReviewView: View {
                 .sheet(isPresented: $showMovieView) {
                     if let presentMovie = presentMovie {
                         MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                            .preferredColorScheme(.dark)
+                            .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
             }
