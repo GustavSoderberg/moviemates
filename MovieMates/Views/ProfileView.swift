@@ -372,7 +372,7 @@ struct ReviewCardProfileView: View {
                             .onTapGesture {
                                 isExpanded.toggle()
                             }
-                    }
+                    }.padding(.leading, 1)
                 }
             }
             .padding()
