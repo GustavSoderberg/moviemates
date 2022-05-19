@@ -114,7 +114,7 @@ struct ReviewCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack(alignment: .top){
                 if let movie = movieFS {
                     
@@ -207,3 +207,4 @@ private var trendingReviews = [Review
 //        HomeView()
 //    }
 //}
+ 

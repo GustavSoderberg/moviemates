@@ -113,7 +113,7 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.trailing, 20)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(darkmode ? .white : .black)
                                 }
                             }
                             
@@ -197,7 +197,6 @@ struct UserReviewView: View {
     
     var body: some View{
         VStack{
-            Text("Hej min favoritfilm är Batman!!")
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
@@ -333,7 +332,7 @@ struct ReviewCardProfileView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack(alignment: .top){
                 if let movie = movieFS {
                     
@@ -414,6 +413,7 @@ struct ReviewCardProfileView: View {
 //]
 
 struct FriendListView: View{
+    @AppStorage("darkmode") private var darkmode = false
     
     var user: User
     
@@ -452,7 +452,7 @@ struct FriendListView: View{
                                 Image(systemName: "trash.circle")
                                     .resizable()
                                     .frame(width: 30, height: 30)
-                                    .foregroundColor(.red)
+                                    .foregroundColor(darkmode ? .red : .black)
                             }
                         }
                     }
@@ -562,3 +562,4 @@ struct FriendRequestTestView: View {
     }
 }
 
+ 
