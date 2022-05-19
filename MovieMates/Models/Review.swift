@@ -11,6 +11,7 @@ struct Review: Identifiable, Codable {
     
     var id: String = UUID().uuidString //Unique id for each review
     let authorId: String
+    let movieId: Int
     let rating: Int
     let reviewText: String
     let whereAt: String

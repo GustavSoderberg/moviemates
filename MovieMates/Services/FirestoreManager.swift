@@ -234,23 +234,20 @@ class FirestoreManager {
         for review in reviews {
             
             let newReview = ["id" : "\(review.id)",
-                                     "authorId" : review.authorId,
-                                     "rating" : review.rating,
-                                     "reviewText" : review.reviewText,
-                                     "whereAt" : review.whereAt,
-                                     "withWho" : review.withWho,
-                                     "timestamp" : review.timestamp] as [String : Any]
+                             "authorId" : review.authorId,
+                             "movieId" : review.movieId,
+                             "rating" : review.rating,
+                             "reviewText" : review.reviewText,
+                             "whereAt" : review.whereAt,
+                             "withWho" : review.withWho,
+                             "timestamp" : review.timestamp] as [String : Any]
             newArray.append(newReview)
             
         }
         
         db.collection("movies").document(movieId)
         
-            .setData([
-                
-                "reviews": newArray
-                
-            ])
+            .updateData(["reviews": newArray], completion: {_ in self.updateAverageRating(movieId: Int(movieId)!)})
         
         
         return true
@@ -274,6 +271,7 @@ class FirestoreManager {
             
     }
     
+
     func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
         
 //        if you.id != nil {
@@ -295,4 +293,9 @@ class FirestoreManager {
     }
     
     
+    func updateAverageRating(movieId: Int) {
+        let average = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+        print("average rating: \(average)")
+        db.collection("movies").document("\(movieId)").updateData(["rating" : average])
+    }
 }

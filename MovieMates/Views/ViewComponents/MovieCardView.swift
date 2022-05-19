@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MovieCardView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     let movie: Movie
     @State var showMovieView = false
@@ -55,8 +56,7 @@ struct MovieCardView: View {
         }
         .sheet(isPresented: $showMovieView) {
             MovieViewController(movie: movie, showMovieView: $showMovieView)
-                .preferredColorScheme(.dark)
-//                        .preferredColorScheme( true ? .dark : .light)
+                .preferredColorScheme(darkmode ? .dark : .light)
         }
     }
 }

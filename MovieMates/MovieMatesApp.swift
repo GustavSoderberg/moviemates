@@ -10,13 +10,16 @@ import Firebase
 
 @main
 struct MovieMatesApp: App {
+    @AppStorage("darkmode") private var darkmode = true
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.colorScheme, .light)
+
+                .environment(\.colorScheme, darkmode ? .dark : .light)
+
         }
     }
 }

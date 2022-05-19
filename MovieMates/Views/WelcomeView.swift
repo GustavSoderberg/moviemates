@@ -12,6 +12,7 @@ import FirebaseOAuthUI
 var showLoginViewGlobal = Auth.auth().currentUser == nil ? true : false
 
 struct WelcomeView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @Binding var viewShowing: Status
     @State var showLoginView = showLoginViewGlobal
@@ -105,7 +106,7 @@ struct WelcomeView: View {
         }) {
             
             LoginView(showLoginView: $showLoginView)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(darkmode ? .dark : .light)
                 .ignoresSafeArea()
             
         }
