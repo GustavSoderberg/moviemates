@@ -64,7 +64,7 @@ struct moviesAndSeriesView: View {
                 List(viewModel.movies, id: \.id) { movie in
                     MovieCardView(movie: movie)
                         .onAppear(){
-                            viewModel.loadMoreContent(currentItem: movie)
+                            viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
                 }
             }
