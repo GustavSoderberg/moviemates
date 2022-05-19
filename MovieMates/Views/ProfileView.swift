@@ -163,7 +163,7 @@ struct ProfileView: View {
                 })
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.red)
+                .colorMultiply(Color("accent-color"))
                 
                 
                 switch index {
