@@ -10,6 +10,7 @@ import FirebaseAuth
 
 
 struct ProfileView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "reviews"
     @State private var showSettingsSheet = false
@@ -51,9 +52,11 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
+                                        .foregroundColor(um.currentUser!.frequests.count > 0 ? .yellow : .blue)
+                                        
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
-                                        .preferredColorScheme(.dark)
+                                        .preferredColorScheme(darkmode ? .dark : .light)
                                 }
                             } else {
                                 Button {
@@ -63,18 +66,18 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
+                                        
+                                        
                                 }
                                 
                             }
                         }
-                        
-                        
                         Spacer()
                         
                         if user.id != ooum.currentUser!.id! {
                             
                             if ooum.currentUser!.friends.contains(user.id!) {
-
+                                
                                 Image(systemName: "person.fill.checkmark")
                                     .resizable()
                                     .frame(width: 30, height: 30)
@@ -92,7 +95,7 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.green)
                                 }.buttonStyle(.plain)
-
+                                
                                 
                             }
                             else if user.frequests.contains(um.currentUser!.id!) {
@@ -130,7 +133,7 @@ struct ProfileView: View {
                             }) {
                                 //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
                                 SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
-                                    .preferredColorScheme(.dark)
+                                    .preferredColorScheme(darkmode ? .dark : .light)
                                 
                             }
                         }
@@ -160,12 +163,12 @@ struct ProfileView: View {
                 })
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.red)
+                .colorMultiply(Color("accent-color"))
                 
                 
                 switch index {
                 case "reviews":
-                    UserReviewView()
+                    UserReviewView(user: user)
                 case "watchlist":
                     WatchListView(user: user)
                 case "friends":
@@ -173,7 +176,7 @@ struct ProfileView: View {
                 case "about":
                     AboutMeView(user: user)
                 default:
-                    UserReviewView()
+                    UserReviewView(user: user)
                 }
                 
                 Spacer()
@@ -184,32 +187,35 @@ struct ProfileView: View {
 }
 
 struct UserReviewView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
+    let user: User
     @State var presentMovie: Movie? = nil
     @State var showMovieView = false
+    
+    @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     
     var body: some View{
         VStack{
             Text("Hej min favoritfilm är Batman!!")
             ScrollView{
                 VStack{
-                    ForEach(rm.listOfMovieFS) { movie in
-                        
-                        ForEach(movie.reviews) { review in
-                            ProfileReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
-                        }
-                        
+                    ForEach(profileReviewsViewModel.reviews) { review in
+                        ReviewCardProfileView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
                     if let presentMovie = presentMovie {
                         MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                            .preferredColorScheme(.dark)
+                            .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
             }
-        }
+        }.onAppear(perform: {
+            profileReviewsViewModel.getUsersReviews(user: user)
+        })
     }
 }
 
@@ -223,14 +229,14 @@ struct WatchListView: View {
         
         
         VStack{
-           
+            
             ScrollView{
                 
                 ForEach(movieWatchlist, id: \.self) { movie in
                     MovieCardView(movie: movie)
-                
+                    
                 }
-
+                
             }
         }.onAppear {
             getMovies()
@@ -250,7 +256,7 @@ struct WatchListView: View {
                     }
                 }
             }
-
+            
         }
         
     }
@@ -313,24 +319,25 @@ struct AboutMeView: View {
     }
 }
 
-struct ProfileReviewCardView: View {
+struct ReviewCardProfileView: View {
     
     let review: Review
-    @State var movie: Movie?
+    var movieFS: MovieFS?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
     
     @State private var isExpanded: Bool = false
     
-    private let apiService: MovieViewModel = MovieViewModel.shared
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(.gray)
             HStack(alignment: .top){
-                if let movie = movie {
-                    AsyncImage(url: movie.posterURL){ image in
+                if let movie = movieFS {
+                    
+                    AsyncImage(url: movie.photoUrl){ image in
                         image
                             .resizable()
                             .scaledToFill()
@@ -340,10 +347,11 @@ struct ProfileReviewCardView: View {
                     .frame(width: 100, height: 150, alignment: .center)
                     .border(Color.black, width: 3)
                     .onTapGesture {
-                        um.refresh += 2
-                        presentMovie = movie
-                        print(movie)
+                        
+                        print("click!")
+                        loadMovie(id: movie.id!)
                         showMovieView = true
+                        //um.refresh += 1
                     }
                     
                     VStack(alignment: .leading){
@@ -353,35 +361,36 @@ struct ProfileReviewCardView: View {
                             Text(formatDate(date: review.timestamp))
                                 .font(.system(size: 12))
                         }
-                        Text(movie.title ?? "no title")
+                        
+                        Text(movie.title)
                             .font(.title2)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(1)
+                        
                         Text("\(review.rating)")
                             .padding(.bottom, 4)
+                        
                         Text(review.reviewText)
                             .font(.system(size: 15))
                             .lineLimit(isExpanded ? nil : 4)
                             .onTapGesture {
                                 isExpanded.toggle()
                             }
-                        Spacer()
                     }.padding(.leading, 1)
                 }
             }
             .padding()
         }
-//        .onAppear {
-//            loadMovie(id: review.movieId)
-//        }
     }
-    
-    func loadMovie(id: Int){
-        apiService.fetchMovie(id: id) { result in
+    func loadMovie(id: String) {
+        presentMovie = nil
+        movieViewModel.fetchMovie(id: Int(id)!) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
                     print(error)
                 case .success(let movie):
-                    self.movie = movie
+                    presentMovie = movie
                 }
             }
         }

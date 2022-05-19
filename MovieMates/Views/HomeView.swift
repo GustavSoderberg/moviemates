@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "friends"
     @State var showMovieView = false
@@ -16,8 +17,6 @@ struct HomeView: View {
     @ObservedObject var viewModel = MovieListViewModel()
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
     @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
-    
-    
     
     var body: some View {
         ZStack{
@@ -35,7 +34,7 @@ struct HomeView: View {
                 .padding(.horizontal)
                 .padding(.top, 20)
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.red)
+                .colorMultiply(Color("accent-color"))
                 
                 ScrollView{
                     LazyVStack{
@@ -77,13 +76,14 @@ struct HomeView: View {
                     .sheet(isPresented: $showMovieView) {
                         if let presentMovie = presentMovie {
                             MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                                .preferredColorScheme(.dark)
+                                .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
                 }
 
             }
-        }.onChange(of: rm.listOfMovieFS, perform: { newValue in
+        }
+        .onAppear {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
         })

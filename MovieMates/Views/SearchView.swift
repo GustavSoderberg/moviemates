@@ -28,7 +28,7 @@ struct SearchView: View {
                 })
                     .padding()
                     .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                    .colorMultiply(.red)
+                    .colorMultiply(Color("accent-color"))
                 
                 switch index {
                 case "movies":
@@ -84,6 +84,7 @@ struct moviesAndSeriesView: View {
 }
 
 struct usersView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @Binding var viewShowing: Status
     @ObservedObject var oum = um
@@ -135,7 +136,7 @@ struct usersView: View {
             
         }.sheet(isPresented: $showProfileView) {
             ProfileView(user: oum.listOfUsers[self.index1], viewShowing: $viewShowing)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(darkmode ? .dark : .light)
         }
     }
 }

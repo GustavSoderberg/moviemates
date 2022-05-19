@@ -131,9 +131,8 @@ struct MovieView: View {
                     Spacer()
                     Text("\(watchlistText)")
                         .padding(.horizontal)
-                        .background(onWatchlist ? .red : .gray)
+                        .background(onWatchlist ? Color("accent-color") : .gray)
                         .cornerRadius(5)
-                        .foregroundColor(.white)
                         .font(Font.headline.weight(.bold))
                         .onTapGesture {
                             //TODO ad to wishlist
@@ -244,7 +243,7 @@ struct MovieView: View {
                             })
                             .padding(.horizontal, 14)
                             .pickerStyle(SegmentedPickerStyle())
-                            .colorMultiply(.red)
+                            .colorMultiply(Color("accent-color"))
                         }
                 
                     }
