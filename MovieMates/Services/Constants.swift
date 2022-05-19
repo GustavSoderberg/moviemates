@@ -15,3 +15,8 @@ let HEADER: HTTPHeaders  = [
     "Content-Type" : "application/json; charset=utf-8"
 ]
 let BACKDROP_BASE_URL  = "https://image.tmdb.org/t/p/w185"
+
+let FRIENDS = "friends"
+let TRENDING = "trending"
+let POPULAR = "popular"
+let UPCOMING = "upcoming"

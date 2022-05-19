@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MovieCardView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     let movie: Movie
     @State var showMovieView = false
@@ -15,7 +16,7 @@ struct MovieCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack {
                 ZStack{
                     if movie.posterPath != nil {
@@ -34,10 +35,7 @@ struct MovieCardView: View {
                             .border(Color.black, width: 3)
                     }
                 }
-                .onTapGesture {
-                    print("click!")
-                    showMovieView = true
-                }
+             
                 VStack(alignment: .leading){
                     Text(movie.title!)
                         .font(.title2)
@@ -53,10 +51,13 @@ struct MovieCardView: View {
             }
             .padding()
         }
+        .onTapGesture {
+            print("click!")
+            showMovieView = true
+        }
         .sheet(isPresented: $showMovieView) {
             MovieViewController(movie: movie, showMovieView: $showMovieView)
-                .preferredColorScheme(.dark)
-//                        .preferredColorScheme( true ? .dark : .light)
+                .preferredColorScheme(darkmode ? .dark : .light)
         }
     }
 }
@@ -66,3 +67,4 @@ struct MovieCardView_Previews: PreviewProvider {
         MovieCardView(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil))
     }
 }
+ 

@@ -51,8 +51,6 @@ struct MovieView: View {
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
     @State var poster : Image = Image("bill_poster")
-    //@State var ratingGlobalWidth : Float = 67
-    //@State var ratingLocalWidth : Float = 14
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
@@ -133,9 +131,8 @@ struct MovieView: View {
                     Spacer()
                     Text("\(watchlistText)")
                         .padding(.horizontal)
-                        .background(onWatchlist ? .red : .gray)
+                        .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
                         .cornerRadius(5)
-                        .foregroundColor(.white)
                         .font(Font.headline.weight(.bold))
                         .onTapGesture {
                             //TODO ad to wishlist
@@ -166,13 +163,12 @@ struct MovieView: View {
                             .cornerRadius(15)
                             .padding(.horizontal)
                             .frame(height: 90)
-                            .foregroundColor(.gray)
+                            .foregroundColor(Color("secondary-background"))
                         
                         VStack(spacing:0) {
                             HStack{
                                 Text("RATINGS")
                                     .font(Font.headline.weight(.bold))
-                                    .foregroundColor(.white)
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -185,7 +181,6 @@ struct MovieView: View {
                             
                             HStack{
                                 Text("GLOBAL")
-                                    .foregroundColor(.white)
                                 Spacer()
                                 HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
@@ -195,7 +190,6 @@ struct MovieView: View {
                                 .frame(height: 20)
                                 
                                 Text("\(ratingGlobalScore)")
-                                    .foregroundColor(.white)
                                     .frame(maxWidth: 30, alignment: .leading)
                                 Spacer()
                             }
@@ -205,7 +199,6 @@ struct MovieView: View {
                             
                             HStack{
                                 Text("FRIENDS")
-                                    .foregroundColor(.white)
                                 Spacer()
                                 HStack(spacing: 2) {
                                     ForEach(1..<6) { i in
@@ -215,7 +208,6 @@ struct MovieView: View {
                                 .frame(height: 20)
                                 
                                 Text("\(ratingLocalScore)")
-                                    .foregroundColor(.white)
                                     .frame(maxWidth: 30, alignment: .leading)
                                 Spacer()
                             }
@@ -246,7 +238,7 @@ struct MovieView: View {
                             })
                             .padding(.horizontal, 14)
                             .pickerStyle(SegmentedPickerStyle())
-                            .colorMultiply(.red)
+                            .colorMultiply(Color("accent-color"))
                         }
                 
                     }
@@ -299,27 +291,27 @@ struct MovieView: View {
             
             ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
             ratingLocalScore = "0.0"
-//            ratingGlobalWidth = Float(Int.random(in: 1...100))
-//            ratingLocalWidth = Float(Int.random(in: 1...100))
             
-//            ratingGlobalScore = String(format: "%.1f", ratingGlobalWidth/20)
             if ratingGlobalScore.hasSuffix("0") {
                 ratingGlobalScore = String(ratingGlobalScore.prefix(1))
             }
             
-//            ratingLocalScore = String(format: "%.1f", ratingLocalWidth/20)
             if ratingLocalScore.hasSuffix("0") {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
-        .onChange(of: sheetShowing, perform: {newValue in
+        .onChange(of: sheetShowing, perform: { _ in
             print("do something now?")
             
-            ratingGlobalScore = "\(movieFS?.rating ?? 0)"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                print("time")
+                print("Rating in time: \(movieFS?.rating ?? 0)")
+                ratingGlobalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))"
 
-            if ratingGlobalScore.hasSuffix("0") {
-                ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-            }
+                if ratingGlobalScore.hasSuffix("0") {
+                    ratingGlobalScore = String(ratingGlobalScore.prefix(1))
+                }
+            })
         })
     }
 }
@@ -355,7 +347,7 @@ struct ReviewClapper: View {
             Image("clapper_hollow")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("secondary-background"))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {
@@ -413,7 +405,7 @@ struct MovieReviewCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack(alignment: .top){
                 VStack(alignment: .leading){
                     HStack{
@@ -483,3 +475,4 @@ struct MovieView_Previews: PreviewProvider {
     }
 }
 
+ 

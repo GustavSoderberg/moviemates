@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "friends"
     @State var showMovieView = false
@@ -17,8 +18,6 @@ struct HomeView: View {
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
     @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
     
-    
-    
     var body: some View {
         ZStack{
             Color("background")
@@ -26,30 +25,41 @@ struct HomeView: View {
             
             VStack{
                 Picker(selection: $index, label: Text("Review List"), content: {
-                    Text("Friends").tag("friends")
-                    Text("Trending").tag("trending")
-                    Text("Popular").tag("popular")
+                    Text("Friends").tag(FRIENDS)
+                    Text("Trending").tag(TRENDING)
+                    Text("Popular").tag(POPULAR)
+                    Text("Upcoming").tag(UPCOMING)
                     
                 })
                 .padding(.horizontal)
                 .padding(.top, 20)
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.red)
+                .colorMultiply(Color("accent-color"))
                 
                 ScrollView{
                     LazyVStack{
                         switch index {
-                        case "friends":
+                        case FRIENDS:
                             ForEach(friendsReviewsViewModel.reviews) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
-                        case "trending":
+                        case TRENDING:
                             ForEach(allReviewsViewModel.reviews) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
-                        case "popular":
-                            ForEach(viewModel.popularMovies) { movie in
+                        case POPULAR:
+                            ForEach(viewModel.movies) { movie in
                                 MovieCardView(movie: movie)
+                                    .onAppear(){
+                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
+                                    }
+                            }
+                        case UPCOMING:
+                            ForEach(viewModel.movies) { movie in
+                                MovieCardView(movie: movie)
+                                    .onAppear(){
+                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
+                                    }
                             }
                             
                         default:
@@ -58,21 +68,38 @@ struct HomeView: View {
                             }
                         }
                     }
+//                    .onAppear {
+//                        viewModel.clearList()
+//                        viewModel.requestMovies(apiReuestType: .popular)
+//                    }
                     .padding()
-                    .onAppear {
-                        viewModel.fetchPopularMovies()
-                    }
                     .sheet(isPresented: $showMovieView) {
                         if let presentMovie = presentMovie {
                             MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
-                                .preferredColorScheme(.dark)
+                                .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
                 }
+
             }
-        }.onChange(of: rm.listOfMovieFS, perform: { newValue in
+        }
+        .onAppear {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
+        }
+        .onChange(of: index, perform: { newValue in
+            switch newValue {
+            case POPULAR:
+                viewModel.clearList()
+                viewModel.requestMovies(apiReuestType: .popular)
+                print("popular tab")
+                
+            case UPCOMING:
+                viewModel.clearList()
+                viewModel.requestMovies(apiReuestType: .upcoming)
+            default:
+                break
+            }
         })
     }
 }
@@ -91,7 +118,7 @@ struct ReviewCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.gray)
+                .fill(Color("secondary-background"))
             HStack(alignment: .top){
                 if let movie = movieFS {
                     
@@ -184,3 +211,4 @@ private var trendingReviews = [Review
 //        HomeView()
 //    }
 //}
+ 
