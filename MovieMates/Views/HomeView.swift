@@ -40,22 +40,22 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case FRIENDS:
-                            ForEach(friendsReviewsViewModel.reviews) { review in
+                            ForEach(friendsReviewsViewModel.reviews, id: \.self) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case TRENDING:
-                            ForEach(allReviewsViewModel.reviews) { review in
+                            ForEach(allReviewsViewModel.reviews, id: \.self) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case POPULAR:
-                            ForEach(viewModel.movies) { movie in
+                            ForEach(viewModel.movies, id: \.self) { movie in
                                 MovieCardView(movie: movie)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
                                     }
                             }
                         case UPCOMING:
-                            ForEach(viewModel.movies) { movie in
+                            ForEach(viewModel.movies, id: \.self) { movie in
                                 MovieCardView(movie: movie)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
