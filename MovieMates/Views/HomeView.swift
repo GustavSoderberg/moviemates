@@ -13,6 +13,7 @@ struct HomeView: View {
     @State var index = "friends"
     @State var showMovieView = false
     @State var presentMovie: Movie? = nil
+    @State var isUpcoming = false
     
     @ObservedObject var viewModel = MovieListViewModel()
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
@@ -49,14 +50,14 @@ struct HomeView: View {
                             }
                         case POPULAR:
                             ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(movie: movie)
+                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
                                     }
                             }
                         case UPCOMING:
                             ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(movie: movie)
+                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
                                     }
@@ -75,7 +76,7 @@ struct HomeView: View {
                     .padding()
                     .sheet(isPresented: $showMovieView) {
                         if let presentMovie = presentMovie {
-                            MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                            MovieViewController(movie: presentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
@@ -89,12 +90,18 @@ struct HomeView: View {
         }
         .onChange(of: index, perform: { newValue in
             switch newValue {
+            case FRIENDS:
+                isUpcoming = false
+                friendsReviewsViewModel.getFriendsReviews()
+            case TRENDING:
+                friendsReviewsViewModel.getFriendsReviews()
+                isUpcoming = false
             case POPULAR:
+                isUpcoming = false
                 viewModel.clearList()
                 viewModel.requestMovies(apiReuestType: .popular)
-                print("popular tab")
-                
             case UPCOMING:
+                isUpcoming = true
                 viewModel.clearList()
                 viewModel.requestMovies(apiReuestType: .upcoming)
             default:

@@ -207,7 +207,7 @@ struct UserReviewView: View {
                 .padding()
                 .sheet(isPresented: $showMovieView) {
                     if let presentMovie = presentMovie {
-                        MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                        MovieViewController(movie: presentMovie, isUpcoming: false, showMovieView: $showMovieView)
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }

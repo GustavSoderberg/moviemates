@@ -17,6 +17,7 @@ struct MovieViewController: View {
     @State var sheetShowing: Sheet = .MovieView
     @State var movie: Movie
     @State var movieFS: MovieFS?
+    @State var isUpcoming: Bool
     @Binding var showMovieView: Bool
     
     var body: some View {
@@ -25,7 +26,7 @@ struct MovieViewController: View {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS)
+                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -45,6 +46,7 @@ struct MovieView: View {
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
     @Binding var movieFS: MovieFS?
+    @Binding var isUpcoming: Bool
     
     @State var friendsReviews = [Review]()
     
@@ -87,11 +89,13 @@ struct MovieView: View {
                             showMovieView = false
                         }
                     Spacer()
+                    if isUpcoming != true {
                     Text("Review")
                         .foregroundColor(.blue)
                         .onTapGesture {
                             sheetShowing = .ReviewSheet
                         }
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -459,7 +463,7 @@ struct RoundedCorner: Shape {
 //Preview!!
 struct MovieView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), showMovieView: .constant(true))
+        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
     }
 }
 
