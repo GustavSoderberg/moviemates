@@ -135,9 +135,8 @@ struct MovieView: View {
                         .cornerRadius(5)
                         .font(Font.headline.weight(.bold))
                         .onTapGesture {
-                            //TODO ad to wishlist
+                            //Make button instead (and make bigger)
                             if !onWatchlist {
-                                
                                 watchlistText = "On Watchlist"
                                 um.addToWatchlist(movieID: "\(currentMovie.id)")
                                 onWatchlist = true
@@ -290,7 +289,9 @@ struct MovieView: View {
             }
             
             ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
-            ratingLocalScore = "0.0"
+            ratingGlobalScore = String(ratingGlobalScore.prefix(3))
+            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
             
             if ratingGlobalScore.hasSuffix("0") {
                 ratingGlobalScore = String(ratingGlobalScore.prefix(1))
@@ -299,19 +300,6 @@ struct MovieView: View {
             if ratingLocalScore.hasSuffix("0") {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
-        })
-        .onChange(of: sheetShowing, perform: { _ in
-            print("do something now?")
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-                print("time")
-                print("Rating in time: \(movieFS?.rating ?? 0)")
-                ratingGlobalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))"
-
-                if ratingGlobalScore.hasSuffix("0") {
-                    ratingGlobalScore = String(ratingGlobalScore.prefix(1))
-                }
-            })
         })
     }
 }
