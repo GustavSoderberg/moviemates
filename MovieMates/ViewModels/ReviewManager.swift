@@ -11,6 +11,8 @@ class ReviewManager : ObservableObject {
     
     @Published var listOfMovieFS = [MovieFS]()
     @Published var refresh = 0
+    @Published var cacheGlobal : Float = 0.0
+    @Published var cacheFriends : Float = 0.0
     
     func getAllReviews(onlyFriends: Bool) -> [Review] {
         
@@ -87,7 +89,7 @@ class ReviewManager : ObservableObject {
             totalScore += review.rating
         }
         print("number of ratings: \(allReviews.count)")
-        return Float(totalScore)/Float(allReviews.count)
+        return round(Float(totalScore)/Float(allReviews.count) * 10) / 10.0
     }
     
     func checkIfMovieExists(movieId: String) -> Bool {
