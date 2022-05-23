@@ -24,33 +24,46 @@ struct ReviewCard: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
+            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(Color("secondary-background")))
+                        .shadow(radius: 10)
+                .onTapGesture {
+                    loadMovie(id: String(review.movieId))
+                    showMovieView = true
+                }
             
-            
-            HStack {
-                if let movie = movieFS {
-                    AsyncImage(url: movie.photoUrl){ image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        ProgressView()
+            VStack(spacing: 0) {
+                HStack(alignment: .top) {
+                    if let movie = movieFS {
+                        AsyncImage(url: movie.photoUrl){ image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 150, alignment: .center)
+                        .border(Color.black, width: 3)
+                        .onTapGesture {
+                            loadMovie(id: movie.id!)
+                            showMovieView = true
+                        }
                     }
-                    .frame(width: 100, height: 150, alignment: .center)
-                    .border(Color.black, width: 3)
-                    .onTapGesture {
-                        loadMovie(id: movie.id!)
-                        showMovieView = true
+                    
+                    VStack(spacing: 0) {
+                        ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle)
+                        Spacer()
                     }
                 }
-                
-                VStack(spacing: 0) {
-                    ReviewInfo(viewShowing: $viewShowing, review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
-                    Spacer()
-                }
+
+                .padding(.horizontal)
+                Divider()
+                    .padding(.bottom)
+                ReviewTab(review: review)
+                    .padding(.horizontal)
             }
-            .padding()
+            .padding(.vertical)
         }
     }
     
@@ -117,43 +130,63 @@ struct ReviewInfo: View {
                     }
                     Spacer()
                 }
-                Text(review.reviewText)
-                    .font(.system(size: 15))
-                    .lineLimit(lineLimit)
-                    .onTapGesture {
-                        withAnimation() {
-                            if !fullText {
-                                fullText = true
-                                lineLimit = .max
-                            } else {
-                                fullText = false
-                                lineLimit = 3
-                            }
-                        }
-                    }
-                
-                Spacer()
-                HStack {
-                    if review.whereAt != "" || review.withWho != "" {
-                        if review.whereAt == "home" {
-                            Image(systemName: "house.circle")
-                        } else if review.whereAt == "cinema" {
-                            Image(systemName: "film.circle")
-                        }
-                        
-                        if review.withWho == "alone" {
-                            Image(systemName: "person.circle")
-                        } else if review.withWho == "friends" {
-                            Image(systemName: "person.2.circle")
-                        }
-                    } else {
-                        Text("")
-                    }
-                    Spacer()
-                    Text("10000+")
-                        .foregroundColor(.red)
-                    LikeButton()
+                ZStack(alignment: .topLeading){
+                    LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .top, endPoint: .bottom)
+                        .mask(RoundedRectangle(cornerRadius: 5, style: .continuous))
+                                .shadow(radius: 5)
+                                .opacity(0.15)
+                                .border(.black, width: 2)
+                                .cornerRadius(3)
+                    
+                    Text(review.reviewText)
+                        .font(.system(size: 15))
+                        .lineLimit(lineLimit)
+                        .padding(5)
                 }
+                .onTapGesture {
+                    withAnimation() {
+                        if !fullText {
+                            fullText = true
+                            lineLimit = .max
+                        } else {
+                            fullText = false
+                            lineLimit = 3
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ReviewTab: View {
+    let review: Review
+    let tagSize: CGFloat = 25
+    
+    var body: some View {
+        HStack{
+            if review.whereAt != "" || review.withWho != "" {
+                if review.whereAt == "home" {
+                    Image(systemName: "house.circle")
+                        .font(.system(size: tagSize))
+                } else if review.whereAt == "cinema" {
+                    Image(systemName: "film.circle")
+                        .font(.system(size: tagSize))
+                }
+                
+                if review.withWho == "alone" {
+                    Image(systemName: "person.circle")
+                        .font(.system(size: tagSize))
+                } else if review.withWho == "friends" {
+                    Image(systemName: "person.2.circle")
+                        .font(.system(size: tagSize))
+                }
+            }
+            Spacer()
+            VStack(spacing: 0) {
+                LikeButton()
+//                        Text("2")
+//                            .font(.system(size: 12))
             }
         }
     }
