@@ -62,28 +62,19 @@ struct moviesAndSeriesView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List(viewModel.movies, id: \.id) { movie in
-                    MovieCardView(movie: movie).listRowBackground(Color.green)
+                    MovieCardView(movie: movie).listRowBackground(Color("background"))
                         .onAppear(){
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
+                }.listStyle(.plain)
+                    
+                .onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                    UITableView.appearance().separatorColor = UIColor(Color("background"))
+                    UITableViewCell.appearance().backgroundColor = UIColor(Color("background"))
+                    UITableView.appearance().backgroundColor = UIColor(Color("background"))
                 }
-//                .onAppear {
-//                    UITableView.appearance().separatorStyle = .none
-//                    UITableViewCell.appearance().backgroundColor = .green
-//                    UITableView.appearance().backgroundColor = .green
-//                }
             }
-            
-
-
-//            ScrollView{
-//                LazyVStack{
-//                    ForEach(searchResultsMovies) { result in
-//                        MovieCardView(movie: result)
-//                    }
-//                }
-//                .padding()
-//            }
         }
     }
 }
