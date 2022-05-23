@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F967102283B7F14008228AA /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F967101283B7F14008228AA /* ReviewView.swift */; };
+		1F967105283B89A5008228AA /* ExtraFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F967104283B89A5008228AA /* ExtraFunctions.swift */; };
 		1FABF9012822B734006F5259 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABF9002822B734006F5259 /* MovieView.swift */; };
 		3F2972C02822C67D00D1616D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2972BF2822C67D00D1616D /* AppDelegate.swift */; };
 		3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2972C22822C94900D1616D /* ReviewSheet.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F967101283B7F14008228AA /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
+		1F967104283B89A5008228AA /* ExtraFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraFunctions.swift; sourceTree = "<group>"; };
 		1FABF9002822B734006F5259 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		3F2972BF2822C67D00D1616D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F2972C22822C94900D1616D /* ReviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSheet.swift; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 				55738AC62823D2E300A5ED38 /* MovieCardView.swift */,
 				415764E12829063400A9795A /* SettingsSheet.swift */,
 				41319566282A8AA9004F9015 /* NotificationSheet.swift */,
+				1F967101283B7F14008228AA /* ReviewView.swift */,
 				4131956A283B6B7D004F9015 /* LikeButton.swift */,
 			);
 			path = ViewComponents;
@@ -142,6 +147,7 @@
 				3F2F568C281FEC3300C6AF76 /* Views */,
 				3F2F567D281FE5EA00C6AF76 /* MovieMatesApp.swift */,
 				3F2972BF2822C67D00D1616D /* AppDelegate.swift */,
+				1F967104283B89A5008228AA /* ExtraFunctions.swift */,
 				3F2F5681281FE5EB00C6AF76 /* Assets.xcassets */,
 				3F2F5683281FE5EB00C6AF76 /* Preview Content */,
 			);
@@ -297,12 +303,14 @@
 				3FBC1B1B2832389B007D83B7 /* ReviewManager.swift in Sources */,
 				3F2F5690281FEEAE00C6AF76 /* HomeView.swift in Sources */,
 				3F2F5692281FEEE200C6AF76 /* ProfileView.swift in Sources */,
+				1F967105283B89A5008228AA /* ExtraFunctions.swift in Sources */,
 				3F2F568E281FECBA00C6AF76 /* WelcomeView.swift in Sources */,
 				415764E22829063500A9795A /* SettingsSheet.swift in Sources */,
 				55D7B82228294A0900D7F31D /* MovieViewModel.swift in Sources */,
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
 				55738AC72823D2E300A5ED38 /* MovieCardView.swift in Sources */,
 				55738AC32823CED200A5ED38 /* Review.swift in Sources */,
+				1F967102283B7F14008228AA /* ReviewView.swift in Sources */,
 				1FABF9012822B734006F5259 /* MovieView.swift in Sources */,
 				3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */,
 				55738AC52823CF6F00A5ED38 /* Movie.swift in Sources */,
@@ -462,7 +470,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.joakimandersson.MovieMates;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oscarkarlsson.MovieMates;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -492,7 +500,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.joakimandersson.MovieMates;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oscarkarlsson.MovieMates;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
