@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct ReviewCard: View {
+    
+    @Binding var viewShowing: Status
+    
     let review: Review
     var movieFS: MovieFS?
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
     let displayName: Bool
     let displayTitle: Bool
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -51,6 +56,7 @@ struct ReviewCard: View {
                         Spacer()
                     }
                 }
+
                 .padding(.horizontal)
                 Divider()
                     .padding(.bottom)
@@ -60,6 +66,7 @@ struct ReviewCard: View {
             .padding(.vertical)
         }
     }
+    
     
     func loadMovie(id: String) {
         currentMovie = nil
@@ -79,11 +86,19 @@ struct ReviewCard: View {
 
 
 struct ReviewInfo: View {
+    
+    @Binding var viewShowing: Status
+    
     let review: Review
     let displayName: Bool
     let displayTitle: Bool
     @State var fullText = false
     @State var lineLimit = 3
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
+    
+//    @State var userProfile: User? = nil
+//    @State var showProfileView = false
     
     var body: some View {
         HStack(alignment: .top) {
@@ -91,6 +106,13 @@ struct ReviewInfo: View {
                 HStack{
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
+                            .onTapGesture {
+                                print("CLICK")
+                            userProfile = um.getUser(id: review.authorId)
+                                print(userProfile!.username)
+                            um.refresh += 1
+                            showProfileView = true
+                        }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                     }
@@ -100,6 +122,7 @@ struct ReviewInfo: View {
                 }
                 if displayTitle && displayName {
                     Text(um.getMovie(movieID: String(review.movieId))!.title)
+                        
                 }
                 HStack{
                     ForEach(1..<6) { i in

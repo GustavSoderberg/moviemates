@@ -32,11 +32,11 @@ struct SearchView: View {
                 
                 switch index {
                 case "movies":
-                    moviesAndSeriesView()
+                    moviesAndSeriesView(viewShowing: $viewShowing)
                 case "users":
                     usersView(viewShowing: $viewShowing)
                 default:
-                    moviesAndSeriesView()
+                    moviesAndSeriesView(viewShowing: $viewShowing)
                 }
             }
         }
@@ -46,6 +46,7 @@ struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
+    @Binding var viewShowing: Status
     
     var body: some View{
         VStack{
@@ -62,7 +63,7 @@ struct moviesAndSeriesView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List(viewModel.movies, id: \.id) { movie in
-                    MovieCardView(movie: movie).listRowBackground(Color("background"))
+                    MovieCardView(viewShowing: $viewShowing, movie: movie).listRowBackground(Color("background"))
                         .onAppear(){
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }

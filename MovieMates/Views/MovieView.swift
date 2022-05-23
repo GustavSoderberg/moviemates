@@ -19,6 +19,7 @@ struct MovieViewController: View {
     @State var movieFS: MovieFS?
     @State var isUpcoming: Bool
     @Binding var showMovieView: Bool
+    @Binding var viewShowing: Status
     
     var body: some View {
         
@@ -26,7 +27,7 @@ struct MovieViewController: View {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
+                MovieView(viewShowing: $viewShowing ,sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -44,11 +45,15 @@ struct MovieViewController: View {
 struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
     
+    @Binding var viewShowing: Status
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
     @Binding var movieFS: MovieFS?
     @Binding var isUpcoming: Bool
+    
+    @State var userProfile: User? = nil
+    @State var showProfileView = false
     
     @State var friendsReviews = [Review]()
     
@@ -258,7 +263,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(friendsReviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -267,7 +272,7 @@ struct MovieView: View {
                         case "global":
                             if let movieFS = movieFS {
                                 ForEach(movieFS.reviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -275,7 +280,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         }
                     }
@@ -286,6 +291,15 @@ struct MovieView: View {
                         }
                     }
                 }
+            }
+            
+        }
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            } else {
+                Text("NIL")
             }
             
         }
@@ -370,10 +384,10 @@ struct ReviewClapper: View {
 
 
 //Preview!!
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
+//    }
+//}
 
  
