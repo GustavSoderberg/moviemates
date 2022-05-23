@@ -71,7 +71,7 @@ struct ReviewInfo: View {
     let displayName: Bool
     let displayTitle: Bool
     @State var fullText = false
-    @State var lineLimit = 5
+    @State var lineLimit = 3
     
     var body: some View {
         HStack(alignment: .top) {
@@ -105,11 +105,12 @@ struct ReviewInfo: View {
                                 lineLimit = .max
                             } else {
                                 fullText = false
-                                lineLimit = 5
+                                lineLimit = 3
                             }
                         }
                     }
                 
+                Spacer()
                 HStack {
                     if review.whereAt != "" || review.withWho != "" {
                         if review.whereAt == "home" {
@@ -126,6 +127,10 @@ struct ReviewInfo: View {
                     } else {
                         Text("")
                     }
+                    Spacer()
+                    Text("10000+")
+                        .foregroundColor(.red)
+                    LikeButton()
                 }
             }
         }

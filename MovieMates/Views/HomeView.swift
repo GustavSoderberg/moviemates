@@ -45,11 +45,11 @@ struct HomeView: View {
                         case FRIENDS:
 
                             ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
-                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true)
                             }
                         case TRENDING:
                             ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
-                                    ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true)
 
                             }
                             
@@ -81,8 +81,8 @@ struct HomeView: View {
                     .padding()
                     .sheet(isPresented: $showMovieView) {
 
-                        if let currentMovie = presentMovie {
-                            MovieViewController(movie: presentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
+                        if let currentMovie = currentMovie {
+                            MovieViewController(movie: currentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
 
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
