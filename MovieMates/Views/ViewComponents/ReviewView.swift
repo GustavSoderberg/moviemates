@@ -52,7 +52,7 @@ struct ReviewCard: View {
                     }
                     
                     VStack(spacing: 0) {
-                        ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle)
+                        ReviewInfo(viewShowing: $viewShowing, review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
                         Spacer()
                     }
                 }
