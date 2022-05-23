@@ -72,6 +72,7 @@ struct ReviewInfo: View {
     let displayTitle: Bool
     @State var fullText = false
     @State var lineLimit = 3
+    let tagSize: CGFloat = 25
     
     var body: some View {
         HStack(alignment: .top) {
@@ -115,27 +116,40 @@ struct ReviewInfo: View {
                     if review.whereAt != "" || review.withWho != "" {
                         if review.whereAt == "home" {
                             Image(systemName: "house.circle")
+                                .font(.system(size: tagSize))
                         } else if review.whereAt == "cinema" {
                             Image(systemName: "film.circle")
+                                .font(.system(size: tagSize))
                         }
                         
                         if review.withWho == "alone" {
                             Image(systemName: "person.circle")
+                                .font(.system(size: tagSize))
                         } else if review.withWho == "friends" {
                             Image(systemName: "person.2.circle")
+                                .font(.system(size: tagSize))
                         }
                     } else {
                         Text("")
                     }
                     Spacer()
-                    Text("10000+")
-                        .foregroundColor(.red)
-                    LikeButton()
+                    VStack(spacing: 0) {
+                        LikeButton()
+//                        Text("2")
+//                            .font(.system(size: 12))
+                    }
                 }
             }
         }
     }
 }
+
+//struct ReviewTab: View {
+//    
+//    var body: some View {
+//        
+//    }
+//}
 
 struct ClapperImage: View {
     var pos : Int
