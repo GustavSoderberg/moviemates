@@ -41,6 +41,8 @@ struct MovieViewController: View {
 }
 
 struct MovieView: View {
+    @AppStorage("darkmode") private var darkmode = true
+    
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
@@ -99,8 +101,8 @@ struct MovieView: View {
             gap(height: 5)
             Divider()
             
-            ScrollView{
-                VStack{
+            ScrollView {
+                VStack {
                     AsyncImage(url: currentMovie.backdropURL) { image in
                         image
                             .resizable()
@@ -117,44 +119,47 @@ struct MovieView: View {
                                     descFull = true
                                     descHeight = .infinity
                                 }
-//                                else {
-//                                    descFull = false
-//                                    descHeight = 110
-//                                }
+                                else {
+                                    descFull = false
+                                    descHeight = 110
+                                }
                             }
                         }
                         .frame(maxHeight: descHeight)
                 }
                 .padding(.horizontal)
+                .frame(width: UIScreen.main.bounds.size.width)
                 
                 HStack {
-                    Spacer()
-                    Text("\(watchlistText)")
-                        .padding(.horizontal)
-                        .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
-                        .cornerRadius(5)
-                        .font(Font.headline.weight(.bold))
-                        .onTapGesture {
-                            //Make button instead (and make bigger)
-                            if !onWatchlist {
-                                watchlistText = "On Watchlist"
-                                um.addToWatchlist(movieID: "\(currentMovie.id)")
-                                onWatchlist = true
-                            } else {
-                                watchlistText = "Add to Watchlist"
-                                um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
-                                onWatchlist =  false
+                    Button {
+                        if !onWatchlist {
+                            watchlistText = "On Watchlist"
+                            um.addToWatchlist(movieID: "\(currentMovie.id)")
+                            onWatchlist = true
+                        } else {
+                            watchlistText = "Add to Watchlist"
+                            um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
+                            onWatchlist =  false
 
-                            }
                         }
-                        .onAppear {
-                            onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
-                                watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
-                        }
+                    } label: {
+                        Text("\(watchlistText)")
+                            .padding(.horizontal)
+                            .padding(.vertical, 4)
+                            .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
+                            .cornerRadius(5)
+                            .font(Font.headline.weight(.bold))
+                            .font(.system(size: 15))
+                            .foregroundColor(darkmode ? .white : .black)
+                    }
+                    .onAppear {
+                        onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
+                            watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
+                    }
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.vertical, -3)
+                .padding(.leading, 15)
                 
                 VStack(spacing:0){
                     ZStack{
@@ -291,6 +296,7 @@ struct MovieView: View {
             ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
             ratingGlobalScore = String(ratingGlobalScore.prefix(3))
             ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+            ratingLocalScore = String(ratingLocalScore.prefix(3))
             ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
             
             if ratingGlobalScore.hasSuffix("0") {
@@ -301,6 +307,14 @@ struct MovieView: View {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
+//        .onChange(of: sheetShowing, perform: { _ in
+//            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+//            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
+//
+//            if ratingLocalScore.hasSuffix("0") {
+//                ratingLocalScore = String(ratingLocalScore.prefix(1))
+//            }
+//        })
     }
 }
 
@@ -371,24 +385,12 @@ struct ClapperImage: View {
     }
 }
 
-//private var friendsReviews = [Review
-////    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-////    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-////    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-////    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-//]()
-
-private var globalReviews = [Review
-//    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
-//    Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
-//    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "1/5", reviewText: "Vad var detta?"),
-//    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
-//    Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
-]()
 
 struct MovieReviewCardView: View {
     
     let review: Review
+    @State var fullText = false
+    @State var lineLimit = 3
     
     var body: some View {
         ZStack{
@@ -410,8 +412,35 @@ struct MovieReviewCardView: View {
                     }
                     Text(review.reviewText)
                         .font(.system(size: 15))
-                        .lineLimit(3)
+                        .lineLimit(lineLimit)
+                        .onTapGesture {
+                            withAnimation() {
+                                if !fullText {
+                                    fullText = true
+                                    lineLimit = .max
+                                } else {
+                                    fullText = false
+                                    lineLimit = 3
+                                }
+                            }
+                        }
                     Spacer()
+                    
+                    HStack {
+                        if review.whereAt != "" || review.withWho != "" {
+                            if review.whereAt == "home" {
+                                Image(systemName: "house.circle")
+                            } else if review.whereAt == "cinema" {
+                                Image(systemName: "film.circle")
+                            }
+                            
+                            if review.withWho == "alone" {
+                                Image(systemName: "person.circle")
+                            } else if review.withWho == "friends" {
+                                Image(systemName: "person.2.circle")
+                            }
+                        }
+                    }
                 }
             }
             .padding()
