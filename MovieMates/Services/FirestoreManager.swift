@@ -43,9 +43,12 @@ class FirestoreManager {
                 
                 _ = um.login()
                 
-                rm.cacheFriends = 0
-                rm.cacheGlobal = 0
+                rm.cacheGlobal = Float.random(in: 10.0 ..< 20.0)
+                rm.cacheFriends = Float.random(in: 10.0 ..< 20.0)
+                print(rm.cacheGlobal)
+                print(rm.cacheFriends)
                 rm.refresh += 1
+                
                 um.refresh += 1
                 um.isLoading = false
                 
