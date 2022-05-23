@@ -168,15 +168,15 @@ struct ProfileView: View {
                 
                 switch index {
                 case "reviews":
-                    UserReviewView(user: user)
+                    UserReviewView(user: user, viewShowing: $viewShowing)
                 case "watchlist":
-                    WatchListView(user: user)
+                    WatchListView(user: user, viewShowing: $viewShowing)
                 case "friends":
                     FriendListView(user: user)
                 case "about":
                     AboutMeView(user: user)
                 default:
-                    UserReviewView(user: user)
+                    UserReviewView(user: user, viewShowing: $viewShowing)
                 }
                 
                 Spacer()
@@ -193,6 +193,9 @@ struct UserReviewView: View {
     @State var currentMovie: Movie? = nil
     @State var showMovieView = false
     @State var showProfileView = false
+    @State var userProfile: User? = nil
+    
+    @Binding var viewShowing: Status
     
     @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     
@@ -201,15 +204,14 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
-                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true, showProfileView: $showProfileView)
+                        ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
 
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
-
                     if let currentMovie = currentMovie {
-                        MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView)
+                        MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView, viewShowing: $viewShowing)
 
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
@@ -218,6 +220,13 @@ struct UserReviewView: View {
         }.onAppear(perform: {
             profileReviewsViewModel.getUsersReviews(user: user)
         })
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            }
+            
+        }
     }
 }
 
@@ -226,6 +235,7 @@ struct WatchListView: View {
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     let user: User
     @State var movieWatchlist = [Movie]()
+    @Binding var viewShowing: Status
     
     var body: some View{
         
@@ -235,7 +245,7 @@ struct WatchListView: View {
             ScrollView{
                 
                 ForEach(movieWatchlist, id: \.self) { movie in
-                    MovieCardView(movie: movie)
+                    MovieCardView(viewShowing: $viewShowing, movie: movie)
                     
                 }
                 

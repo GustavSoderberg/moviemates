@@ -19,6 +19,7 @@ struct MovieViewController: View {
     @State var movieFS: MovieFS?
     @State var isUpcoming: Bool
     @Binding var showMovieView: Bool
+    @Binding var viewShowing: Status
     
     var body: some View {
         
@@ -26,7 +27,7 @@ struct MovieViewController: View {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
+                MovieView(viewShowing: $viewShowing ,sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -44,6 +45,7 @@ struct MovieViewController: View {
 struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
     
+    @Binding var viewShowing: Status
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
@@ -261,7 +263,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(friendsReviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -270,7 +272,7 @@ struct MovieView: View {
                         case "global":
                             if let movieFS = movieFS {
                                 ForEach(movieFS.reviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -278,7 +280,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         }
                     }
@@ -294,8 +296,10 @@ struct MovieView: View {
         }
         .sheet(isPresented: $showProfileView) {
             if let userProfile = userProfile {
-                ProfileView(user: userProfile)
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
                     .preferredColorScheme(darkmode ? .dark : .light)
+            } else {
+                Text("NIL")
             }
             
         }
