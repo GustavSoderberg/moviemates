@@ -18,6 +18,7 @@ struct HomeView: View {
     @ObservedObject var viewModel = MovieListViewModel()
     @ObservedObject var allReviewsViewModel = ReviewListViewModel()
     @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
+    @ObservedObject var orm = rm
     
     var body: some View {
         ZStack{
@@ -41,13 +42,14 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case FRIENDS:
-                            ForEach(friendsReviewsViewModel.reviews, id: \.self) { review in
+                            ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case TRENDING:
-                            ForEach(allReviewsViewModel.reviews, id: \.self) { review in
-                                ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+                            ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
+                                    ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
+                            
                         case POPULAR:
                             ForEach(viewModel.movies, id: \.self) { movie in
                                 MovieCardView(movie: movie, isUpcoming: isUpcoming)
@@ -88,26 +90,6 @@ struct HomeView: View {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
         }
-        .onChange(of: index, perform: { newValue in
-            switch newValue {
-            case FRIENDS:
-                isUpcoming = false
-                friendsReviewsViewModel.getFriendsReviews()
-            case TRENDING:
-                friendsReviewsViewModel.getFriendsReviews()
-                isUpcoming = false
-            case POPULAR:
-                isUpcoming = false
-                viewModel.clearList()
-                viewModel.requestMovies(apiReuestType: .popular)
-            case UPCOMING:
-                isUpcoming = true
-                viewModel.clearList()
-                viewModel.requestMovies(apiReuestType: .upcoming)
-            default:
-                break
-            }
-        })
     }
 }
 
