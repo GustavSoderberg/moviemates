@@ -14,8 +14,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "checkIfMovieExists(movieId:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "ReviewManager"
             landmarkType = "3">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "saveReview(movie:rating:text:whereAt:withWho:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "saveReview(movie:rating:text:whereAt:withWho:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "MovieMates/Services/FirestoreManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "updateReviewsToFirestore(movieId:reviews:)"
             landmarkType = "7">
          </BreakpointContent>

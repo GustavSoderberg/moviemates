@@ -168,6 +168,9 @@ struct ReviewSheet: View {
                                               text: review,
                                               whereAt: whereAt,
                                               withWho: withWho)
+                                rm.cacheGlobal = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false)
+                                rm.cacheFriends = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true)
+                                rm.refresh += 1
                                 sheetShowing = .MovieView
                             } else {
                                 emptyRating = true

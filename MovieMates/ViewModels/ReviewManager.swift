@@ -11,6 +11,43 @@ class ReviewManager : ObservableObject {
     
     @Published var listOfMovieFS = [MovieFS]()
     @Published var refresh = 0
+    @Published var cacheGlobal : Float = 0.0
+    @Published var cacheFriends : Float = 0.0
+    
+    func getAllReviews(onlyFriends: Bool) -> [Review] {
+        
+        var reviewArray = [Review]()
+        for movie in listOfMovieFS {
+            
+            
+            if onlyFriends {
+                
+                for review in movie.reviews {
+                    
+                    if um.currentUser!.friends.contains(review.authorId) || um.currentUser!.id == review.authorId {
+                        
+                        reviewArray.append(review)
+                        
+                    }
+                    
+                }
+            }
+            else {
+                
+                for review in movie.reviews {
+                    
+                    reviewArray.append(review)
+                    
+                }
+                
+            }
+            
+            
+            
+        }
+        
+        return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
+    }
     
     func getReviews(movieId: Int, onlyFriends: Bool) -> [Review] {
         
@@ -52,11 +89,11 @@ class ReviewManager : ObservableObject {
             totalScore += review.rating
         }
         print("number of ratings: \(allReviews.count)")
-        return Float(totalScore)/Float(allReviews.count)
+        return round(Float(totalScore)/Float(allReviews.count) * 10) / 10.0
     }
     
     func checkIfMovieExists(movieId: String) -> Bool {
-
+        
         for movieFS in listOfMovieFS {
             
             if movieFS.id == movieId {
@@ -72,7 +109,7 @@ class ReviewManager : ObservableObject {
     
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
-
+        
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
             let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
@@ -85,8 +122,8 @@ class ReviewManager : ObservableObject {
                     break;
                 }
             }
-        
-
+            
+            
             
             reviews.append(review)
             
@@ -138,6 +175,6 @@ class ReviewManager : ObservableObject {
             }
         }
         return nil
-    }
+    } 
 }
 

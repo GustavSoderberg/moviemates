@@ -168,15 +168,15 @@ struct ProfileView: View {
                 
                 switch index {
                 case "reviews":
-                    UserReviewView(user: user)
+                    UserReviewView(user: user, viewShowing: $viewShowing)
                 case "watchlist":
-                    WatchListView(user: user)
+                    WatchListView(user: user, viewShowing: $viewShowing)
                 case "friends":
                     FriendListView(user: user)
                 case "about":
                     AboutMeView(user: user)
                 default:
-                    UserReviewView(user: user)
+                    UserReviewView(user: user, viewShowing: $viewShowing)
                 }
                 
                 Spacer()
@@ -190,8 +190,12 @@ struct UserReviewView: View {
     @AppStorage("darkmode") private var darkmode = true
     
     let user: User
-    @State var presentMovie: Movie? = nil
+    @State var currentMovie: Movie? = nil
     @State var showMovieView = false
+    @State var showProfileView = false
+    @State var userProfile: User? = nil
+    
+    @Binding var viewShowing: Status
     
     @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     
@@ -200,14 +204,15 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
-                        ReviewCardProfileView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+                        ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
 
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
-                    if let presentMovie = presentMovie {
-                        MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+                    if let currentMovie = currentMovie {
+                        MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView, viewShowing: $viewShowing)
+
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
@@ -215,6 +220,13 @@ struct UserReviewView: View {
         }.onAppear(perform: {
             profileReviewsViewModel.getUsersReviews(user: user)
         })
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            }
+            
+        }
     }
 }
 
@@ -223,6 +235,7 @@ struct WatchListView: View {
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     let user: User
     @State var movieWatchlist = [Movie]()
+    @Binding var viewShowing: Status
     
     var body: some View{
         
@@ -232,7 +245,7 @@ struct WatchListView: View {
             ScrollView{
                 
                 ForEach(movieWatchlist, id: \.self) { movie in
-                    MovieCardView(movie: movie)
+                    MovieCardView(viewShowing: $viewShowing, movie: movie)
                     
                 }
                 
@@ -240,6 +253,7 @@ struct WatchListView: View {
         }.onAppear {
             getMovies()
         }
+        .padding()
     }
     func getMovies() {
         
@@ -318,6 +332,7 @@ struct AboutMeView: View {
     }
 }
 
+
 struct ReviewCardProfileView: View {
     
     let review: Review
@@ -375,6 +390,13 @@ struct ReviewCardProfileView: View {
                             .onTapGesture {
                                 isExpanded.toggle()
                             }
+                        Spacer()
+                        HStack(alignment: .bottom){
+                            Spacer()
+                            Text("10000+")
+                                .foregroundColor(.red)
+                            LikeButton()
+                        }
                     }.padding(.leading, 1)
                 }
             }

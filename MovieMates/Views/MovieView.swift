@@ -17,7 +17,9 @@ struct MovieViewController: View {
     @State var sheetShowing: Sheet = .MovieView
     @State var movie: Movie
     @State var movieFS: MovieFS?
+    @State var isUpcoming: Bool
     @Binding var showMovieView: Bool
+    @Binding var viewShowing: Status
     
     var body: some View {
         
@@ -25,7 +27,7 @@ struct MovieViewController: View {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS)
+                MovieView(viewShowing: $viewShowing ,sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -41,10 +43,18 @@ struct MovieViewController: View {
 }
 
 struct MovieView: View {
+    @AppStorage("darkmode") private var darkmode = true
+    @ObservedObject var orm = rm
+    
+    @Binding var viewShowing: Status
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
     @Binding var movieFS: MovieFS?
+    @Binding var isUpcoming: Bool
+    
+    @State var userProfile: User? = nil
+    @State var showProfileView = false
     
     @State var friendsReviews = [Review]()
     
@@ -62,6 +72,9 @@ struct MovieView: View {
     
     @State var index = "friends"
     @State var watchlist = false
+    
+    @State var cacheGlobal: Float = 0.0
+    @State var cacheFriends: Float = 0.0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -87,11 +100,13 @@ struct MovieView: View {
                             showMovieView = false
                         }
                     Spacer()
-                    Text("Review")
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            sheetShowing = .ReviewSheet
-                        }
+                    if isUpcoming != true {
+                        Text("Review")
+                            .foregroundColor(.blue)
+                            .onTapGesture {
+                                sheetShowing = .ReviewSheet
+                            }
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -99,8 +114,8 @@ struct MovieView: View {
             gap(height: 5)
             Divider()
             
-            ScrollView{
-                VStack{
+            ScrollView {
+                VStack {
                     AsyncImage(url: currentMovie.backdropURL) { image in
                         image
                             .resizable()
@@ -117,44 +132,47 @@ struct MovieView: View {
                                     descFull = true
                                     descHeight = .infinity
                                 }
-//                                else {
-//                                    descFull = false
-//                                    descHeight = 110
-//                                }
+                                else {
+                                    descFull = false
+                                    descHeight = 110
+                                }
                             }
                         }
                         .frame(maxHeight: descHeight)
                 }
                 .padding(.horizontal)
+                .frame(width: UIScreen.main.bounds.size.width)
                 
                 HStack {
-                    Spacer()
-                    Text("\(watchlistText)")
-                        .padding(.horizontal)
-                        .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
-                        .cornerRadius(5)
-                        .font(Font.headline.weight(.bold))
-                        .onTapGesture {
-                            //Make button instead (and make bigger)
-                            if !onWatchlist {
-                                watchlistText = "On Watchlist"
-                                um.addToWatchlist(movieID: "\(currentMovie.id)")
-                                onWatchlist = true
-                            } else {
-                                watchlistText = "Add to Watchlist"
-                                um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
-                                onWatchlist =  false
-
-                            }
+                    Button {
+                        if !onWatchlist {
+                            watchlistText = "On Watchlist"
+                            um.addToWatchlist(movieID: "\(currentMovie.id)")
+                            onWatchlist = true
+                        } else {
+                            watchlistText = "Add to Watchlist"
+                            um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
+                            onWatchlist =  false
+                            
                         }
-                        .onAppear {
-                            onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
-                                watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
-                        }
+                    } label: {
+                        Text("\(watchlistText)")
+                            .padding(.horizontal)
+                            .padding(.vertical, 4)
+                            .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
+                            .cornerRadius(5)
+                            .font(Font.headline.weight(.bold))
+                            .font(.system(size: 15))
+                            .foregroundColor(darkmode ? .white : .black)
+                    }
+                    .onAppear {
+                        onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
+                        watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
+                    }
                     Spacer()
                 }
                 .padding(.horizontal)
-                .padding(.vertical, -3)
+                .padding(.leading, 15)
                 
                 VStack(spacing:0){
                     ZStack{
@@ -182,8 +200,14 @@ struct MovieView: View {
                                 Text("GLOBAL")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: $ratingGlobalScore)
+                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
+                                        }
+                                    } else {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
+                                        }
                                     }
                                 }
                                 .frame(height: 20)
@@ -200,8 +224,14 @@ struct MovieView: View {
                                 Text("FRIENDS")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: $ratingLocalScore)
+                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
+                                        }
+                                    } else {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
+                                        }
                                     }
                                 }
                                 .frame(height: 20)
@@ -216,6 +246,12 @@ struct MovieView: View {
                 }
                 
                 Divider()
+                Button {
+                    rm.refresh += 1
+                } label: {
+                    Text("Hej")
+                }
+                
                 
                 VStack(spacing:0){
                     ZStack{
@@ -223,7 +259,7 @@ struct MovieView: View {
                             HStack{
                                 Text("REVIEWS")
                                     .font(Font.headline.weight(.bold))
-                                    //.foregroundColor(.white)
+                                //.foregroundColor(.white)
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -239,7 +275,7 @@ struct MovieView: View {
                             .pickerStyle(SegmentedPickerStyle())
                             .colorMultiply(Color("accent-color"))
                         }
-                
+                        
                     }
                     
                     gap(height: 5)
@@ -248,8 +284,9 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(friendsReviews) { review in
-                                    MovieReviewCardView(review: review)
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+
                                 }
                             } else {
                                 Text("No Reviews")
@@ -257,8 +294,8 @@ struct MovieView: View {
                             
                         case "global":
                             if let movieFS = movieFS {
-                                ForEach(movieFS.reviews) { review in
-                                    MovieReviewCardView(review: review)
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -266,7 +303,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                MovieReviewCardView(review: review)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         }
                     }
@@ -277,6 +314,15 @@ struct MovieView: View {
                         }
                     }
                 }
+            }
+            
+        }
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            } else {
+                Text("NIL")
             }
             
         }
@@ -291,6 +337,7 @@ struct MovieView: View {
             ratingGlobalScore = "\(movieFS?.rating ?? 0.0)"
             ratingGlobalScore = String(ratingGlobalScore.prefix(3))
             ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+            ratingLocalScore = String(ratingLocalScore.prefix(3))
             ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
             
             if ratingGlobalScore.hasSuffix("0") {
@@ -301,6 +348,14 @@ struct MovieView: View {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
+        //        .onChange(of: sheetShowing, perform: { _ in
+        //            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+        //            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
+        //
+        //            if ratingLocalScore.hasSuffix("0") {
+        //                ratingLocalScore = String(ratingLocalScore.prefix(1))
+        //            }
+        //        })
     }
 }
 
@@ -317,8 +372,9 @@ func getFriendsReviews(movieFS: MovieFS) -> [Review]{
 
 struct ReviewClapper: View {
     var pos : Int
-    @Binding var score : String
+    @State var score : String
     @State var width : Float = 20
+    @State var movieId: Int
     
     var body: some View {
         GeometryReader { geo in
@@ -346,121 +402,29 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-            //print("pos: \(pos), score: \(score), width: \(width)")
+            
         })
-    }
-}
-
-struct ClapperImage: View {
-    var pos : Int
-    var score : String
-    @State var filled : Bool = false
-    
-    var body: some View {
-        Image("clapper-big")
-            .resizable()
-            .frame(width: 20, height: 20)
-            .foregroundColor(filled ? .black : .white)
-            .onAppear(perform: {
-                if Int(score.prefix(1)) ?? 0 >= pos {
-                    filled = true
-                } else {
-                    filled = false
-                }
-            })
-    }
-}
-
-//private var friendsReviews = [Review
-////    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-////    Review(movieId: 272, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-////    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-////    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-//]()
-
-private var globalReviews = [Review
-//    Review(movieId: 414, username: "Rikard", title: "The Spiderman", rating: "2/5", reviewText: "meh."),
-//    Review(movieId: 414, username: "Rakel", title: "The Spiderman", rating: "5/5", reviewText: "Detta var en bra film!"),
-//    Review(movieId: 414, username: "Gunnar", title: "The Spiderman", rating: "1/5", reviewText: "Vad var detta?"),
-//    Review(movieId: 414, username: "Örjan", title: "The Spiderman", rating: "3/5", reviewText: "varken bra eller dålig"),
-//    Review(movieId: 414, username: "Björn", title: "The Spiderman", rating: "2/5", reviewText: "")
-]()
-
-struct MovieReviewCardView: View {
-    
-    let review: Review
-    
-    var body: some View {
-        ZStack{
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
-            HStack(alignment: .top){
-                VStack(alignment: .leading){
-                    HStack{
-                        Text(um.getUser(id: review.authorId).username)
-                        Spacer()
-                        Text(formatDate(date: review.timestamp))
-                            .font(.system(size: 12))
-                    }
-                    HStack{
-                        ForEach(1..<6) { i in
-                            ClapperImage(pos: i, score: "\(review.rating)")
-                        }
-                        Spacer()
-                    }
-                    Text(review.reviewText)
-                        .font(.system(size: 15))
-                        .lineLimit(3)
-                    Spacer()
-                }
+        .onChange(of: score) { newValue in
+            if Int(score.prefix(1)) ?? 0 >= pos {
+                width = 20
+            } else if ((Int(score.prefix(1)) ?? 0) + 1) == pos {
+                width = ((Float(score.prefix(3)) ?? 0) - (Float(score.prefix(1)) ?? 0))*20
+            } else {
+                width = 0
             }
-            .padding()
+            rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+            rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
+            rm.refresh += 1
         }
     }
 }
 
-struct gap :View {
-    var height: CGFloat?
-    var body: some View {
-        Rectangle()
-            .frame(height: height)
-            .foregroundColor(.clear)
-    }
-}
-
-struct line :View {
-    var color: Color?
-    var body: some View {
-        Rectangle()
-            .frame(height: 1)
-            .foregroundColor(color)
-    }
-}
-
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
-    }
-}
-
-struct RoundedCorner: Shape {
-    
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
-    }
-}
-
-
 
 //Preview!!
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), showMovieView: .constant(true))
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
+//    }
+//}
 
- 
+

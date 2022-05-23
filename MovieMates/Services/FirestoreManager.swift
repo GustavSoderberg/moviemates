@@ -43,6 +43,9 @@ class FirestoreManager {
                 
                 _ = um.login()
                 
+                rm.cacheFriends = 0
+                rm.cacheGlobal = 0
+                rm.refresh += 1
                 um.refresh += 1
                 um.isLoading = false
                 

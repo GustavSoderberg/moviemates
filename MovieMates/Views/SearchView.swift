@@ -32,11 +32,11 @@ struct SearchView: View {
                 
                 switch index {
                 case "movies":
-                    moviesAndSeriesView()
+                    moviesAndSeriesView(viewShowing: $viewShowing)
                 case "users":
                     usersView(viewShowing: $viewShowing)
                 default:
-                    moviesAndSeriesView()
+                    moviesAndSeriesView(viewShowing: $viewShowing)
                 }
             }
         }
@@ -46,6 +46,7 @@ struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
+    @Binding var viewShowing: Status
     
     var body: some View{
         VStack{
@@ -62,23 +63,19 @@ struct moviesAndSeriesView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List(viewModel.movies, id: \.id) { movie in
-                    MovieCardView(movie: movie)
+                    MovieCardView(viewShowing: $viewShowing, movie: movie).listRowBackground(Color("background"))
                         .onAppear(){
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
+                }.listStyle(.plain)
+                    
+                .onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                    UITableView.appearance().separatorColor = UIColor(Color("background"))
+                    UITableViewCell.appearance().backgroundColor = UIColor(Color("background"))
+                    UITableView.appearance().backgroundColor = UIColor(Color("background"))
                 }
             }
-            
-
-
-//            ScrollView{
-//                LazyVStack{
-//                    ForEach(searchResultsMovies) { result in
-//                        MovieCardView(movie: result)
-//                    }
-//                }
-//                .padding()
-//            }
         }
     }
 }
