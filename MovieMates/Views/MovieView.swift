@@ -258,7 +258,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(friendsReviews) { review in
-                                    MovieReviewCardView(review: review)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -267,7 +267,7 @@ struct MovieView: View {
                         case "global":
                             if let movieFS = movieFS {
                                 ForEach(movieFS.reviews) { review in
-                                    MovieReviewCardView(review: review)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -275,7 +275,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                MovieReviewCardView(review: review)
+                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false)
                             }
                         }
                     }
@@ -364,129 +364,9 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-            //print("pos: \(pos), score: \(score), width: \(width)")
         })
     }
 }
-
-struct ClapperImage: View {
-    var pos : Int
-    var score : String
-    @State var filled : Bool = false
-    
-    var body: some View {
-        Image("clapper-big")
-            .resizable()
-            .frame(width: 20, height: 20)
-            .foregroundColor(filled ? .black : .white)
-            .onAppear(perform: {
-                if Int(score.prefix(1)) ?? 0 >= pos {
-                    filled = true
-                } else {
-                    filled = false
-                }
-            })
-    }
-}
-
-
-struct MovieReviewCardView: View {
-    
-    let review: Review
-    @State var fullText = false
-    @State var lineLimit = 3
-    
-    var body: some View {
-        ZStack{
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
-            HStack(alignment: .top){
-                VStack(alignment: .leading){
-                    HStack{
-                        Text(um.getUser(id: review.authorId).username)
-                        Spacer()
-                        Text(formatDate(date: review.timestamp))
-                            .font(.system(size: 12))
-                    }
-                    HStack{
-                        ForEach(1..<6) { i in
-                            ClapperImage(pos: i, score: "\(review.rating)")
-                        }
-                        Spacer()
-                    }
-                    Text(review.reviewText)
-                        .font(.system(size: 15))
-                        .lineLimit(lineLimit)
-                        .onTapGesture {
-                            withAnimation() {
-                                if !fullText {
-                                    fullText = true
-                                    lineLimit = .max
-                                } else {
-                                    fullText = false
-                                    lineLimit = 3
-                                }
-                            }
-                        }
-                    Spacer()
-                    
-                    HStack {
-                        if review.whereAt != "" || review.withWho != "" {
-                            if review.whereAt == "home" {
-                                Image(systemName: "house.circle")
-                            } else if review.whereAt == "cinema" {
-                                Image(systemName: "film.circle")
-                            }
-                            
-                            if review.withWho == "alone" {
-                                Image(systemName: "person.circle")
-                            } else if review.withWho == "friends" {
-                                Image(systemName: "person.2.circle")
-                            }
-                        }
-                    }
-                }
-            }
-            .padding()
-        }
-    }
-}
-
-struct gap :View {
-    var height: CGFloat?
-    var body: some View {
-        Rectangle()
-            .frame(height: height)
-            .foregroundColor(.clear)
-    }
-}
-
-struct line :View {
-    var color: Color?
-    var body: some View {
-        Rectangle()
-            .frame(height: 1)
-            .foregroundColor(color)
-    }
-}
-
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape( RoundedCorner(radius: radius, corners: corners) )
-    }
-}
-
-struct RoundedCorner: Shape {
-    
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
-    }
-}
-
 
 
 //Preview!!

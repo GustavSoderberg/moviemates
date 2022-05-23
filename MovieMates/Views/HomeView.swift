@@ -12,6 +12,7 @@ struct HomeView: View {
     
     @State var index = "friends"
     @State var showMovieView = false
+    @State var currentMovie: Movie? = nil
     @State var presentMovie: Movie? = nil
     @State var isUpcoming = false
     
@@ -42,12 +43,14 @@ struct HomeView: View {
                     LazyVStack{
                         switch index {
                         case FRIENDS:
+
                             ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
                                 ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
                             }
                         case TRENDING:
                             ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
                                     ReviewCardView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+
                             }
                             
                         case POPULAR:
@@ -67,7 +70,7 @@ struct HomeView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCardView(review: review, presentMovie: $presentMovie, showMovieView: $showMovieView)
+                                ReviewCard(review: review, currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true)
                             }
                         }
                     }
@@ -77,8 +80,10 @@ struct HomeView: View {
 //                    }
                     .padding()
                     .sheet(isPresented: $showMovieView) {
-                        if let presentMovie = presentMovie {
+
+                        if let currentMovie = presentMovie {
                             MovieViewController(movie: presentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
+
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
@@ -205,23 +210,7 @@ func formatDate(date: Date) -> String{
 }
 
 
-private var friendsReviews = [Review
-//    Review(movieId: 10612, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
-//    Review(movieId: 634649, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-//    Review(movieId: 364, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-//    Review(movieId: 414, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
-]()
+private var friendsReviews = [Review]()
 
-private var trendingReviews = [Review
-//    Review(movieId: 414906, username: "Oscar", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
-//    Review(movieId: 284052, username: "Joakim", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
-//    Review(movieId: 406759, username: "Gustav", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!"),
-//    Review(movieId: 414906, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!")
-]()
-
-//struct HomeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView()
-//    }
-//}
+private var trendingReviews = [Review]()
  

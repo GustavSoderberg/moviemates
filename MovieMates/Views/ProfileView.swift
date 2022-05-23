@@ -190,7 +190,7 @@ struct UserReviewView: View {
     @AppStorage("darkmode") private var darkmode = true
     
     let user: User
-    @State var presentMovie: Movie? = nil
+    @State var currentMovie: Movie? = nil
     @State var showMovieView = false
     
     @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
@@ -200,14 +200,16 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
-                        ReviewCardProfileView(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), presentMovie: $presentMovie, showMovieView: $showMovieView)
+                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true)
 
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
-                    if let presentMovie = presentMovie {
+
+                    if let currentMovie = presentMovie {
                         MovieViewController(movie: presentMovie, isUpcoming: false, showMovieView: $showMovieView)
+
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
@@ -318,6 +320,7 @@ struct AboutMeView: View {
         }
     }
 }
+
 
 struct ReviewCardProfileView: View {
     
