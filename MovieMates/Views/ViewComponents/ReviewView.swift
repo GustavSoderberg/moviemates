@@ -14,6 +14,8 @@ struct ReviewCard: View {
     @Binding var showMovieView : Bool
     let displayName: Bool
     let displayTitle: Bool
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -41,7 +43,7 @@ struct ReviewCard: View {
                 }
                 
                 VStack(spacing: 0) {
-                    ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle)
+                    ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
                     Spacer()
                 }
             }
@@ -67,11 +69,14 @@ struct ReviewCard: View {
 
 
 struct ReviewInfo: View {
+    
     let review: Review
     let displayName: Bool
     let displayTitle: Bool
     @State var fullText = false
     @State var lineLimit = 3
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -79,6 +84,13 @@ struct ReviewInfo: View {
                 HStack{
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
+                            .onTapGesture {
+                                print("CLICK")
+                            userProfile = um.getUser(id: review.authorId)
+                                print(userProfile)
+                            um.refresh += 1
+                            showProfileView = true
+                        }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                     }
@@ -88,6 +100,7 @@ struct ReviewInfo: View {
                 }
                 if displayTitle && displayName {
                     Text(um.getMovie(movieID: String(review.movieId))!.title)
+                        
                 }
                 HStack{
                     ForEach(1..<6) { i in

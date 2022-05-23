@@ -50,6 +50,9 @@ struct MovieView: View {
     @Binding var movieFS: MovieFS?
     @Binding var isUpcoming: Bool
     
+    @State var userProfile: User? = nil
+    @State var showProfileView = false
+    
     @State var friendsReviews = [Review]()
     
     @State var title : String = "Movie Title"
@@ -258,7 +261,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(friendsReviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -267,7 +270,7 @@ struct MovieView: View {
                         case "global":
                             if let movieFS = movieFS {
                                 ForEach(movieFS.reviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -275,7 +278,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false)
+                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         }
                     }
@@ -286,6 +289,13 @@ struct MovieView: View {
                         }
                     }
                 }
+            }
+            
+        }
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile)
+                    .preferredColorScheme(darkmode ? .dark : .light)
             }
             
         }
@@ -370,10 +380,10 @@ struct ReviewClapper: View {
 
 
 //Preview!!
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
+//    }
+//}
 
  

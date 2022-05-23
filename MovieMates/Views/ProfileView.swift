@@ -192,6 +192,7 @@ struct UserReviewView: View {
     let user: User
     @State var currentMovie: Movie? = nil
     @State var showMovieView = false
+    @State var showProfileView = false
     
     @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     
@@ -200,7 +201,7 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
-                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true)
+                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true, showProfileView: $showProfileView)
 
                     }
                 }
