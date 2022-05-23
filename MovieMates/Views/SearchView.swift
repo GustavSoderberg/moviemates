@@ -62,11 +62,16 @@ struct moviesAndSeriesView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List(viewModel.movies, id: \.id) { movie in
-                    MovieCardView(movie: movie)
+                    MovieCardView(movie: movie).listRowBackground(Color.green)
                         .onAppear(){
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
                 }
+//                .onAppear {
+//                    UITableView.appearance().separatorStyle = .none
+//                    UITableViewCell.appearance().backgroundColor = .green
+//                    UITableView.appearance().backgroundColor = .green
+//                }
             }
             
 
