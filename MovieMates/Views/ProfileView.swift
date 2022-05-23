@@ -206,8 +206,10 @@ struct UserReviewView: View {
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
-                    if let presentMovie = currentMovie {
-                        MovieViewController(movie: presentMovie, showMovieView: $showMovieView)
+
+                    if let currentMovie = presentMovie {
+                        MovieViewController(movie: presentMovie, isUpcoming: false, showMovieView: $showMovieView)
+
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
@@ -240,6 +242,7 @@ struct WatchListView: View {
         }.onAppear {
             getMovies()
         }
+        .padding()
     }
     func getMovies() {
         
@@ -317,6 +320,108 @@ struct AboutMeView: View {
         }
     }
 }
+
+
+struct ReviewCardProfileView: View {
+    
+    let review: Review
+    var movieFS: MovieFS?
+    @Binding var presentMovie: Movie?
+    @Binding var showMovieView : Bool
+    
+    @State private var isExpanded: Bool = false
+    
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(Color("secondary-background"))
+            HStack(alignment: .top){
+                if let movie = movieFS {
+                    
+                    AsyncImage(url: movie.photoUrl){ image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 100, height: 150, alignment: .center)
+                    .border(Color.black, width: 3)
+                    .onTapGesture {
+                        
+                        print("click!")
+                        loadMovie(id: movie.id!)
+                        showMovieView = true
+                        //um.refresh += 1
+                    }
+                    
+                    VStack(alignment: .leading){
+                        
+                        HStack{
+                            Spacer()
+                            Text(formatDate(date: review.timestamp))
+                                .font(.system(size: 12))
+                        }
+                        
+                        Text(movie.title)
+                            .font(.title2)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(1)
+                        
+                        Text("\(review.rating)")
+                            .padding(.bottom, 4)
+                        
+                        Text(review.reviewText)
+                            .font(.system(size: 15))
+                            .lineLimit(isExpanded ? nil : 4)
+                            .onTapGesture {
+                                isExpanded.toggle()
+                            }
+                        Spacer()
+                        HStack(alignment: .bottom){
+                            Spacer()
+                            Text("10000+")
+                                .foregroundColor(.red)
+                            LikeButton()
+                        }
+                    }.padding(.leading, 1)
+                }
+            }
+            .padding()
+        }
+    }
+    func loadMovie(id: String) {
+        presentMovie = nil
+        movieViewModel.fetchMovie(id: Int(id)!) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let movie):
+                    presentMovie = movie
+                }
+            }
+        }
+    }
+}
+
+
+
+//private var myReviews = [
+//    Review(movieId: 414, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+//    Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 272, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 406759, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+//]
+
+//private var watchlist = [
+//    Movie(id: 1, adult: false, backdropPath: nil, genreIDS: nil, originalLanguage: nil, originalTitle: "spider man", overview: "fasdfdsafasdf", releaseDate: nil, posterPath: nil, popularity: nil, title: "Spooder-Man", video: nil, voteAverage: nil, voteCount: nil)
+////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
+////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
+////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
+//]
 
 struct FriendListView: View{
     @AppStorage("darkmode") private var darkmode = false
