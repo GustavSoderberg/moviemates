@@ -73,9 +73,6 @@ struct MovieView: View {
     @State var index = "friends"
     @State var watchlist = false
     
-    @State var cacheGlobal: Float = 0.0
-    @State var cacheFriends: Float = 0.0
-    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -200,11 +197,16 @@ struct MovieView: View {
                                 Text("GLOBAL")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                    if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                        
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
                                         }
+                                        .onAppear {
+                                            orm.cacheGlobal = 0
+                                        }
                                     } else {
+                                        
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
                                         }
@@ -224,7 +226,7 @@ struct MovieView: View {
                                 Text("FRIENDS")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
+                                    if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
                                         }
@@ -246,12 +248,6 @@ struct MovieView: View {
                 }
                 
                 Divider()
-                Button {
-                    rm.refresh += 1
-                } label: {
-                    Text("Hej")
-                }
-                
                 
                 VStack(spacing:0){
                     ZStack{
@@ -412,9 +408,9 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-            rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
-            rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
-            rm.refresh += 1
+                    rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+                    rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
+                    rm.refresh += 1
         }
     }
 }
