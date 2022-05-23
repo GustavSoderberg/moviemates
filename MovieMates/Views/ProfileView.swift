@@ -240,6 +240,7 @@ struct WatchListView: View {
         }.onAppear {
             getMovies()
         }
+        .padding()
     }
     func getMovies() {
         
