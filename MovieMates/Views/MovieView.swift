@@ -285,7 +285,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
 
                                 }
                             } else {
@@ -295,7 +295,7 @@ struct MovieView: View {
                         case "global":
                             if let movieFS = movieFS {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
