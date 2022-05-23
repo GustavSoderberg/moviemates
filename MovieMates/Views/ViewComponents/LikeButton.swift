@@ -16,20 +16,20 @@ struct LikeButton: View {
         ZStack{
             
             Image(systemName: "heart")
-                
             
             Image(systemName: "heart.fill")
-                .opacity(isLiked ? 1 : 0)
-                .scaleEffect(isLiked ? 1.0 : 0.1)
-                .animation(.linear)
+                //.opacity(isLiked ? 1 : 0)
+                .scaleEffect(isLiked ? 1.0 : 0)
         
         
-        }.font(.system(size: 20))
+        }.font(.system(size: 25))
             .onTapGesture {
-                     self.isLiked.toggle()
+                withAnimation{
+                    self.isLiked.toggle()
+                }
                     
              }
-            .foregroundColor(isLiked ? .red : .red)
+            .foregroundColor(isLiked ? .red : .white)
     }
     
 }
