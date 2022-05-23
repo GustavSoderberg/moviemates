@@ -10,6 +10,7 @@ import SwiftUI
 struct MovieCardView: View {
     @AppStorage("darkmode") private var darkmode = true
     
+    
     @Binding var viewShowing: Status
     
     let movie: Movie

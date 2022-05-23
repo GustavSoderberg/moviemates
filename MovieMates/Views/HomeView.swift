@@ -18,6 +18,7 @@ struct HomeView: View {
     @State var currentMovie: Movie? = nil
     @State var presentMovie: Movie? = nil
     @State var isUpcoming = false
+    
     @State var userProfile: User? = nil
     
     @ObservedObject var viewModel = MovieListViewModel()
@@ -49,11 +50,11 @@ struct HomeView: View {
                         case FRIENDS:
 
                             ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         case TRENDING:
                             ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
 
                             }
                             
@@ -74,7 +75,7 @@ struct HomeView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
+                                Text("E: HomeView - Failed to catch view to show")
                             }
                         }
                     }
@@ -96,7 +97,7 @@ struct HomeView: View {
                             ProfileView(user: userProfile, viewShowing: $viewShowing)
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
-                        
+
                     }
                 }
 
