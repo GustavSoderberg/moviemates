@@ -375,6 +375,13 @@ struct ReviewCardProfileView: View {
                             .onTapGesture {
                                 isExpanded.toggle()
                             }
+                        Spacer()
+                        HStack(alignment: .bottom){
+                            Spacer()
+                            Text("10000+")
+                                .foregroundColor(.red)
+                            LikeButton()
+                        }
                     }.padding(.leading, 1)
                 }
             }

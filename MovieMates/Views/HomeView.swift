@@ -165,10 +165,19 @@ struct ReviewCardView: View {
                         
                         Text(review.reviewText)
                             .font(.system(size: 15))
-                            .lineLimit(isExpanded ? nil : 4)
+                            .lineLimit(isExpanded ? nil : 3)
                             .onTapGesture {
                                 isExpanded.toggle()
                             }
+                        Spacer()
+                        HStack(alignment: .bottom){
+                            Spacer()
+                            Text("10000+")
+                                .foregroundColor(.red)
+                            LikeButton()
+                        }
+                        
+                            
                     }
                 }
             }
