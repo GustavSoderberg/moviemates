@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Review: Identifiable, Codable {
+struct Review: Identifiable, Codable, Hashable {
     
     var id: String = UUID().uuidString //Unique id for each review
     let authorId: String

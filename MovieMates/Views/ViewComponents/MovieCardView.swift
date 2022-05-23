@@ -12,6 +12,7 @@ struct MovieCardView: View {
     
     let movie: Movie
     @State var showMovieView = false
+    @State var isUpcoming: Bool = false
     
     var body: some View {
         ZStack{
@@ -56,7 +57,7 @@ struct MovieCardView: View {
             showMovieView = true
         }
         .sheet(isPresented: $showMovieView) {
-            MovieViewController(movie: movie, showMovieView: $showMovieView)
+            MovieViewController(movie: movie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
                 .preferredColorScheme(darkmode ? .dark : .light)
         }
     }
@@ -64,7 +65,7 @@ struct MovieCardView: View {
 
 struct MovieCardView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieCardView(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil))
+        MovieCardView(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false)
     }
 }
  

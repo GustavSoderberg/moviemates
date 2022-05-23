@@ -33,6 +33,7 @@
 		3FBC1B1B2832389B007D83B7 /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBC1B1A2832389B007D83B7 /* ReviewManager.swift */; };
 		3FC3D1B52823C9970005E8BD /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC3D1B42823C9970005E8BD /* FirestoreManager.swift */; };
 		41319567282A8AA9004F9015 /* NotificationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41319566282A8AA9004F9015 /* NotificationSheet.swift */; };
+		4131956B283B6B7D004F9015 /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4131956A283B6B7D004F9015 /* LikeButton.swift */; };
 		415764E02822743300A9795A /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764DF2822743300A9795A /* UserManager.swift */; };
 		415764E22829063500A9795A /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415764E12829063400A9795A /* SettingsSheet.swift */; };
 		55738AC32823CED200A5ED38 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55738AC22823CED200A5ED38 /* Review.swift */; };
@@ -71,6 +72,7 @@
 		3FBC1B1A2832389B007D83B7 /* ReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
 		3FC3D1B42823C9970005E8BD /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		41319566282A8AA9004F9015 /* NotificationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSheet.swift; sourceTree = "<group>"; };
+		4131956A283B6B7D004F9015 /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
 		415764DF2822743300A9795A /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		415764E12829063400A9795A /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
 		55738AC22823CED200A5ED38 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				415764E12829063400A9795A /* SettingsSheet.swift */,
 				41319566282A8AA9004F9015 /* NotificationSheet.swift */,
 				1F967101283B7F14008228AA /* ReviewView.swift */,
+				4131956A283B6B7D004F9015 /* LikeButton.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				3F396FE728229F0100E1D336 /* User.swift in Sources */,
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
 				3FBC1B1928323126007D83B7 /* MovieFS.swift in Sources */,
+				4131956B283B6B7D004F9015 /* LikeButton.swift in Sources */,
 				3F2972C02822C67D00D1616D /* AppDelegate.swift in Sources */,
 				B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */,
 				415764E02822743300A9795A /* UserManager.swift in Sources */,
