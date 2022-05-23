@@ -293,7 +293,7 @@ struct MovieView: View {
                             }
                             
                         case "global":
-                            if let movieFS = movieFS {
+                            if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
                                     ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
