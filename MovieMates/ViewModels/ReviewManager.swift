@@ -173,6 +173,6 @@ class ReviewManager : ObservableObject {
             }
         }
         return nil
-    }
+    } 
 }
 

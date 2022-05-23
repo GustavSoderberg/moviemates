@@ -90,6 +90,21 @@ struct HomeView: View {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
         }
+        .onChange(of: index, perform: { newValue in
+            switch newValue {
+            case POPULAR:
+                viewModel.clearList()
+                viewModel.requestMovies(apiReuestType: .popular)
+                print("popular tab")
+                
+            case UPCOMING:
+                viewModel.clearList()
+                viewModel.requestMovies(apiReuestType: .upcoming)
+                print("upcoming tab")
+            default:
+                break
+            }
+        })
     }
 }
 
