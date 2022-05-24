@@ -172,6 +172,7 @@ struct ReviewTopView: View {
         um.refresh += 1
         showProfileView = true
     }
+    //Test
 }
 
 struct ReviewTextView: View {
