@@ -25,70 +25,60 @@ struct ReviewCard: View {
             LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous)
                     .fill(Color("secondary-background")))
-                        .shadow(radius: 10)
+                .shadow(radius: 10)
                 .onTapGesture {
                     loadMovie(id: String(review.movieId))
                     showMovieView = true
                 }
             
             VStack(spacing: 0) {
-                
-                HStack(alignment: .top) {
-                    VStack {
-                        
-                        //Profile picture:
-                        HStack(spacing: 0) {
-//                            if movieFS != nil {
-//                                Rectangle()
-//                                    .frame(width: 50)
-//                                    .foregroundColor(.clear)
-//                            }
-                            AsyncImage(url: um.getUser(id: review.authorId).photoUrl) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 50, height: 50, alignment: .center)
-                            .cornerRadius(25)
-                            .onTapGesture {
-                                
-                                showMovieView = true
-                            }
+                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle)
+                    .padding(.horizontal)
+                    .padding(.bottom, 5)
+                HStack(alignment: .top, spacing: 0) {
+                    
+                    //Movie poster:
+                    if let movie = movieFS {
+                        AsyncImage(url: movie.photoUrl){ image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
                         }
-                        
-                        //Movie poster:
-                        if let movie = movieFS {
-                            AsyncImage(url: movie.photoUrl){ image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 100, height: 150, alignment: .center)
-                            .border(Color.black, width: 3)
-                            .onTapGesture {
-                                loadMovie(id: movie.id!)
-                                showMovieView = true
-                            }
+                        .frame(width: 100, height: 150, alignment: .center)
+                        .border(Color.black, width: 3)
+                        .onTapGesture {
+                            loadMovie(id: movie.id!)
+                            showMovieView = true
                         }
+                        .padding(.leading)
+                        .padding(.bottom, 5)
                     }
                     
                     VStack(spacing: 0) {
-                        ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
-                        Spacer()
-                    }
-                }
 
-                .padding(.horizontal)
+                        if displayName && displayTitle {
+                            ClapperLine(review: review)
+                                .padding(.bottom, 5)
+                        }
+                        
+                        if review.reviewText != "" {
+                            ReviewTextView(reviewText: review.reviewText)
+                                .padding(.bottom, 5)
+                        }
+                        gap(height: 0)
+
+                    }
+                    .padding(.horizontal, 5)
+                }
                 Divider()
-                    .padding(.bottom)
+                    .padding(.bottom, 5)
                 ReviewTab(review: review)
                     .padding(.horizontal)
             }
-            .padding(.vertical)
+            .padding(.top)
+            .padding(.bottom, 7)
         }
     }
     
@@ -109,7 +99,6 @@ struct ReviewCard: View {
 }
 
 
-
 struct ReviewInfo: View {
     
     let review: Review
@@ -122,15 +111,6 @@ struct ReviewInfo: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 5){
-                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle)
-                
-                ClapperLine(review: review)
-                
-                if review.reviewText != "" {
-                    ReviewTextView(reviewText: review.reviewText)
-                }
-            }
         }
     }
 }
@@ -156,15 +136,19 @@ struct ReviewTopView: View {
                 //Go to profile
             }
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
-                            .onTapGesture {
-                            userProfile = um.getUser(id: review.authorId)
-                            rm.refresh += 1
-                            showProfileView = true
-                        }
+
+//                            .onTapGesture {
+//                                print("CLICK")
+//                            userProfile = um.getUser(id: review.authorId)
+//                                print(userProfile!.username)
+//                            um.refresh += 1
+//                            showProfileView = true
+//                        }
+
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                     }
