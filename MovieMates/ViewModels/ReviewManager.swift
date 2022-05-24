@@ -85,10 +85,14 @@ class ReviewManager : ObservableObject {
     func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
         let allReviews = getReviews(movieId: movieId, onlyFriends: onlyFriends)
         var totalScore: Int = 0
-        for review in allReviews {
-            totalScore += review.rating
+        if allReviews.count == 0 {
+            return 0.0
+        } else {
+            for review in allReviews {
+                totalScore += review.rating
+            }
+            print("number of ratings: \(allReviews.count)")
         }
-        print("number of ratings: \(allReviews.count)")
         return round(Float(totalScore)/Float(allReviews.count) * 10) / 10.0
     }
     

@@ -126,7 +126,7 @@ struct ReviewSheet: View {
                             VStack(spacing: 0){
                                 ScrollView{
                                     TextEditor(text: $review)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(darkmode ? .white : .black)
                                         .background(.clear)
                                         .frame(height: 170)
                                         .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
