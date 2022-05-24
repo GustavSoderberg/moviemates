@@ -8,23 +8,27 @@
 import SwiftUI
 
 struct ReviewCard: View {
+
+    @AppStorage("darkmode") private var darkmode = true
     
     let review: Review
     var movieFS: MovieFS?
+    
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
+    
+    @Binding var userProfile: User?
+    @Binding var showProfileView : Bool
+    
     let displayName: Bool
     let displayTitle: Bool
-    @Binding var showProfileView: Bool
-    @Binding var userProfile: User?
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
-                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color("secondary-background")))
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 10)
                 .onTapGesture {
                     loadMovie(id: String(review.movieId))
@@ -66,22 +70,21 @@ struct ReviewCard: View {
                     
                     
                     VStack(spacing: 0) {
-
                         if displayName && displayTitle {
                             ClapperLine(review: review)
                                 .padding(.bottom, 5)
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText)
+                            ReviewTextView(reviewText: review.reviewText, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
-
                     }
                     .padding(.horizontal, 5)
                 }
                 Divider()
+                    .background(darkmode ? .black : .white)
                     .padding(.bottom, 5)
                 ReviewTab(review: review)
                     .padding(.horizontal)
@@ -131,18 +134,13 @@ struct ReviewTopView: View {
             }
             
             VStack(alignment: .leading, spacing: 5) {
-                HStack {
+                HStack(alignment: .top) {
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
-
-//                            .onTapGesture {
-//                                print("CLICK")
-//                            userProfile = um.getUser(id: review.authorId)
-//                                print(userProfile!.username)
-//                            um.refresh += 1
-//                            showProfileView = true
-//                        }
-
+                            .font(Font.system(size: 20).italic())
+                            .onTapGesture {
+                            loadProfile()
+                        }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
@@ -160,7 +158,6 @@ struct ReviewTopView: View {
                         .minimumScaleFactor(0.5)
                         .lineLimit(2)
 
-
                 } else {
                     ClapperLine(review: review)
                 }
@@ -175,14 +172,19 @@ struct ReviewTopView: View {
         rm.refresh += 1
         showProfileView = true
     }
-    //Test
-
 }
 
 struct ReviewTextView: View {
-    let reviewText: String
+    var reviewText: String
+    var heightConstant: CGFloat
+    @State var height: CGFloat
     @State var fullText = false
-    @State var lineLimit = 3
+    
+    init(reviewText: String, heightConstant: CGFloat) {
+        self.reviewText = reviewText
+        self.heightConstant = heightConstant
+        height = heightConstant
+    }
     
     var body: some View {
         ZStack(alignment: .topLeading){
@@ -192,17 +194,17 @@ struct ReviewTextView: View {
             
             Text(reviewText)
                 .font(.system(size: 15))
-                .lineLimit(lineLimit)
+                .frame(height: height, alignment: .topLeading)
                 .padding(5)
         }
         .onTapGesture {
             withAnimation() {
                 if !fullText {
                     fullText = true
-                    lineLimit = .max
+                    height = .infinity
                 } else {
                     fullText = false
-                    lineLimit = 3
+                    height = heightConstant
                 }
             }
         }
@@ -233,10 +235,10 @@ struct ReviewTab: View {
                 }
             }
             Spacer()
-            VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                Text("2")
+                    .font(.system(size: 12))
                 LikeButton()
-//                        Text("2")
-//                            .font(.system(size: 12))
             }
         }
     }
