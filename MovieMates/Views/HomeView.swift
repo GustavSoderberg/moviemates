@@ -123,7 +123,7 @@ struct HomeView: View {
 
 struct ReviewCardView: View {
     
-    @State var review: Review
+    let review: Review
     var movieFS: MovieFS?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
@@ -184,7 +184,7 @@ struct ReviewCardView: View {
                             Spacer()
                             Text("10000+")
                                 .foregroundColor(.red)
-                            LikeButton(review: $review)
+                            LikeButton()
                         }
                         
                             

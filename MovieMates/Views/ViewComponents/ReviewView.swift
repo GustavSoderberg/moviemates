@@ -199,7 +199,7 @@ struct ReviewTextView: View {
 }
 
 struct ReviewTab: View {
-    @State var review: Review
+    let review: Review
     let tagSize: CGFloat = 25
     
     var body: some View {
@@ -223,7 +223,7 @@ struct ReviewTab: View {
             }
             Spacer()
             VStack(spacing: 0) {
-                LikeButton(review: $review)
+                LikeButton()
 //                        Text("2")
 //                            .font(.system(size: 12))
             }

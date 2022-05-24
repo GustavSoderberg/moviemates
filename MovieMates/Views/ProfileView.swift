@@ -333,7 +333,7 @@ struct AboutMeView: View {
 
 struct ReviewCardProfileView: View {
     
-    @State var review: Review
+    let review: Review
     var movieFS: MovieFS?
     @Binding var presentMovie: Movie?
     @Binding var showMovieView : Bool
@@ -393,7 +393,7 @@ struct ReviewCardProfileView: View {
                             Spacer()
                             Text("10000+")
                                 .foregroundColor(.red)
-                            LikeButton(review: $review)
+                            LikeButton()
                         }
                     }.padding(.leading, 1)
                 }
