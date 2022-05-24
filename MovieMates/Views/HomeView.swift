@@ -9,8 +9,6 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("darkmode") private var darkmode = true
     
-    @Binding var viewShowing: Status
-    
     @State var index = "friends"
     @State var showMovieView = false
     @State var showProfileView = false
@@ -47,24 +45,24 @@ struct HomeView: View {
                         switch index {
                         case FRIENDS:
                             ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
+                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         case TRENDING:
                             ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
+                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
 
                             }
                             
                         case POPULAR:
                             ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(viewShowing: $viewShowing, movie: movie, isUpcoming: isUpcoming)
+                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
                                     }
                             }
                         case UPCOMING:
                             ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(viewShowing: $viewShowing, movie: movie, isUpcoming: isUpcoming)
+                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
                                     .onAppear(){
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
                                     }
@@ -72,7 +70,9 @@ struct HomeView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
+
+                                ReviewCard(review: review, currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: true, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
+
                             }
                         }
                     }
@@ -84,14 +84,14 @@ struct HomeView: View {
                     .sheet(isPresented: $showMovieView) {
 
                         if let currentMovie = currentMovie {
-                            MovieViewController(movie: currentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView, viewShowing: $viewShowing)
+                            MovieViewController(movie: currentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
 
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
                     .sheet(isPresented: $showProfileView) {
                         if let userProfile = userProfile {
-                            ProfileView(user: userProfile, viewShowing: $viewShowing)
+                            ProfileView(user: userProfile)
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                         
@@ -121,6 +121,7 @@ struct HomeView: View {
         })
     }
 }
+
 
 func formatDate(date: Date) -> String{
     let dateFormatter = DateFormatter()

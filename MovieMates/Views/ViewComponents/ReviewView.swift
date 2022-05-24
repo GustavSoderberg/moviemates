@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ReviewCard: View {
-    
-    @Binding var viewShowing: Status
+
     @AppStorage("darkmode") private var darkmode = true
-    
+
     let review: Review
     var movieFS: MovieFS?
     
@@ -62,6 +61,7 @@ struct ReviewCard: View {
                     }
                     
                     VStack(spacing: 0) {
+
                         if displayName && displayTitle {
                             ClapperLine(review: review)
                                 .padding(.bottom, 5)
@@ -72,6 +72,7 @@ struct ReviewCard: View {
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
+
                     }
                     .padding(.horizontal, 5)
                 }
@@ -104,13 +105,9 @@ struct ReviewCard: View {
 
 
 struct ReviewInfo: View {
-    
-    @Binding var viewShowing: Status
+
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
-    
-//    @State var userProfile: User? = nil
-//    @State var showProfileView = false
     
     var body: some View {
         HStack(alignment: .top) {
@@ -149,6 +146,7 @@ struct ReviewTopView: View {
                             .onTapGesture {
                             loadProfile()
                         }
+
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
@@ -214,7 +212,7 @@ struct ReviewTextView: View {
 }
 
 struct ReviewTab: View {
-    let review: Review
+    @State var review: Review
     let tagSize: CGFloat = 25
     
     var body: some View {
@@ -237,10 +235,12 @@ struct ReviewTab: View {
                 }
             }
             Spacer()
+
             HStack(spacing: 0) {
                 Text("2")
                     .font(.system(size: 12))
                 LikeButton()
+
             }
         }
     }
