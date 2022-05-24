@@ -139,7 +139,7 @@ struct ReviewSheet: View {
                             VStack(spacing: 0){
                                 ScrollView{
                                     TextEditor(text: $review)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(darkmode ? .white : .black)
                                         .background(.clear)
                                         .frame(height: 170)
                                         .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
@@ -149,38 +149,6 @@ struct ReviewSheet: View {
                         }
                         .padding(.horizontal)
                     }
-                    
-                    //klsjdflksa
-                    VStack(spacing: 0){
-                        ZStack{
-                            LinearGradient(gradient: Gradient(colors: [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
-                                .mask(Rectangle()
-                                    .cornerRadius(15)
-                                    .frame(height: 200))
-                                .shadow(radius: 10)
-                            
-                            VStack(spacing: 0) {
-                                Text("Write your review")
-                                    .font(Font.headline.weight(.bold)) .padding(.vertical, 5)
-                                    .padding(.horizontal)
-                                
-                                Divider()
-                                
-                                ScrollView{
-                                    TextEditor(text: $review)
-                                        .foregroundColor(.white)
-                                        .background(.clear)
-                                        .frame(height: 170)
-                                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                                        .padding(.horizontal)
-                                }
-                                .frame(maxHeight: 170)
-
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
-                    //jhskhfjklsd
                     
                     VStack{
                         

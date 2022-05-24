@@ -43,23 +43,32 @@ struct ReviewCard: View {
                 HStack(alignment: .top, spacing: 0) {
                     
                     //Movie poster:
+                    
                     if let movie = movieFS {
-                        AsyncImage(url: movie.photoUrl){ image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            ProgressView()
+                        if review.reviewText != "" {
+                            AsyncImage(url: movie.photoUrl){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 100, height: 150, alignment: .center)
+                            .border(Color.black, width: 3)
+                            .onTapGesture {
+                                loadMovie(id: movie.id!)
+                                showMovieView = true
+                            }
+                            .padding(.leading)
+                            .padding(.bottom, 5)
+                        } else {
+                            Rectangle()
+                                .frame(width: 0, height: 20)
+                                .foregroundColor(.clear)
+                                .padding(.leading)
                         }
-                        .frame(width: 100, height: 150, alignment: .center)
-                        .border(Color.black, width: 3)
-                        .onTapGesture {
-                            loadMovie(id: movie.id!)
-                            showMovieView = true
-                        }
-                        .padding(.leading)
-                        .padding(.bottom, 5)
                     }
+                    
                     
                     VStack(spacing: 0) {
                         if displayName && displayTitle {
@@ -102,22 +111,6 @@ struct ReviewCard: View {
     }
 }
 
-
-struct ReviewInfo: View {
-    
-    @Binding var viewShowing: Status
-    @Binding var showProfileView: Bool
-    @Binding var userProfile: User?
-    
-//    @State var userProfile: User? = nil
-//    @State var showProfileView = false
-    
-    var body: some View {
-        HStack(alignment: .top) {
-        }
-    }
-}
-
 struct ReviewTopView: View {
     let review: Review
     let displayName: Bool
@@ -152,6 +145,8 @@ struct ReviewTopView: View {
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(2)
                     }
                     Spacer()
                     Text(formatDate(date: review.timestamp))
@@ -161,12 +156,15 @@ struct ReviewTopView: View {
                 if displayTitle && displayName {
                     Text(um.getMovie(movieID: String(review.movieId))!.title)
                         .font(Font.headline.weight(.bold))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
 
                 } else {
                     ClapperLine(review: review)
                 }
             }
         }
+        .frame(height: 60)
     }
     
     func loadProfile() {
