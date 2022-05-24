@@ -8,61 +8,31 @@
 import SwiftUI
 
 struct LikeButton: View {
-    
-    @Binding var review: Review
     @State var scale: CGFloat = 1
     @State var opacity = 0.0
     @State var isLiked = false
+    @State var likeCounter = 0
     
     var body: some View {
-        
-        Button {
+        ZStack{
             
-            if !review.likes.contains(um.currentUser!.id!) {
-                um.like(review: review)
-                
-                isLiked = true
-                
-            } else {
-                um.dislike(review: review)
-                
-                isLiked = false
-                
-            }
+            Image(systemName: "heart")
             
-        } label: {
-            ZStack{
-                
-                Image(systemName: "heart")
-                
-                Image(systemName: "heart.fill")
-                    .onAppear(){
-                        self.isLiked = review.likes.contains(um.currentUser!.id!)
-                    }
+            Image(systemName: "heart.fill")
                 //.opacity(isLiked ? 1 : 0)
-                    .scaleEffect(isLiked ? 1.0 : 0)
-                
-                
-            }.font(.system(size: 25))
-        }.foregroundColor(isLiked ? .red : .white)
+                .scaleEffect(isLiked ? 1.0 : 0)
         
-        //            .onTapGesture {
-        //                withAnimation{
-        //                    if !review.likes.contains(um.currentUser!.id!) {
-        //                        um.like(review: review)
-        //
-        //                        isLiked = true
-        //
-        //                    } else {
-        //                        um.dislike(review: review)
-        //
-        //                        isLiked = false
-        //
-        //                    }
-        //                }
-        //
-        //             }
         
+        }.font(.system(size: 25))
+            .onTapGesture {
+                likeCounter += 1
+                print(likeCounter)
+                withAnimation{
+                    self.isLiked.toggle()
+                }
+                    
+             }
+            .foregroundColor(isLiked ? .red : .white)
     }
     
 }
