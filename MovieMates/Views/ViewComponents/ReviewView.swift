@@ -34,20 +34,47 @@ struct ReviewCard: View {
                 }
             
             VStack(spacing: 0) {
+                
                 HStack(alignment: .top) {
-                    if let movie = movieFS {
-                        AsyncImage(url: movie.photoUrl){ image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            ProgressView()
+                    VStack {
+                        
+                        //Profile picture:
+                        HStack(spacing: 0) {
+//                            if movieFS != nil {
+//                                Rectangle()
+//                                    .frame(width: 50)
+//                                    .foregroundColor(.clear)
+//                            }
+                            AsyncImage(url: um.getUser(id: review.authorId).photoUrl) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 50, height: 50, alignment: .center)
+                            .cornerRadius(25)
+                            .onTapGesture {
+                                
+                                showMovieView = true
+                            }
                         }
-                        .frame(width: 100, height: 150, alignment: .center)
-                        .border(Color.black, width: 3)
-                        .onTapGesture {
-                            loadMovie(id: movie.id!)
-                            showMovieView = true
+                        
+                        //Movie poster:
+                        if let movie = movieFS {
+                            AsyncImage(url: movie.photoUrl){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 100, height: 150, alignment: .center)
+                            .border(Color.black, width: 3)
+                            .onTapGesture {
+                                loadMovie(id: movie.id!)
+                                showMovieView = true
+                            }
                         }
                     }
                     
@@ -103,7 +130,41 @@ struct ReviewInfo: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 5){
-                HStack{
+                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle)
+                
+                ClapperLine(review: review)
+                
+                if review.reviewText != "" {
+                    ReviewTextView(reviewText: review.reviewText)
+                }
+            }
+        }
+    }
+}
+
+struct ReviewTopView: View {
+    let review: Review
+    let displayName: Bool
+    let displayTitle: Bool
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            //Profile picture:
+            AsyncImage(url: um.getUser(id: review.authorId).photoUrl) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: 50, height: 50, alignment: .center)
+            .cornerRadius(25)
+            .onTapGesture {
+                //Go to profile
+            }
+            
+            VStack(alignment: .leading) {
+                HStack {
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
                             .onTapGesture {
@@ -120,39 +181,42 @@ struct ReviewInfo: View {
                     Text(formatDate(date: review.timestamp))
                         .font(.system(size: 12))
                 }
+                
                 if displayTitle && displayName {
                     Text(um.getMovie(movieID: String(review.movieId))!.title)
-                        
+
+                } else {
+                    ClapperLine(review: review)
                 }
-                HStack{
-                    ForEach(1..<6) { i in
-                        ClapperImage(pos: i, score: "\(review.rating)")
-                    }
-                    Spacer()
-                }
-                ZStack(alignment: .topLeading){
-                    LinearGradient(gradient: Gradient(colors: [.black, .gray]), startPoint: .top, endPoint: .bottom)
-                        .mask(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                                .shadow(radius: 5)
-                                .opacity(0.15)
-                                .border(.black, width: 2)
-                                .cornerRadius(3)
-                    
-                    Text(review.reviewText)
-                        .font(.system(size: 15))
-                        .lineLimit(lineLimit)
-                        .padding(5)
-                }
-                .onTapGesture {
-                    withAnimation() {
-                        if !fullText {
-                            fullText = true
-                            lineLimit = .max
-                        } else {
-                            fullText = false
-                            lineLimit = 3
-                        }
-                    }
+            }
+        }
+    }
+}
+
+struct ReviewTextView: View {
+    let reviewText: String
+    @State var fullText = false
+    @State var lineLimit = 3
+    
+    var body: some View {
+        ZStack(alignment: .topLeading){
+            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                .foregroundColor(.black)
+                .opacity(0.1)
+            
+            Text(reviewText)
+                .font(.system(size: 15))
+                .lineLimit(lineLimit)
+                .padding(5)
+        }
+        .onTapGesture {
+            withAnimation() {
+                if !fullText {
+                    fullText = true
+                    lineLimit = .max
+                } else {
+                    fullText = false
+                    lineLimit = 3
                 }
             }
         }
@@ -192,8 +256,21 @@ struct ReviewTab: View {
     }
 }
 
+struct ClapperLine: View {
+    let review: Review
+    
+    var body: some View {
+        HStack {
+            ForEach(1..<6) { i in
+                ClapperImage(pos: i, score: "\(review.rating)")
+            }
+            Spacer()
+        }
+    }
+}
+
 struct ClapperImage: View {
-    var pos : Int
+    let pos : Int
     var score : String
     @State var filled : Bool = false
     
