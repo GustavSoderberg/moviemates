@@ -181,4 +181,26 @@ class UserManager: ObservableObject {
         }
             return nil
     }
+    
+    func like(review: Review){
+    
+        if fm.saveLikeToFirestore(review: review, user: currentUser!) {
+            
+            print("Succefully liked the review")
+        }else{
+            print("Error: could not like the review")
+        }
+        
+    }
+
+    func dislike(review: Review){
+      
+        if fm.removeLikeFromFirestore(review: review, user: currentUser!) {
+            
+            print("Succefully removed the like")
+        }else{
+            print("Error: could not dislike the review")
+        }
+        
+    }
 }
