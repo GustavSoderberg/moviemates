@@ -44,12 +44,8 @@ struct ReviewSheet: View {
                 
                 VStack {
                     ZStack() {
-                        //                        RoundedRectangle(cornerRadius: 15)
-                        //                            .foregroundColor(Color("accent-color"))
-                        
-                        LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
-                            .mask(RoundedRectangle(cornerRadius: 15, style: .continuous))
-                            .shadow(radius: 10)
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundColor(Color("accent-color"))
                         
                         HStack{
                             VStack{
@@ -64,7 +60,7 @@ struct ReviewSheet: View {
                                 .border(Color.black, width: 1)
                             }
                             
-                            VStack(spacing: 0) {
+                            VStack(spacing: 0){
                                 Text(currentMovie.title ?? "Title")
                                     .multilineTextAlignment(.center)
                                     .padding(.bottom, 10)
@@ -76,39 +72,32 @@ struct ReviewSheet: View {
                                 
                                 
                                 //Score Picker "Slider"
-                                ZStack(alignment: .center) {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .frame(width: 160, height: 35)
-                                        .foregroundColor(Color("secondary-background"))
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .frame(width: 145, height: 25)
+                                        .foregroundColor(.white)
                                     
-                                    GeometryReader { geo in
-                                        Rectangle()
-                                            .frame(width: 145, height: 25)
-                                            .foregroundColor(.white)
-                                        
-                                        Rectangle()
-                                            .frame(width: scoreWidth, height: 25)
-                                            .foregroundColor(.black)
-                                        
-                                        HStack(spacing: 0) {
-                                            ForEach(1..<6, id: \.self){ i in
-                                                ClapperScoreSlider(pos: i, score: $score)
-                                                
-                                                Rectangle()
-                                                    .frame(width: 5, height: 25)
-                                                    .foregroundColor(Color("secondary-background"))
-                                            }
-                                        }
-                                        .onChange(of: score) { _ in
-                                            withAnimation(.easeIn(duration: 0.3)) {
-                                                scoreWidth = CGFloat(score*30)
-                                            }
+                                    Rectangle()
+                                        .frame(width: scoreWidth, height: 25)
+                                        .foregroundColor(.black)
+                                    
+                                    HStack(spacing: 0) {
+                                        ForEach(1..<6, id: \.self){ i in
+                                            ClapperScoreSlider(pos: i, score: $score)
+                                            Rectangle()
+                                                .frame(width: 5, height: 25)
+                                                .foregroundColor(Color("accent-color"))
                                         }
                                     }
-                                    .frame(width: 145, height: 25)
+                                    .onChange(of: score) { _ in
+                                        withAnimation(.easeIn(duration: 0.3)) {
+                                            scoreWidth = CGFloat(score*30)
+                                        }
+                                    }
                                 }
-                                .frame(width: 200)
+                                .frame(width: 145, height: 25)
                             }
+                            .frame(width: 200)
                         }
                         .padding()
                     }
@@ -130,12 +119,10 @@ struct ReviewSheet: View {
                         .padding(.horizontal)
                         
                         ZStack{
-                            LinearGradient(gradient: Gradient(colors: [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
-                                .mask(Rectangle()
-                                    .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                                    .frame(height: 170))
-                                .shadow(radius: 10)
-                            
+                            Rectangle()
+                                .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                                .frame(height: 170)
+                                .foregroundColor(Color("secondary-background"))
                             VStack(spacing: 0){
                                 ScrollView{
                                     TextEditor(text: $review)
@@ -149,38 +136,6 @@ struct ReviewSheet: View {
                         }
                         .padding(.horizontal)
                     }
-                    
-                    //klsjdflksa
-                    VStack(spacing: 0){
-                        ZStack{
-                            LinearGradient(gradient: Gradient(colors: [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
-                                .mask(Rectangle()
-                                    .cornerRadius(15)
-                                    .frame(height: 200))
-                                .shadow(radius: 10)
-                            
-                            VStack(spacing: 0) {
-                                Text("Write your review")
-                                    .font(Font.headline.weight(.bold)) .padding(.vertical, 5)
-                                    .padding(.horizontal)
-                                
-                                Divider()
-                                
-                                ScrollView{
-                                    TextEditor(text: $review)
-                                        .foregroundColor(.white)
-                                        .background(.clear)
-                                        .frame(height: 170)
-                                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                                        .padding(.horizontal)
-                                }
-                                .frame(maxHeight: 170)
-
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
-                    //jhskhfjklsd
                     
                     VStack{
                         
@@ -224,9 +179,9 @@ struct ReviewSheet: View {
                             Text("Leave Review")
                                 .frame(width: 200, height: 50)
                         }.buttonStyle(.plain)
-                            .frame(width: 200, height: 50)
-                            .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
-                            .cornerRadius(10)
+                        .frame(width: 200, height: 50)
+                        .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
+                        .cornerRadius(10)
                         
                         
                     }
@@ -249,7 +204,7 @@ struct ClapperScoreSlider: View {
         Image("clapper_hollow")
             .resizable()
             .frame(width: 25, height: 25)
-            .foregroundColor(Color("secondary-background"))
+            .foregroundColor(Color("accent-color"))
             .onTapGesture {
                 score = pos
             }
@@ -261,4 +216,4 @@ struct ProfileSheet_Previews: PreviewProvider {
         ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil)))
     }
 }
-
+ 

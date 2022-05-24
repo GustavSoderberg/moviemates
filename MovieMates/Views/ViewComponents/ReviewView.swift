@@ -8,27 +8,23 @@
 import SwiftUI
 
 struct ReviewCard: View {
-
-    @AppStorage("darkmode") private var darkmode = true
-
+    
     let review: Review
     var movieFS: MovieFS?
-    
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
-    
-    @Binding var userProfile: User?
-    @Binding var showProfileView : Bool
-    
     let displayName: Bool
     let displayTitle: Bool
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
-                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(Color("secondary-background")))
                 .shadow(radius: 10)
                 .onTapGesture {
                     loadMovie(id: String(review.movieId))
@@ -36,7 +32,7 @@ struct ReviewCard: View {
                 }
             
             VStack(spacing: 0) {
-                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
+                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle)
                     .padding(.horizontal)
                     .padding(.bottom, 5)
                 HStack(alignment: .top, spacing: 0) {
@@ -68,7 +64,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140)
+                            ReviewTextView(reviewText: review.reviewText)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -77,7 +73,6 @@ struct ReviewCard: View {
                     .padding(.horizontal, 5)
                 }
                 Divider()
-                    .background(darkmode ? .black : .white)
                     .padding(.bottom, 5)
                 ReviewTab(review: review)
                     .padding(.horizontal)
@@ -105,7 +100,12 @@ struct ReviewCard: View {
 
 
 struct ReviewInfo: View {
-
+    
+    let review: Review
+    let displayName: Bool
+    let displayTitle: Bool
+    @State var fullText = false
+    @State var lineLimit = 3
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
     
@@ -119,8 +119,6 @@ struct ReviewTopView: View {
     let review: Review
     let displayName: Bool
     let displayTitle: Bool
-    @Binding var showProfileView: Bool
-    @Binding var userProfile: User?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -135,21 +133,24 @@ struct ReviewTopView: View {
             .frame(width: 50, height: 50, alignment: .center)
             .cornerRadius(25)
             .onTapGesture {
-                loadProfile()
+                //Go to profile
             }
             
             VStack(alignment: .leading, spacing: 5) {
-                HStack(alignment: .top) {
+                HStack {
                     if displayName {
                         Text(um.getUser(id: review.authorId).username)
-                            .font(Font.system(size: 20).italic())
-                            .onTapGesture {
-                            loadProfile()
-                        }
+
+//                            .onTapGesture {
+//                                print("CLICK")
+//                            userProfile = um.getUser(id: review.authorId)
+//                                print(userProfile!.username)
+//                            um.refresh += 1
+//                            showProfileView = true
+//                        }
 
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
-                            .font(Font.headline.weight(.bold))
                     }
                     Spacer()
                     Text(formatDate(date: review.timestamp))
@@ -158,7 +159,6 @@ struct ReviewTopView: View {
                 
                 if displayTitle && displayName {
                     Text(um.getMovie(movieID: String(review.movieId))!.title)
-                        .font(Font.headline.weight(.bold))
 
                 } else {
                     ClapperLine(review: review)
@@ -166,25 +166,12 @@ struct ReviewTopView: View {
             }
         }
     }
-    
-    func loadProfile() {
-        userProfile = um.getUser(id: review.authorId)
-        um.refresh += 1
-        showProfileView = true
-    }
 }
 
 struct ReviewTextView: View {
-    var reviewText: String
-    var heightConstant: CGFloat
-    @State var height: CGFloat
+    let reviewText: String
     @State var fullText = false
-    
-    init(reviewText: String, heightConstant: CGFloat) {
-        self.reviewText = reviewText
-        self.heightConstant = heightConstant
-        height = heightConstant
-    }
+    @State var lineLimit = 3
     
     var body: some View {
         ZStack(alignment: .topLeading){
@@ -194,17 +181,17 @@ struct ReviewTextView: View {
             
             Text(reviewText)
                 .font(.system(size: 15))
-                .frame(height: height, alignment: .topLeading)
+                .lineLimit(lineLimit)
                 .padding(5)
         }
         .onTapGesture {
             withAnimation() {
                 if !fullText {
                     fullText = true
-                    height = .infinity
+                    lineLimit = .max
                 } else {
                     fullText = false
-                    height = heightConstant
+                    lineLimit = 3
                 }
             }
         }
@@ -235,12 +222,10 @@ struct ReviewTab: View {
                 }
             }
             Spacer()
-
-            HStack(spacing: 0) {
-                Text("2")
-                    .font(.system(size: 12))
-                LikeButton()
-
+            VStack(spacing: 0) {
+                LikeButton(review: $review)
+//                        Text("2")
+//                            .font(.system(size: 12))
             }
         }
     }
