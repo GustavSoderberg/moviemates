@@ -112,7 +112,7 @@ class ReviewManager : ObservableObject {
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String]() , timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             
@@ -137,7 +137,7 @@ class ReviewManager : ObservableObject {
         }
         else {
             
-            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String](), timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             reviews.append(review)
@@ -164,7 +164,7 @@ class ReviewManager : ObservableObject {
             }
         }
         
-        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", likes: [""], timestamp: Date.now)
     }
     
     func getMovieFS(movieId: String) -> MovieFS? {
@@ -175,6 +175,9 @@ class ReviewManager : ObservableObject {
             }
         }
         return nil
-    } 
+    }
+    
+    
+    
 }
 
