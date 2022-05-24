@@ -11,6 +11,7 @@ struct LikeButton: View {
     @State var scale: CGFloat = 1
     @State var opacity = 0.0
     @State var isLiked = false
+    @State var likeCounter = 0
     
     var body: some View {
         ZStack{
@@ -24,6 +25,8 @@ struct LikeButton: View {
         
         }.font(.system(size: 25))
             .onTapGesture {
+                likeCounter += 1
+                print(likeCounter)
                 withAnimation{
                     self.isLiked.toggle()
                 }
@@ -34,8 +37,8 @@ struct LikeButton: View {
     
 }
 
-struct LikeButton_Previews: PreviewProvider {
-    static var previews: some View {
-        LikeButton()
-    }
-}
+//struct LikeButton_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LikeButton()
+//    }
+//}
