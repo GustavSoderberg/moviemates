@@ -166,14 +166,14 @@ struct ReviewTopView: View {
             VStack(alignment: .leading) {
                 HStack {
                     if displayName {
-                        Text(um.getUser(id: review.authorId).username)
-                            .onTapGesture {
-                                print("CLICK")
-                            userProfile = um.getUser(id: review.authorId)
-                                print(userProfile!.username)
-                            um.refresh += 1
-                            showProfileView = true
-                        }
+//                        Text(um.getUser(id: review.authorId).username)
+//                            .onTapGesture {
+//                                print("CLICK")
+//                            userProfile = um.getUser(id: review.authorId)
+//                                print(userProfile!.username)
+//                            um.refresh += 1
+//                            showProfileView = true
+//                        }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                     }
