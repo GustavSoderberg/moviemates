@@ -16,6 +16,7 @@ struct Review: Identifiable, Codable, Hashable {
     let reviewText: String
     let whereAt: String
     let withWho: String
+    let likes: [String]
     let timestamp: Date
     
 }

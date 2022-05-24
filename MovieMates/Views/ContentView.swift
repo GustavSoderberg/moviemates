@@ -13,13 +13,12 @@ var um = UserManager()
 var fm = FirestoreManager()
 var rm = ReviewManager()
 
-enum Status {
-    case Loading, WelcomeView, HomeView
-}
 
 struct ContentView: View {
     
+    @EnvironmentObject var statusController: StatusController
     @ObservedObject var uw = um
+    
     @State var viewShowing: Status = .Loading
     @State private var selection = 2
     @State var text = ""
@@ -32,15 +31,11 @@ struct ContentView: View {
     
     var body: some View {
         
-        
         VStack {
             
-            
-            
-            switch self.viewShowing {
+            switch statusController.viewShowing {
                 
             case .Loading:
-                
                 
                 ZStack{
                     Color("background")
@@ -55,38 +50,37 @@ struct ContentView: View {
                         ProgressView("Checking if currentUser exists")
                             .onAppear {
                                 if um.currentUser != nil {
-                                    viewShowing = .HomeView
+                                    statusController.viewShowing = .HomeView
                                 }
                                 else {
-                                    viewShowing = .WelcomeView
+                                    statusController.viewShowing = .WelcomeView
                                 }
                                 
                             }
-                        
                     }
                 }
                 
             case .WelcomeView:
-                WelcomeView(viewShowing: $viewShowing)
+                WelcomeView()
                 
             case .HomeView:
                 
                 TabView(selection: $selection) {
-                    ProfileView(user: um.currentUser!, viewShowing: $viewShowing)
+                    ProfileView(user: um.currentUser!)
                         .tabItem {
                             Image(systemName: "person.fill")
                             Text("Profile")
                         }
                         .tag(1)
                     
-                    HomeView(viewShowing: $viewShowing)
+                    HomeView()
                         .tabItem {
                             Image(systemName: "house")
                             Text("Home")
                         }
                         .tag(2)
                     
-                    SearchView(text: $text, viewShowing: $viewShowing)
+                    SearchView(text: $text)
                         .tabItem {
                             Image(systemName: "magnifyingglass")
                             Text("Search")
@@ -96,6 +90,5 @@ struct ContentView: View {
                 }
             }
         }
-        
     } 
 }

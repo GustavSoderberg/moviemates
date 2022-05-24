@@ -14,20 +14,21 @@ enum Sheet {
 }
 
 struct MovieViewController: View {
+    
     @State var sheetShowing: Sheet = .MovieView
     @State var movie: Movie
     @State var movieFS: MovieFS?
     @State var isUpcoming: Bool
-    @Binding var showMovieView: Bool
-    @Binding var viewShowing: Status
     
+    @Binding var showMovieView: Bool
+
     var body: some View {
         
         VStack {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(viewShowing: $viewShowing ,sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
+                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -46,7 +47,7 @@ struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
     @ObservedObject var orm = rm
     
-    @Binding var viewShowing: Status
+    
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
@@ -72,9 +73,6 @@ struct MovieView: View {
     
     @State var index = "friends"
     @State var watchlist = false
-    
-    @State var cacheGlobal: Float = 0.0
-    @State var cacheFriends: Float = 0.0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -200,11 +198,16 @@ struct MovieView: View {
                                 Text("GLOBAL")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                    if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                        
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
                                         }
+                                        .onAppear {
+                                            orm.cacheGlobal = 0
+                                        }
                                     } else {
+                                        
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
                                         }
@@ -224,7 +227,7 @@ struct MovieView: View {
                                 Text("FRIENDS")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    if rm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
+                                    if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
                                         ForEach(1..<6) { i in
                                             ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
                                         }
@@ -246,12 +249,6 @@ struct MovieView: View {
                 }
                 
                 Divider()
-                Button {
-                    rm.refresh += 1
-                } label: {
-                    Text("Hej")
-                }
-                
                 
                 VStack(spacing:0){
                     ZStack{
@@ -285,7 +282,7 @@ struct MovieView: View {
                         case "friends":
                             if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
-                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
 
                                 }
                             } else {
@@ -293,9 +290,9 @@ struct MovieView: View {
                             }
                             
                         case "global":
-                            if let movieFS = movieFS {
+                            if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
-                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -303,7 +300,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
                             }
                         }
                     }
@@ -319,7 +316,7 @@ struct MovieView: View {
         }
         .sheet(isPresented: $showProfileView) {
             if let userProfile = userProfile {
-                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             } else {
                 Text("NIL")
@@ -412,9 +409,9 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-            rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
-            rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
-            rm.refresh += 1
+                    rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+                    rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
+                    rm.refresh += 1
         }
     }
 }

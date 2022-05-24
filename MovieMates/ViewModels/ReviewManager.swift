@@ -85,10 +85,14 @@ class ReviewManager : ObservableObject {
     func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
         let allReviews = getReviews(movieId: movieId, onlyFriends: onlyFriends)
         var totalScore: Int = 0
-        for review in allReviews {
-            totalScore += review.rating
+        if allReviews.count == 0 {
+            return 0.0
+        } else {
+            for review in allReviews {
+                totalScore += review.rating
+            }
+            print("number of ratings: \(allReviews.count)")
         }
-        print("number of ratings: \(allReviews.count)")
         return round(Float(totalScore)/Float(allReviews.count) * 10) / 10.0
     }
     
@@ -112,7 +116,7 @@ class ReviewManager : ObservableObject {
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
-            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String]() , timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             
@@ -137,7 +141,7 @@ class ReviewManager : ObservableObject {
         }
         else {
             
-            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, timestamp: Date.now)
+            let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String](), timestamp: Date.now)
             
             var reviews = getReviews(movieId: movie.id, onlyFriends: false)
             reviews.append(review)
@@ -164,7 +168,7 @@ class ReviewManager : ObservableObject {
             }
         }
         
-        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", timestamp: Date.now)
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", likes: [""], timestamp: Date.now)
     }
     
     func getMovieFS(movieId: String) -> MovieFS? {
@@ -175,6 +179,9 @@ class ReviewManager : ObservableObject {
             }
         }
         return nil
-    } 
+    }
+    
+    
+    
 }
 

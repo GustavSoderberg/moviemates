@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @Binding var text: String
-    @Binding var viewShowing: Status
+    
     @State var index = "movies"
     @State private var isEditing = false
     
@@ -32,11 +32,11 @@ struct SearchView: View {
                 
                 switch index {
                 case "movies":
-                    moviesAndSeriesView(viewShowing: $viewShowing)
+                    moviesAndSeriesView()
                 case "users":
-                    usersView(viewShowing: $viewShowing)
+                    usersView()
                 default:
-                    moviesAndSeriesView(viewShowing: $viewShowing)
+                    moviesAndSeriesView()
                 }
             }
         }
@@ -46,7 +46,7 @@ struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
-    @Binding var viewShowing: Status
+    
     
     var body: some View{
         VStack{
@@ -63,7 +63,7 @@ struct moviesAndSeriesView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List(viewModel.movies, id: \.id) { movie in
-                    MovieCardView(viewShowing: $viewShowing, movie: movie).listRowBackground(Color("background"))
+                    MovieCardView(movie: movie).listRowBackground(Color("background"))
                         .onAppear(){
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
@@ -83,7 +83,7 @@ struct moviesAndSeriesView: View {
 struct usersView: View {
     @AppStorage("darkmode") private var darkmode = true
     
-    @Binding var viewShowing: Status
+    
     @ObservedObject var oum = um
     @State var showProfileView = false
     @State var index1 = 0
@@ -132,7 +132,7 @@ struct usersView: View {
             }
             
         }.sheet(isPresented: $showProfileView) {
-            ProfileView(user: oum.listOfUsers[self.index1], viewShowing: $viewShowing)
+            ProfileView(user: oum.listOfUsers[self.index1])
                 .preferredColorScheme(darkmode ? .dark : .light)
         }
     }
