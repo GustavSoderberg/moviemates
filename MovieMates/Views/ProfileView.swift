@@ -435,6 +435,9 @@ struct ReviewCardProfileView: View {
 struct FriendListView: View{
     @AppStorage("darkmode") private var darkmode = false
     
+    @State var showProfileView = false
+    @State var userProfile: User?
+    
     var user: User
     
     var body: some View {
@@ -478,10 +481,21 @@ struct FriendListView: View{
                     }
                     .padding()
                 }
+                
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
                 .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
+                .onTapGesture {
+                    userProfile = userToDisplay
+                    um.refresh += 1
+                    showProfileView = true
+                }
             }
             
+        }.sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            }
         }
     }
     
