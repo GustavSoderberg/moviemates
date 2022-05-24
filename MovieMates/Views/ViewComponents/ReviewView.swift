@@ -166,6 +166,14 @@ struct ReviewTopView: View {
         }
         .frame(height: 60)
     }
+    
+    func loadProfile() {
+        userProfile = um.getUser(id: review.authorId)
+        um.refresh += 1
+        showProfileView = true
+    }
+    //Test
+
 }
 
 struct ReviewTextView: View {
