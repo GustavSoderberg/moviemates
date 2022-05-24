@@ -41,6 +41,7 @@
 		55738AC72823D2E300A5ED38 /* MovieCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55738AC62823D2E300A5ED38 /* MovieCardView.swift */; };
 		5582BB9628351D7A00F84219 /* ReviewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5582BB9528351D7A00F84219 /* ReviewListViewModel.swift */; };
 		55D7B82228294A0900D7F31D /* MovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7B82128294A0900D7F31D /* MovieViewModel.swift */; };
+		55EA25F1283CDACA00E157DE /* StatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA25F0283CDACA00E157DE /* StatusController.swift */; };
 		B54891982827B44A00B9ABF4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B54891972827B44A00B9ABF4 /* Alamofire */; };
 		B548919A2827F68500B9ABF4 /* MovieListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54891992827F68500B9ABF4 /* MovieListViewModel.swift */; };
 		B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B548919B2827F97F00B9ABF4 /* SearchBar.swift */; };
@@ -80,6 +81,7 @@
 		55738AC62823D2E300A5ED38 /* MovieCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCardView.swift; sourceTree = "<group>"; };
 		5582BB9528351D7A00F84219 /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
 		55D7B82128294A0900D7F31D /* MovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewModel.swift; sourceTree = "<group>"; };
+		55EA25F0283CDACA00E157DE /* StatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusController.swift; sourceTree = "<group>"; };
 		B54891992827F68500B9ABF4 /* MovieListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewModel.swift; sourceTree = "<group>"; };
 		B548919B2827F97F00B9ABF4 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		B548919D282800B000B9ABF4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			children = (
 				3FC3D1B42823C9970005E8BD /* FirestoreManager.swift */,
 				B548919D282800B000B9ABF4 /* Constants.swift */,
+				55EA25F0283CDACA00E157DE /* StatusController.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				55738AC32823CED200A5ED38 /* Review.swift in Sources */,
 				1F967102283B7F14008228AA /* ReviewView.swift in Sources */,
 				1FABF9012822B734006F5259 /* MovieView.swift in Sources */,
+				55EA25F1283CDACA00E157DE /* StatusController.swift in Sources */,
 				3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */,
 				55738AC52823CF6F00A5ED38 /* Movie.swift in Sources */,
 				B54891A9282B15F700B9ABF4 /* SearchViewInfo.swift in Sources */,

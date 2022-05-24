@@ -9,8 +9,6 @@ import SwiftUI
 
 struct ReviewCard: View {
     
-    @Binding var viewShowing: Status
-    
     let review: Review
     var movieFS: MovieFS?
     @Binding var currentMovie: Movie?
@@ -79,7 +77,7 @@ struct ReviewCard: View {
                     }
                     
                     VStack(spacing: 0) {
-                        ReviewInfo(viewShowing: $viewShowing, review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
+                        ReviewInfo(review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
                         Spacer()
                     }
                 }
@@ -114,8 +112,6 @@ struct ReviewCard: View {
 
 struct ReviewInfo: View {
     
-    @Binding var viewShowing: Status
-    
     let review: Review
     let displayName: Bool
     let displayTitle: Bool
@@ -123,9 +119,6 @@ struct ReviewInfo: View {
     @State var lineLimit = 3
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
-    
-//    @State var userProfile: User? = nil
-//    @State var showProfileView = false
     
     var body: some View {
         HStack(alignment: .top) {
@@ -166,14 +159,12 @@ struct ReviewTopView: View {
             VStack(alignment: .leading) {
                 HStack {
                     if displayName {
-//                        Text(um.getUser(id: review.authorId).username)
-//                            .onTapGesture {
-//                                print("CLICK")
-//                            userProfile = um.getUser(id: review.authorId)
-//                                print(userProfile!.username)
-//                            um.refresh += 1
-//                            showProfileView = true
-//                        }
+                        Text(um.getUser(id: review.authorId).username)
+                            .onTapGesture {
+                            userProfile = um.getUser(id: review.authorId)
+                            rm.refresh += 1
+                            showProfileView = true
+                        }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                     }
