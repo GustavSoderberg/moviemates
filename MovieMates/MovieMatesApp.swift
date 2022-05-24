@@ -11,6 +11,7 @@ import Firebase
 @main
 struct MovieMatesApp: App {
     @AppStorage("darkmode") private var darkmode = true
+    @StateObject var statusController = StatusController()
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
@@ -19,6 +20,7 @@ struct MovieMatesApp: App {
             ContentView()
 
                 .environment(\.colorScheme, darkmode ? .dark : .light)
+                .environmentObject(statusController)
 
         }
     }

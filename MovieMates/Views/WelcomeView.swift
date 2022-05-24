@@ -13,8 +13,8 @@ var showLoginViewGlobal = Auth.auth().currentUser == nil ? true : false
 
 struct WelcomeView: View {
     @AppStorage("darkmode") private var darkmode = true
+    @EnvironmentObject var statusController: StatusController
     
-    @Binding var viewShowing: Status
     @State var showLoginView = showLoginViewGlobal
     var welcomeClapperArray = [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]
     var backgroundView: AnyView = AnyView(Color.white)
@@ -62,13 +62,13 @@ struct WelcomeView: View {
                         
                         if um.login() {
                             
-                            viewShowing = .HomeView
+                            statusController.viewShowing = .HomeView
                             
                         }
                         else {
                             
                             um.register(username: username)
-                            viewShowing = .HomeView
+                            statusController.viewShowing = .HomeView
                             
                         }
                         
@@ -101,7 +101,7 @@ struct WelcomeView: View {
             
         }.sheet(isPresented: $showLoginView, onDismiss: {
             
-            viewShowing = um.login() ? .HomeView : .WelcomeView
+            statusController.viewShowing = um.login() ? .HomeView : .WelcomeView
             
         }) {
             
@@ -110,6 +110,7 @@ struct WelcomeView: View {
                 .ignoresSafeArea()
             
         }
+        .environmentObject(statusController)
 
     }
 }

@@ -11,6 +11,7 @@ import FirebaseAuth
 
 struct ProfileView: View {
     @AppStorage("darkmode") private var darkmode = true
+    @EnvironmentObject var statusController: StatusController
     
     @State var index = "reviews"
     @State private var showSettingsSheet = false
@@ -18,7 +19,7 @@ struct ProfileView: View {
     
     @State private var addFriend = false
     var user: User
-    @Binding var viewShowing: Status
+    
     @State var test = 0
     @ObservedObject var ooum = um
     
@@ -46,7 +47,7 @@ struct ProfileView: View {
                                 Button {
                                     //ooum.notification = true
                                     showingNotificationSheet = true
-                                    viewShowing = .Loading
+                                    statusController.viewShowing = .Loading
                                 } label: {
                                     Image(systemName: um.currentUser!.frequests.count > 0 ? "bell.badge" : "bell")
                                         .resizable()
@@ -129,15 +130,15 @@ struct ProfileView: View {
                                     .frame(width: 25, height: 25)
                                     .padding(.trailing, 20)
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
-                                if Auth.auth().currentUser == nil { viewShowing = .WelcomeView }
+                                if Auth.auth().currentUser == nil { statusController.viewShowing = .WelcomeView }
                             }) {
                                 //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
-                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user, viewShowing: $viewShowing)
+                                SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user)
                                     .preferredColorScheme(darkmode ? .dark : .light)
                                 
                             }
                         }
-                    }
+                    }.environmentObject(statusController)
                     
                 }
                 Spacer()
@@ -168,20 +169,19 @@ struct ProfileView: View {
                 
                 switch index {
                 case "reviews":
-                    UserReviewView(user: user, viewShowing: $viewShowing)
+                    UserReviewView(user: user)
                 case "watchlist":
-                    WatchListView(user: user, viewShowing: $viewShowing)
+                    WatchListView(user: user)
                 case "friends":
                     FriendListView(user: user)
                 case "about":
                     AboutMeView(user: user)
                 default:
-                    UserReviewView(user: user, viewShowing: $viewShowing)
+                    UserReviewView(user: user)
                 }
                 
                 Spacer()
             }
-            .padding(.top)
         }
     }
     
@@ -196,8 +196,6 @@ struct UserReviewView: View {
     @State var showProfileView = false
     @State var userProfile: User? = nil
     
-    @Binding var viewShowing: Status
-    
     @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     
     var body: some View{
@@ -205,14 +203,14 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
-                        ReviewCard(viewShowing: $viewShowing, review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true)
+                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, displayName: false, displayTitle: true, showProfileView: $showProfileView, userProfile: $userProfile)
 
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
                     if let currentMovie = currentMovie {
-                        MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView, viewShowing: $viewShowing)
+                        MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView)
 
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
@@ -223,7 +221,7 @@ struct UserReviewView: View {
         })
         .sheet(isPresented: $showProfileView) {
             if let userProfile = userProfile {
-                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
             
@@ -236,7 +234,6 @@ struct WatchListView: View {
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     let user: User
     @State var movieWatchlist = [Movie]()
-    @Binding var viewShowing: Status
     
     var body: some View{
         
@@ -246,7 +243,7 @@ struct WatchListView: View {
             ScrollView{
                 
                 ForEach(movieWatchlist, id: \.self) { movie in
-                    MovieCardView(viewShowing: $viewShowing, movie: movie)
+                    MovieCardView(movie: movie)
                     
                 }
                 
@@ -333,8 +330,113 @@ struct AboutMeView: View {
     }
 }
 
+
+struct ReviewCardProfileView: View {
+    
+    let review: Review
+    var movieFS: MovieFS?
+    @Binding var presentMovie: Movie?
+    @Binding var showMovieView : Bool
+    
+    @State private var isExpanded: Bool = false
+    
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(Color("secondary-background"))
+            HStack(alignment: .top){
+                if let movie = movieFS {
+                    
+                    AsyncImage(url: movie.photoUrl){ image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 100, height: 150, alignment: .center)
+                    .border(Color.black, width: 3)
+                    .onTapGesture {
+                        
+                        print("click!")
+                        loadMovie(id: movie.id!)
+                        showMovieView = true
+                        //um.refresh += 1
+                    }
+                    
+                    VStack(alignment: .leading){
+                        
+                        HStack{
+                            Spacer()
+                            Text(formatDate(date: review.timestamp))
+                                .font(.system(size: 12))
+                        }
+                        
+                        Text(movie.title)
+                            .font(.title2)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(1)
+                        
+                        Text("\(review.rating)")
+                            .padding(.bottom, 4)
+                        
+                        Text(review.reviewText)
+                            .font(.system(size: 15))
+                            .lineLimit(isExpanded ? nil : 4)
+                            .onTapGesture {
+                                isExpanded.toggle()
+                            }
+                        Spacer()
+                        HStack(alignment: .bottom){
+                            Spacer()
+                            Text("10000+")
+                                .foregroundColor(.red)
+                            LikeButton()
+                        }
+                    }.padding(.leading, 1)
+                }
+            }
+            .padding()
+        }
+    }
+    func loadMovie(id: String) {
+        presentMovie = nil
+        movieViewModel.fetchMovie(id: Int(id)!) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let movie):
+                    presentMovie = movie
+                }
+            }
+        }
+    }
+}
+
+
+
+//private var myReviews = [
+//    Review(movieId: 414, username: "Sarah", title: "The Batman", rating: "5/5", reviewText: "Siken film! jag grät, jag skrek, jag belv en helt ny människa!"),
+//    Review(movieId: 414906, username: "Sarah", title: "The Duckman", rating: "4/5", reviewText: "Jag gillar ankor så denna film var helt perfekt för mig! Dock så var det ett himla kvackande i biosalongen."),
+//    Review(movieId: 272, username: "Sarah", title: "The Birdman", rating: "1/5", reviewText: "Trodde filmen skulle handla om en fågel som ville bli människa, men det var ju helt fel! Den handlar om en man som trodde han var en fågel. Falsk marknadsföring!"),
+//    Review(movieId: 406759, username: "Sarah", title: "The Spiderman", rating: "5/5", reviewText: "Jag somnade efter 30min och vaknade strax innan slutet. Bästa tuppluren jag haft på länge! Rekomenderas starkt!")
+//]
+
+//private var watchlist = [
+//    Movie(id: 1, adult: false, backdropPath: nil, genreIDS: nil, originalLanguage: nil, originalTitle: "spider man", overview: "fasdfdsafasdf", releaseDate: nil, posterPath: nil, popularity: nil, title: "Spooder-Man", video: nil, voteAverage: nil, voteCount: nil)
+////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
+////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
+////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
+//]
+
 struct FriendListView: View{
     @AppStorage("darkmode") private var darkmode = false
+    
+    @State var showProfileView = false
+    @State var userProfile: User?
     
     var user: User
     
@@ -379,10 +481,23 @@ struct FriendListView: View{
                     }
                     .padding()
                 }
+                
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
                 .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
+                .onTapGesture {
+                    if user.id == um.currentUser!.id {
+                        userProfile = userToDisplay
+                        um.refresh += 1
+                        showProfileView = true
+                    }
+                }
             }
             
+        }.sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            }
         }
     }
     
