@@ -32,7 +32,7 @@ struct ReviewCard: View {
                 }
             
             VStack(spacing: 0) {
-                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle)
+                ReviewTopView(review: review, displayName: displayName, displayTitle: displayTitle, showProfileView: $showProfileView, userProfile: $userProfile)
                     .padding(.horizontal)
                     .padding(.bottom, 5)
                 HStack(alignment: .top, spacing: 0) {
@@ -111,6 +111,8 @@ struct ReviewTopView: View {
     let review: Review
     let displayName: Bool
     let displayTitle: Bool
+    @Binding var showProfileView: Bool
+    @Binding var userProfile: User?
     
     var body: some View {
         HStack(alignment: .top) {
@@ -125,7 +127,7 @@ struct ReviewTopView: View {
             .frame(width: 50, height: 50, alignment: .center)
             .cornerRadius(25)
             .onTapGesture {
-                //Go to profile
+                loadProfile()
             }
             
             VStack(alignment: .leading, spacing: 5) {
@@ -170,6 +172,7 @@ struct ReviewTopView: View {
     func loadProfile() {
         userProfile = um.getUser(id: review.authorId)
         um.refresh += 1
+        rm.refresh += 1
         showProfileView = true
     }
     //Test
