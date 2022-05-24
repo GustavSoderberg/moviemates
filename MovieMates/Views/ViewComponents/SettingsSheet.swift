@@ -13,7 +13,7 @@ struct SettingsSheet: View {
     
     @Binding var showSettingsSheet: Bool
     var user: User
-    @Binding var viewShowing: Status
+    
     
     @State var isEditingUsername = false
     @State var isEditingBiography = false
