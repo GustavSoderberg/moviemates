@@ -19,6 +19,7 @@ struct MovieViewController: View {
     @State var movieFS: MovieFS?
     @State var isUpcoming: Bool
     @Binding var showMovieView: Bool
+    @Binding var viewShowing: Status
     
     var body: some View {
         
@@ -26,7 +27,7 @@ struct MovieViewController: View {
             switch self.sheetShowing {
                 
             case .MovieView:
-                MovieView(sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
+                MovieView(viewShowing: $viewShowing ,sheetShowing: $sheetShowing, currentMovie: $movie, showMovieView: $showMovieView, movieFS: $movieFS, isUpcoming: $isUpcoming)
                 
             case .ReviewSheet:
                 ReviewSheet(sheetShowing: $sheetShowing, currentMovie: $movie)
@@ -43,12 +44,17 @@ struct MovieViewController: View {
 
 struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
+    @ObservedObject var orm = rm
     
+    @Binding var viewShowing: Status
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
     @Binding var movieFS: MovieFS?
     @Binding var isUpcoming: Bool
+    
+    @State var userProfile: User? = nil
+    @State var showProfileView = false
     
     @State var friendsReviews = [Review]()
     
@@ -92,11 +98,11 @@ struct MovieView: View {
                         }
                     Spacer()
                     if isUpcoming != true {
-                    Text("Review")
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            sheetShowing = .ReviewSheet
-                        }
+                        Text("Review")
+                            .foregroundColor(.blue)
+                            .onTapGesture {
+                                sheetShowing = .ReviewSheet
+                            }
                     }
                 }
                 .padding(.horizontal)
@@ -144,7 +150,7 @@ struct MovieView: View {
                             watchlistText = "Add to Watchlist"
                             um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
                             onWatchlist =  false
-
+                            
                         }
                     } label: {
                         Text("\(watchlistText)")
@@ -158,7 +164,7 @@ struct MovieView: View {
                     }
                     .onAppear {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
-                            watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
+                        watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                     }
                     Spacer()
                 }
@@ -191,8 +197,19 @@ struct MovieView: View {
                                 Text("GLOBAL")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: $ratingGlobalScore)
+                                    if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                        
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
+                                        }
+                                        .onAppear {
+                                            orm.cacheGlobal = 0
+                                        }
+                                    } else {
+                                        
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
+                                        }
                                     }
                                 }
                                 .frame(height: 20)
@@ -209,8 +226,14 @@ struct MovieView: View {
                                 Text("FRIENDS")
                                 Spacer()
                                 HStack(spacing: 2) {
-                                    ForEach(1..<6) { i in
-                                        ReviewClapper(pos: i, score: $ratingLocalScore)
+                                    if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
+                                        }
+                                    } else {
+                                        ForEach(1..<6) { i in
+                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
+                                        }
                                     }
                                 }
                                 .frame(height: 20)
@@ -232,7 +255,7 @@ struct MovieView: View {
                             HStack{
                                 Text("REVIEWS")
                                     .font(Font.headline.weight(.bold))
-                                    //.foregroundColor(.white)
+                                //.foregroundColor(.white)
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -248,7 +271,7 @@ struct MovieView: View {
                             .pickerStyle(SegmentedPickerStyle())
                             .colorMultiply(Color("accent-color"))
                         }
-                
+                        
                     }
                     
                     gap(height: 5)
@@ -257,17 +280,18 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(friendsReviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+
                                 }
                             } else {
                                 Text("No Reviews")
                             }
                             
                         case "global":
-                            if let movieFS = movieFS {
-                                ForEach(movieFS.reviews) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false)
+                            if movieFS != nil {
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
+                                    ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true), displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -275,7 +299,7 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false)
+                                ReviewCard(viewShowing: $viewShowing, review: review, currentMovie: .constant(nil), showMovieView: .constant(true),displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
                             }
                         }
                     }
@@ -286,6 +310,15 @@ struct MovieView: View {
                         }
                     }
                 }
+            }
+            
+        }
+        .sheet(isPresented: $showProfileView) {
+            if let userProfile = userProfile {
+                ProfileView(user: userProfile, viewShowing: $viewShowing)
+                    .preferredColorScheme(darkmode ? .dark : .light)
+            } else {
+                Text("NIL")
             }
             
         }
@@ -311,14 +344,14 @@ struct MovieView: View {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
-//        .onChange(of: sheetShowing, perform: { _ in
-//            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
-//            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
-//
-//            if ratingLocalScore.hasSuffix("0") {
-//                ratingLocalScore = String(ratingLocalScore.prefix(1))
-//            }
-//        })
+        //        .onChange(of: sheetShowing, perform: { _ in
+        //            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
+        //            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
+        //
+        //            if ratingLocalScore.hasSuffix("0") {
+        //                ratingLocalScore = String(ratingLocalScore.prefix(1))
+        //            }
+        //        })
     }
 }
 
@@ -335,8 +368,9 @@ func getFriendsReviews(movieFS: MovieFS) -> [Review]{
 
 struct ReviewClapper: View {
     var pos : Int
-    @Binding var score : String
+    @State var score : String
     @State var width : Float = 20
+    @State var movieId: Int
     
     var body: some View {
         GeometryReader { geo in
@@ -364,16 +398,29 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
+            
         })
+        .onChange(of: score) { newValue in
+            if Int(score.prefix(1)) ?? 0 >= pos {
+                width = 20
+            } else if ((Int(score.prefix(1)) ?? 0) + 1) == pos {
+                width = ((Float(score.prefix(3)) ?? 0) - (Float(score.prefix(1)) ?? 0))*20
+            } else {
+                width = 0
+            }
+                    rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+                    rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
+                    rm.refresh += 1
+        }
     }
 }
 
 
 //Preview!!
-struct MovieView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
-    }
-}
+//struct MovieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
+//    }
+//}
 
- 
+

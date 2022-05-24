@@ -43,6 +43,12 @@ class FirestoreManager {
                 
                 _ = um.login()
                 
+                rm.cacheGlobal = Float.random(in: 10.0 ..< 20.0)
+                rm.cacheFriends = Float.random(in: 10.0 ..< 20.0)
+                print(rm.cacheGlobal)
+                print(rm.cacheFriends)
+                rm.refresh += 1
+                
                 um.refresh += 1
                 um.isLoading = false
                 
@@ -240,6 +246,7 @@ class FirestoreManager {
                              "reviewText" : review.reviewText,
                              "whereAt" : review.whereAt,
                              "withWho" : review.withWho,
+                             "likes" : review.likes,
                              "timestamp" : review.timestamp] as [String : Any]
             newArray.append(newReview)
             
@@ -297,5 +304,28 @@ class FirestoreManager {
         let average = rm.getAverageRating(movieId: movieId, onlyFriends: false)
         print("average rating: \(average)")
         db.collection("movies").document("\(movieId)").updateData(["rating" : average])
+    }
+    
+    
+    func saveLikeToFirestore(review: Review, user: User) -> Bool{
+        
+        db.collection("movies").document("\(review.movieId)")
+            .updateData([
+            
+                "likes": FieldValue.arrayUnion([user.id!])
+
+            ])
+        return true
+    }
+    
+    func removeLikeFromFirestore(review: Review, user: User) ->  Bool{
+        
+        db.collection("movies").document("\(review.movieId)")
+            .updateData([
+            
+                "likes": FieldValue.arrayRemove([user.id!])
+
+            ])
+        return true
     }
 }
