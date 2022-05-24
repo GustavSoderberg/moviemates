@@ -485,9 +485,11 @@ struct FriendListView: View{
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
                 .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
                 .onTapGesture {
-                    userProfile = userToDisplay
-                    um.refresh += 1
-                    showProfileView = true
+                    if user.id == um.currentUser!.id {
+                        userProfile = userToDisplay
+                        um.refresh += 1
+                        showProfileView = true
+                    }
                 }
             }
             
