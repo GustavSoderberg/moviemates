@@ -23,8 +23,6 @@ struct ProfileView: View {
     @State var test = 0
     @ObservedObject var ooum = um
     
-    
-    
     var body: some View {
         ZStack{
             Color("background")
@@ -54,7 +52,7 @@ struct ProfileView: View {
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
                                         .foregroundColor(um.currentUser!.frequests.count > 0 ? .yellow : .blue)
-                                        
+                                    
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
                                         .preferredColorScheme(darkmode ? .dark : .light)
@@ -67,8 +65,8 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
-                                        
-                                        
+                                    
+                                    
                                 }
                                 
                             }
@@ -204,14 +202,14 @@ struct UserReviewView: View {
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true)
-
+                        
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
                     if let currentMovie = currentMovie {
                         MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView)
-
+                        
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
@@ -224,7 +222,6 @@ struct UserReviewView: View {
                 ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
-            
         }
     }
 }
@@ -246,7 +243,6 @@ struct WatchListView: View {
                     MovieCardView(movie: movie)
                     
                 }
-                
             }
         }.onAppear {
             getMovies()
@@ -267,23 +263,22 @@ struct WatchListView: View {
                     }
                 }
             }
-            
         }
-        
     }
-    
 }
 
 struct AboutMeView: View {
     
     let user: User
     @State var bio = ""
+    @State var genres = [String]()
+    @State var favoriteGenre = "No Reviews"
     
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     init(user: User) {
         UITextView.appearance().backgroundColor = .clear
         self.user = user
-        
     }
     
     var body: some View{
@@ -319,12 +314,50 @@ struct AboutMeView: View {
                         .fill(Color("secondary-background"))
                         .frame(minHeight: 100)
                     
-                    VStack{
-                        Text("about blblblbbababa ska kasokdak ajsjd jiasd jiasdj as bla bla bla ")
-                            .padding()
-                        Spacer()
-                    }
+                    VStack(alignment: .leading) {
+                        
+                        HStack {
+                            VStack(alignment: .leading){
+                                Text("Reviews: ")
+                                Text("Avrg score: ")
+                                Text("Most Reviewed Genre: ")
+                            }.padding(.trailing, 40)
+                                .onTapGesture {
+                                    print(genres)
+                                }
+                            
+                            VStack(alignment: .leading){
+                                Text("\(rm.getUsersReviews(user: user).count)")
+                                Text("\(rm.getUserAverageRating(user: user), specifier: "%.1f")")
+                                Text("\(favoriteGenre)")
+                            }
+                        }
+                    }.padding()
                 }.padding()
+            }
+        }.onAppear{
+            getGenreList()
+        }
+        .onChange(of: genres) { newValue in
+            let countedSet = NSCountedSet(array: genres)
+            let mostFrequent = countedSet.max { countedSet.count(for: $0) <= countedSet.count(for: $1)}
+            favoriteGenre = mostFrequent as! String
+        }
+    }
+    
+    func getGenreList(){
+        for review in rm.getUsersReviews(user: user) {
+            movieViewModel.fetchMovie(id: review.movieId) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let movie):
+                        for genre in movie.genres! {
+                            genres.append(genre.name)
+                        }
+                    }
+                }
             }
         }
     }
@@ -398,9 +431,6 @@ struct FriendListView: View{
             }
         }
     }
-    
-    
-    
 }
 
 struct FriendRequestTestView: View {
@@ -433,10 +463,7 @@ struct FriendRequestTestView: View {
                             Text("Add \(user.username)")
                         }
                     }
-                    
-                    
                 }
-                
             }
             
             Text("Requests:").padding().padding(.top,40)
@@ -452,9 +479,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Deny request from \(request)")
                 }
-                
-                
-                
             }
             
             Text("Friends:").padding().padding(.top,40)
@@ -465,8 +489,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Remove \(friend)")
                 }
-                
-                
             }
             
             Text("Change Username:").padding().padding(.top,40)
@@ -496,4 +518,4 @@ struct FriendRequestTestView: View {
     }
 }
 
- 
+
