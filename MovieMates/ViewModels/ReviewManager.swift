@@ -198,7 +198,6 @@ class ReviewManager : ObservableObject {
                 layerdReviewsArray[posAtLayerdArray].append(newReview)
             }
         }
-        //print(layerdReviewsArray)
         return layerdReviewsArray
     }
 }
