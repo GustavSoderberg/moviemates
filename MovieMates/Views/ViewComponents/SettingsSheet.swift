@@ -20,6 +20,7 @@ struct SettingsSheet: View {
     @State var username = ""
     @State var biography = ""
     @State var index = "friends"
+    @State private var showingAlert = false
     
     var body: some View {
         
@@ -32,8 +33,22 @@ struct SettingsSheet: View {
                     Text("Back")
                         .padding()
                 }
-                
                 Spacer()
+                
+                Button {
+                    um.changeUsername(username: username)
+                    um.updateBiography(biography: biography)
+                    
+                    isEditingUsername = false
+                    isEditingBiography = false
+                    
+                    showSettingsSheet = false
+                } label: {
+                    Text("Save")
+                }
+                
+                
+                
             }
             
             Spacer()
@@ -58,24 +73,6 @@ struct SettingsSheet: View {
                     }
                 
             }
-            
-            HStack {
-                Spacer()
-                Button {
-                    um.changeUsername(username: username)
-                    isEditingUsername = false
-                } label: {
-                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingUsername ? (darkmode ? .white : .black) : .gray )
-                }
-                Button {
-                    username = user.username
-                    isEditingUsername = false
-                } label: {
-                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingUsername ? (darkmode ? .white : .black) : .gray )
-                }
-                
-            }.padding()
-                .padding(.top, -15)
             
             HStack{
                 Text("Change Biography")
@@ -102,23 +99,6 @@ struct SettingsSheet: View {
                 
             }
             
-            HStack {
-                Spacer()
-                Button {
-                    um.updateBiography(biography: biography)
-                    isEditingBiography = false
-                } label: {
-                    Image(systemName: "checkmark").font(.title).foregroundColor(isEditingBiography ? (darkmode ? .white : .black) : .gray )
-                }
-                Button {
-                    biography = user.bio!
-                    isEditingBiography = false
-                } label: {
-                    Image(systemName: "xmark").font(.title).foregroundColor(isEditingBiography ? (darkmode ? .white : .black) : .gray )
-                }
-                
-            }.padding()
-                .padding(.top, -15)
             
         }.padding()
         VStack {
@@ -136,23 +116,35 @@ struct SettingsSheet: View {
             
             Spacer()
             
-            Button {
+            Button("Sign out") {
                 
-                try! Auth.auth().signOut()
-                showSettingsSheet = false
-                
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15, style: .continuous)
-                        .fill(Color("secondary-background"))
-                        .frame(height: 50)
-                    Text("SIGN OUT").font(.headline).foregroundColor(.white)
-                }
+                showingAlert = true
+//
             }
+            .font(.headline)
+            .background(Color("secondary-background"))
+            .foregroundColor(.white)
+            .cornerRadius(15)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .alert("Are you sure you want to sign out?", isPresented: $showingAlert){
+                
+                Button("Yes") {
+                    try! Auth.auth().signOut()
+                    showSettingsSheet = false
+                }
+                Button("No", role: .cancel) {}
+            }
+//        message: {
+//                ZStack {
+//                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+//                        .fill(Color("secondary-background"))
+//                        .frame(height: 50)
+//                    Text("SIGN OUT").font(.headline).foregroundColor(.white)
+//                }
+//            }
             
             
         }
-        .padding()
     }
 }
- 
+
