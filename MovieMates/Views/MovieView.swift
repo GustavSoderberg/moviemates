@@ -14,7 +14,7 @@ enum Sheet {
 }
 
 struct MovieViewController: View {
-    
+    //check MovieView
     @State var sheetShowing: Sheet = .MovieView
     @State var movie: Movie
     @State var movieFS: MovieFS?

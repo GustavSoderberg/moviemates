@@ -10,6 +10,7 @@ import FirebaseAuth
 
 
 struct ProfileView: View {
+    //check HomeView
     @AppStorage("darkmode") private var darkmode = true
     @EnvironmentObject var statusController: StatusController
     
