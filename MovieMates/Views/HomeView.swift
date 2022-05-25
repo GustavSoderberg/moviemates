@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    //check HomeView
     @AppStorage("darkmode") private var darkmode = true
     
     @State var index = "friends"
