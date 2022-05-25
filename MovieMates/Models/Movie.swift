@@ -8,10 +8,17 @@
 import Foundation
 
 struct Movie: Identifiable, Codable, Hashable {
+    static func == (lhs: Movie, rhs: Movie) -> Bool {
+        lhs.id == rhs.id
+    }
+    public func hash(into hasher: inout Hasher) {
+        return hasher.combine(id)
+    }
     
-//    var id = UUID()
-//    var title: String
-//    var description: String
+    
+    //    var id = UUID()
+    //    var title: String
+    //    var description: String
     let id: Int
     let adult: Bool?
     let backdropPath: String?
@@ -25,7 +32,9 @@ struct Movie: Identifiable, Codable, Hashable {
     let title: String?
     let video: Bool?
     let voteAverage, voteCount: Double?
-
+    let genres: [MovieGenre]?
+    
+    
     enum CodingKeys: String, CodingKey {
         case adult
         case backdropPath = "backdrop_path"
@@ -41,6 +50,7 @@ struct Movie: Identifiable, Codable, Hashable {
         case title
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+        case genres
     }
     
     var posterURL: URL {
@@ -51,4 +61,9 @@ struct Movie: Identifiable, Codable, Hashable {
         return URL(string: "https://image.tmdb.org/t/p/w500\(backdropPath ?? "")")!
     }
     
+}
+
+struct MovieGenre: Codable {
+    
+    let name: String
 }

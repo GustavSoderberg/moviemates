@@ -29,7 +29,7 @@ struct ReviewCard: View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                .shadow(radius: 10)
+                .shadow(color: darkmode ? .black : .gray , radius: 10)
                 .onTapGesture {
                     loadMovie(id: String(review.movieId))
                     showMovieView = true

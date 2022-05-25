@@ -324,6 +324,7 @@ struct MovieView: View {
             
         }
         .onAppear(perform: {
+            print(currentMovie)
             title = currentMovie.title ?? "Title"
             description = currentMovie.overview ?? "Description"
             //Search for "O", think it's the third movie
