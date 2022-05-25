@@ -222,7 +222,6 @@ struct UserReviewView: View {
                 ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
-            
         }
     }
 }
@@ -244,7 +243,6 @@ struct WatchListView: View {
                     MovieCardView(movie: movie)
                     
                 }
-                
             }
         }.onAppear {
             getMovies()
@@ -265,11 +263,8 @@ struct WatchListView: View {
                     }
                 }
             }
-            
         }
-        
     }
-    
 }
 
 struct AboutMeView: View {
@@ -337,8 +332,6 @@ struct AboutMeView: View {
                                 Text("\(favoriteGenre)")
                             }
                         }
-                        
-                        
                     }.padding()
                 }.padding()
             }
@@ -349,7 +342,6 @@ struct AboutMeView: View {
             let countedSet = NSCountedSet(array: genres)
             let mostFrequent = countedSet.max { countedSet.count(for: $0) <= countedSet.count(for: $1)}
             favoriteGenre = mostFrequent as! String
-            print(genres)
         }
     }
     
@@ -439,9 +431,6 @@ struct FriendListView: View{
             }
         }
     }
-    
-    
-    
 }
 
 struct FriendRequestTestView: View {
@@ -474,10 +463,7 @@ struct FriendRequestTestView: View {
                             Text("Add \(user.username)")
                         }
                     }
-                    
-                    
                 }
-                
             }
             
             Text("Requests:").padding().padding(.top,40)
@@ -493,9 +479,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Deny request from \(request)")
                 }
-                
-                
-                
             }
             
             Text("Friends:").padding().padding(.top,40)
@@ -506,8 +489,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Remove \(friend)")
                 }
-                
-                
             }
             
             Text("Change Username:").padding().padding(.top,40)
