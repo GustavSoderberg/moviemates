@@ -326,17 +326,15 @@ struct AboutMeView: View {
                                 Text("Reviews: ")
                                 Text("Avrg score: ")
                                 Text("Most Reviewed Genre: ")
-                                Text("Något:")
                             }.padding(.trailing, 40)
                                 .onTapGesture {
                                     print(genres)
                                 }
+                            
                             VStack(alignment: .leading){
                                 Text("\(rm.getUsersReviews(user: user).count)")
-                                
                                 Text("\(rm.getUserAverageRating(user: user), specifier: "%.1f")")
                                 Text("\(favoriteGenre)")
-                                Text("23")
                             }
                         }
                         
@@ -349,7 +347,7 @@ struct AboutMeView: View {
         }
         .onChange(of: genres) { newValue in
             let countedSet = NSCountedSet(array: genres)
-            let mostFrequent = countedSet.max { countedSet.count(for: $0) < countedSet.count(for: $1)}
+            let mostFrequent = countedSet.max { countedSet.count(for: $0) <= countedSet.count(for: $1)}
             favoriteGenre = mostFrequent as! String
             print(genres)
         }
