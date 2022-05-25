@@ -44,6 +44,9 @@ struct ReviewSheet: View {
                 
                 VStack {
                     ZStack() {
+                        //                        RoundedRectangle(cornerRadius: 15)
+                        //                            .foregroundColor(Color("accent-color"))
+                        
                         LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
                             .mask(RoundedRectangle(cornerRadius: 15, style: .continuous))
                             .shadow(radius: 10)
