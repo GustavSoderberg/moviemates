@@ -119,13 +119,15 @@ struct SettingsSheet: View {
             Button("Sign out") {
                 
                 showingAlert = true
-//
             }
             .font(.headline)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: 40)
             .background(Color("secondary-background"))
             .foregroundColor(.white)
             .cornerRadius(15)
-            .frame(minWidth: 0, maxWidth: .infinity)
+            .padding([.leading, .trailing], 20)
+            .padding(.bottom)
             .alert("Are you sure you want to sign out?", isPresented: $showingAlert){
                 
                 Button("Yes") {
@@ -134,15 +136,6 @@ struct SettingsSheet: View {
                 }
                 Button("No", role: .cancel) {}
             }
-//        message: {
-//                ZStack {
-//                    RoundedRectangle(cornerRadius: 15, style: .continuous)
-//                        .fill(Color("secondary-background"))
-//                        .frame(height: 50)
-//                    Text("SIGN OUT").font(.headline).foregroundColor(.white)
-//                }
-//            }
-            
             
         }
     }
