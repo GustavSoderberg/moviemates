@@ -223,8 +223,25 @@ class ReviewManager : ObservableObject {
         }
         return nil
     }
-    
-    
-    
+  
+    func groupReviews(reviews: [Review]) -> [[Review]] {
+        var layerdReviewsArray: [[Review]] = [[]]
+        var posAtLayerdArray = 0
+        for i in 0..<reviews.count {
+            let newReview = reviews[i]
+            if i > 0 {
+                if newReview.movieId == reviews[i-1].movieId {
+                    layerdReviewsArray[posAtLayerdArray].append(newReview)
+                } else {
+                    posAtLayerdArray += 1
+                    let nextReviews = [newReview]
+                    layerdReviewsArray.append(nextReviews)
+                }
+            } else {
+                layerdReviewsArray[posAtLayerdArray].append(newReview)
+            }
+        }
+        return layerdReviewsArray
+    }
 }
 
