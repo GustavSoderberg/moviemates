@@ -26,7 +26,6 @@ struct ReviewCard: View {
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
-        //Test line
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
