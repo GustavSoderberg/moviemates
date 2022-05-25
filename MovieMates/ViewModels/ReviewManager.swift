@@ -14,6 +14,8 @@ class ReviewManager : ObservableObject {
     @Published var cacheGlobal : Float = 0.0
     @Published var cacheFriends : Float = 0.0
     
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
+    
     func getAllReviews(onlyFriends: Bool) -> [Review] {
         
         var reviewArray = [Review]()
@@ -47,6 +49,47 @@ class ReviewManager : ObservableObject {
         }
         
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
+    }
+    
+    func getUsersReviews(user: User) -> [Review] {
+        var reviewArray = [Review]()
+        
+        for movieFS in listOfMovieFS {
+            for review in movieFS.reviews {
+                if (user.id == review.authorId) {
+                    reviewArray.append(review)
+                }
+            }
+        }
+        return reviewArray
+    }
+    
+    func getUserAverageRating(user: User) -> Float {
+        let reviewArray = getUsersReviews(user: user)
+        var sum: Float = 0
+        for review in reviewArray {
+            sum += Float(review.rating)
+        }
+        let result: Float = sum/Float(reviewArray.count)
+        return Float(result)
+    }
+    
+    func getFavoriteGenre(user: User) {
+        let reviewArray = getUsersReviews(user: user)
+        var movieArray = [Movie]()
+        for review in reviewArray {
+            movieViewModel.fetchMovie(id: review.movieId) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let movie):
+                        movieArray.append(movie)
+                    }
+                }
+            }
+        }
+        
     }
     
     func getReviews(movieId: Int, onlyFriends: Bool) -> [Review] {
