@@ -86,6 +86,7 @@ struct MovieView: View {
                             .font(Font.headline.weight(.bold))
                             .multilineTextAlignment(.center)
                     }
+                    
                     Text("Review")
                         .foregroundColor(.clear)
                 }
@@ -112,6 +113,7 @@ struct MovieView: View {
             gap(height: 5)
             Divider()
             
+            
             ScrollView {
                 VStack {
                     AsyncImage(url: currentMovie.backdropURL) { image in
@@ -122,6 +124,21 @@ struct MovieView: View {
                         ProgressView()
                     }
                     .frame(width: .infinity, height: 220, alignment: .center)
+                    
+                    HStack{
+                        
+                    Text(currentMovie.releaseDate!.prefix(4))
+                                .background(RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(.black)
+                                    .opacity(0.3))
+                        .opacity(0.7)
+                        .font(Font.system(size: 15).italic())
+                            
+                        
+                        Spacer()
+                        
+                    }
+                    
                     
                     Text(description)
                         .onTapGesture {
@@ -346,6 +363,7 @@ struct MovieView: View {
                     }
                     .padding(.horizontal)
                     .onAppear {
+                        
                         if let movieFS = movieFS {
                             friendsReviews = getFriendsReviews(movieFS: movieFS)
                         }
