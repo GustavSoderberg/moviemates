@@ -151,7 +151,6 @@ struct MovieView: View {
                             watchlistText = "Add to Watchlist"
                             um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
                             onWatchlist =  false
-                            
                         }
                     } label: {
                         Text("\(watchlistText)")
@@ -170,7 +169,7 @@ struct MovieView: View {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
                         watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                     }
-                    Spacer()
+                    
                 }
                 .padding(.horizontal)
                 .padding(.leading, 15)
