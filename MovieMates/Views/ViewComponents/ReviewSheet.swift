@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ReviewSheet: View {
-    //check reviewSheet
     @AppStorage("darkmode") private var darkmode = false
     
     @Environment(\.dismiss) var dismiss
