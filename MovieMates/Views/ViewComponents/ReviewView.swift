@@ -363,12 +363,12 @@ struct ReviewTextView: View {
         }
         .onTapGesture {
             withAnimation() {
-                if !fullText {
-                    fullText = true
-                    height = .infinity
+                if !self.fullText {
+                    self.fullText = true
+                    self.height = .infinity
                 } else {
-                    fullText = false
-                    height = heightConstant
+                    self.fullText = false
+                    self.height = heightConstant
                 }
             }
         }
