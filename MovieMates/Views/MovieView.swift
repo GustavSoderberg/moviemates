@@ -14,13 +14,14 @@ enum Sheet {
 }
 
 struct MovieViewController: View {
+    
     @State var sheetShowing: Sheet = .MovieView
     @State var movie: Movie
     @State var movieFS: MovieFS?
     @State var isUpcoming: Bool
     
     @Binding var showMovieView: Bool
-
+    
     var body: some View {
         
         VStack {
@@ -156,10 +157,13 @@ struct MovieView: View {
                         Text("\(watchlistText)")
                             .padding(.horizontal)
                             .padding(.vertical, 4)
-                            .background(onWatchlist ? Color("accent-color") : Color("secondary-background"))
                             .cornerRadius(5)
                             .font(Font.headline.weight(.bold))
                             .font(.system(size: 15))
+                            .background(LinearGradient(gradient: Gradient(colors: onWatchlist ? [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")] : [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
+                                .mask(Rectangle()
+                                    .cornerRadius(5))
+                                    .shadow(radius: 10))
                             .foregroundColor(darkmode ? .white : .black)
                     }
                     .onAppear {
@@ -174,12 +178,12 @@ struct MovieView: View {
                 VStack(spacing:0){
                     ZStack{
                         Rectangle()
-                            .cornerRadius(15)
-                            .padding(.horizontal)
-                            .frame(height: 90)
+                            .cornerRadius(15, corners: [.topLeft, .topRight])
+                            .frame(height: 30)
                             .foregroundColor(Color("secondary-background"))
                         
                         VStack(spacing:0) {
+                            
                             HStack{
                                 Text("RATINGS")
                                     .font(Font.headline.weight(.bold))
@@ -187,65 +191,102 @@ struct MovieView: View {
                             }
                             .padding(.horizontal)
                             .padding(.leading, 12)
-                            
-                            Divider()
-                                .padding(.horizontal)
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    ZStack{
+                        LinearGradient(gradient: Gradient(colors: [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
+                            .mask(Rectangle()
+                                .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                                .frame(height: 70))
+                            .shadow(radius: 10)
+                        
+                        VStack(spacing: 0) {
                             
                             gap(height: 5)
                             
                             HStack{
-                                Text("GLOBAL")
+                                HStack{
+                                    Text("GLOBAL")
+                                        .font(Font.headline.weight(.bold))
+                                    Image(systemName: "globe.europe.africa")
+                                        .font(.system(size: 20))
+                                }
+                                .frame(width: 120, alignment: .leading)
                                 Spacer()
-                                HStack(spacing: 2) {
-                                    if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
-                                        
-                                        ForEach(1..<6) { i in
-                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
-                                        }
-                                        .onAppear {
-                                            orm.cacheGlobal = 0
-                                        }
-                                    } else {
-                                        
-                                        ForEach(1..<6) { i in
-                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id)
+                                ZStack(alignment: .center) {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .frame(width: 115, height: 25)
+                                        .foregroundColor(Color("secondary-background"))
+                                    
+                                    HStack(spacing: 2) {
+                                        if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
+                                            
+                                            ForEach(1..<6) { i in
+                                                ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id, gray: true)
+                                            }
+                                            .onAppear {
+                                                orm.cacheGlobal = 0
+                                            }
+                                        } else {
+                                            
+                                            ForEach(1..<6) { i in
+                                                ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false))", movieId: currentMovie.id, gray: true)
+                                            }
                                         }
                                     }
+                                    .frame(height: 20)
                                 }
-                                .frame(height: 20)
                                 
                                 Text("\(ratingGlobalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(.system(size: 20))
                                 Spacer()
                             }
                             .padding(.horizontal, 30.0)
                             
                             gap(height: 5)
-                            
+                        
                             HStack{
-                                Text("FRIENDS")
+                                HStack{
+                                    Text("FRIENDS")
+                                        .font(Font.headline.weight(.bold))
+                                    Image(systemName: "person.2.circle")
+                                        .font(.system(size: 20))
+                                }
+                                .frame(width: 120, alignment: .leading)
                                 Spacer()
-                                HStack(spacing: 2) {
-                                    if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
-                                        ForEach(1..<6) { i in
-                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
-                                        }
-                                    } else {
-                                        ForEach(1..<6) { i in
-                                            ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id)
+                                ZStack(alignment: .center) {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .frame(width: 115, height: 25)
+                                        .foregroundColor(Color("secondary-background"))
+                                    
+                                    HStack(spacing: 2) {
+                                        if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
+                                            ForEach(1..<6) { i in
+                                                ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id, gray: true)
+                                            }
+                                        } else {
+                                            ForEach(1..<6) { i in
+                                                ReviewClapper(pos: i, score: "\(orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))", movieId: currentMovie.id, gray: true)
+                                            }
                                         }
                                     }
+                                    .frame(height: 20)
                                 }
-                                .frame(height: 20)
                                 
                                 Text("\(ratingLocalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(.system(size: 20))
                                 Spacer()
                             }
                             .padding(.horizontal, 30.0)
                         }
                     }
                 }
+                .padding(.horizontal)
                 
                 Divider()
                 
@@ -282,7 +323,7 @@ struct MovieView: View {
                             if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
-
+                                    
                                 }
                             } else {
                                 Text("No Reviews")
@@ -371,6 +412,7 @@ struct ReviewClapper: View {
     @State var score : String
     @State var width : Float = 20
     @State var movieId: Int
+    let gray: Bool
     
     var body: some View {
         GeometryReader { geo in
@@ -387,7 +429,7 @@ struct ReviewClapper: View {
             Image("clapper_hollow")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(Color("secondary-background"))
+                .foregroundColor(gray ? Color("secondary-background") : Color("accent-color"))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {
@@ -408,19 +450,14 @@ struct ReviewClapper: View {
             } else {
                 width = 0
             }
-                    rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
-                    rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
-                    rm.refresh += 1
+            rm.cacheGlobal = rm.getAverageRating(movieId: movieId, onlyFriends: false)
+            rm.cacheFriends = rm.getAverageRating(movieId: movieId, onlyFriends: true)
+            rm.refresh += 1
         }
     }
 }
 
 
-//Preview!!
-//struct MovieView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MovieViewController(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false, showMovieView: .constant(true))
-//    }
-//}
+
 
 
