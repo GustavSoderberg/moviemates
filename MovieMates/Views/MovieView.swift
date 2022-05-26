@@ -113,9 +113,8 @@ struct MovieView: View {
             gap(height: 5)
             Divider()
             
-            
             ScrollView {
-                VStack {
+                VStack(spacing: 0) {
                     AsyncImage(url: currentMovie.backdropURL) { image in
                         image
                             .resizable()
@@ -125,19 +124,18 @@ struct MovieView: View {
                     }
                     .frame(width: .infinity, height: 220, alignment: .center)
                     
-                    HStack{
-                        
-                    Text(currentMovie.releaseDate!.prefix(4))
-                                .background(RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(.black)
-                                    .opacity(0.3))
-                        .opacity(0.7)
-                        .font(Font.system(size: 15).italic())
+                    HStack(spacing: 15){
+                        Text(currentMovie.releaseDate!.prefix(4))
+                            .background(RoundedRectangle(cornerRadius: 5)
+                                .foregroundColor(.black)
+                                .opacity(darkmode ? 1 : 0.2)
+                                .padding(.horizontal, -5))
+                            .font(Font.system(size: 15).italic())
+                            .opacity(0.7)
                             
-                        
                         Spacer()
-                        
                     }
+                    .padding(.top, 2)
                     
                     
                     Text(description)
@@ -230,7 +228,7 @@ struct MovieView: View {
                                     Image(systemName: "globe.europe.africa")
                                         .font(.system(size: 20))
                                 }
-                                .frame(width: 120, alignment: .leading)
+                                .frame(width: 110, alignment: .leading)
                                 Spacer()
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
@@ -258,6 +256,7 @@ struct MovieView: View {
                                 
                                 Text("\(ratingGlobalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(Font.headline.weight(.bold))
                                     .font(.system(size: 20))
                                 Spacer()
                             }
@@ -272,7 +271,7 @@ struct MovieView: View {
                                     Image(systemName: "person.2.circle")
                                         .font(.system(size: 20))
                                 }
-                                .frame(width: 120, alignment: .leading)
+                                .frame(width: 110, alignment: .leading)
                                 Spacer()
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
@@ -295,6 +294,7 @@ struct MovieView: View {
                                 
                                 Text("\(ratingLocalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(Font.headline.weight(.bold))
                                     .font(.system(size: 20))
                                 Spacer()
                             }
@@ -337,7 +337,7 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
                                     
                                 }
@@ -347,7 +347,7 @@ struct MovieView: View {
                             
                         case "global":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
                                 }
                             } else {

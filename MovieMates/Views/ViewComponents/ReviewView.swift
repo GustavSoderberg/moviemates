@@ -131,7 +131,7 @@ struct GroupHeader: View {
                     showMovieView = true
                 }
             VStack(spacing: 5){
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0) {
                     if reviews.count > 0 {
                         AsyncImage(url: rm.getMovieFS(movieId: "\(reviews[0].movieId)")?.photoUrl) { image in
                             image
@@ -214,11 +214,9 @@ struct AverageReviewsLine: View {
                     }
                 }
             }
-            if (rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends) == Float(Int(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)))) {
-                
-            }
             Text((rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends) == Float(Int(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)))) ? String(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)).prefix(1) : String(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)).prefix(3))
                 .frame(maxWidth: 30, alignment: .leading)
+                .font(Font.headline.weight(.bold))
                 .font(.system(size: 20))
         }
     }
