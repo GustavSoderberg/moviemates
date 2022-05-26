@@ -196,13 +196,14 @@ struct UserReviewView: View {
     @State var showProfileView = false
     @State var userProfile: User? = nil
     
-    @ObservedObject var profileReviewsViewModel = ReviewListViewModel()
+    //@ObservedObject var profileReviewsViewModel = ReviewListViewModel()
+    @ObservedObject var orm = rm
     
     var body: some View{
         VStack{
             ScrollView{
                 VStack{
-                    ForEach(profileReviewsViewModel.reviews) { review in
+                    ForEach(orm.getUsersReviews(user: user)) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true)
                         
                     }
@@ -216,9 +217,7 @@ struct UserReviewView: View {
                     }
                 }
             }
-        }.onAppear(perform: {
-            profileReviewsViewModel.getUsersReviews(user: user)
-        })
+        }
         .sheet(isPresented: $showProfileView) {
             if let userProfile = userProfile {
                 ProfileView(user: userProfile)

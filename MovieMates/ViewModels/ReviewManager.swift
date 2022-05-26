@@ -61,7 +61,7 @@ class ReviewManager : ObservableObject {
                 }
             }
         }
-        return reviewArray
+        return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
     }
     
     func getUserAverageRating(user: User) -> Float {
@@ -113,7 +113,7 @@ class ReviewManager : ObservableObject {
                 }
                 else {
                     
-                    return movie.reviews
+                    return movie.reviews.sorted(by: { $0.timestamp > $1.timestamp })
                     
                     
                 }
@@ -122,7 +122,7 @@ class ReviewManager : ObservableObject {
             
         }
         
-        return reviewArray
+        return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
     }
     
     func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
