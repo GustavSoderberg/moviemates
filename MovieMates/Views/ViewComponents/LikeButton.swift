@@ -23,9 +23,9 @@ struct LikeButton: View {
         
         }.font(.system(size: 25))
             .onTapGesture {
-                rm.toggleLike(review: review, removeLike: isLiked)
-                withAnimation{
-                    self.isLiked.toggle()
+                rm.toggleLike(review: review, removeLike: review.likes.contains(um.currentUser!.id!))
+                withAnimation {
+                    self.isLiked = review.likes.contains(um.currentUser!.id!)
                 }
              }
             .foregroundColor(isLiked ? .red : .white)
