@@ -278,12 +278,14 @@ struct AboutMeView: View {
     
     let user: User
     @State var bio = ""
+    @State var genres = [String]()
+    @State var favoriteGenre = "No Reviews"
     
+    private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     init(user: User) {
         UITextView.appearance().backgroundColor = .clear
         self.user = user
-        
     }
     
     var body: some View{
@@ -319,12 +321,50 @@ struct AboutMeView: View {
                         .fill(Color("secondary-background"))
                         .frame(minHeight: 100)
                     
-                    VStack{
-                        Text("about blblblbbababa ska kasokdak ajsjd jiasd jiasdj as bla bla bla ")
-                            .padding()
-                        Spacer()
-                    }
+                    VStack(alignment: .leading) {
+                        
+                        HStack {
+                            VStack(alignment: .leading){
+                                Text("Reviews: ")
+                                Text("Avrg score: ")
+                                Text("Most Reviewed Genre: ")
+                            }.padding(.trailing, 40)
+                                .onTapGesture {
+                                    print(genres)
+                                }
+                            
+                            VStack(alignment: .leading){
+                                Text("\(rm.getUsersReviews(user: user).count)")
+                                Text("\(rm.getUserAverageRating(user: user), specifier: "%.1f")")
+                                Text("\(favoriteGenre)")
+                            }
+                        }
+                    }.padding()
                 }.padding()
+            }
+        }.onAppear{
+            getGenreList()
+        }
+        .onChange(of: genres) { newValue in
+            let countedSet = NSCountedSet(array: genres)
+            let mostFrequent = countedSet.max { countedSet.count(for: $0) <= countedSet.count(for: $1)}
+            favoriteGenre = mostFrequent as! String
+        }
+    }
+    
+    func getGenreList(){
+        for review in rm.getUsersReviews(user: user) {
+            movieViewModel.fetchMovie(id: review.movieId) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let movie):
+                        for genre in movie.genres! {
+                            genres.append(genre.name)
+                        }
+                    }
+                }
             }
         }
     }
