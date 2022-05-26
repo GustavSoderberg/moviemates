@@ -41,19 +41,26 @@ struct HomeView: View {
                 .colorMultiply(Color("accent-color"))
                 
                 ScrollView{
-                    LazyVStack{
+                    LazyVStack {
                         switch index {
+                            
                         case FRIENDS:
-
-                            ForEach(orm.getAllReviews(onlyFriends: true), id: \.self) { review in
-                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
-                            }
-                        case TRENDING:
-                            ForEach(orm.getAllReviews(onlyFriends: false), id: \.self) { review in
-                                ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
-
+                            ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: true)), id: \.self) { reviews in
+                                if reviews.count == 1 {
+                                    ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
+                                } else {
+                                    GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView)
+                                }
                             }
                             
+                        case TRENDING:
+                            ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: false)), id: \.self) { reviews in
+                                if reviews.count == 1 {
+                                    ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
+                                } else {
+                                    GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView)
+                                }
+                            }
                         case POPULAR:
                             ForEach(viewModel.movies, id: \.self) { movie in
                                 MovieCardView(movie: movie, isUpcoming: isUpcoming)
@@ -68,7 +75,6 @@ struct HomeView: View {
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
                                     }
                             }
-                            
                         default:
                             ForEach(friendsReviews) { review in
                                 ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true)
@@ -98,6 +104,8 @@ struct HomeView: View {
         .onAppear {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
+            
+            //rm.groupReviews(reviews: rm.getAllReviews(onlyFriends: false))
         }
         .onChange(of: index, perform: { newValue in
             switch newValue {
