@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import FirebaseFirestoreSwift
+import CoreMedia
 
 class FirestoreManager {
     
@@ -306,8 +307,7 @@ class FirestoreManager {
         db.collection("movies").document("\(movieId)").updateData(["rating" : average])
     }
     
-    
-    func saveLikeToFirestore(review: Review, user: User) -> Bool{
+    func saveLikeToFirestore(review: Review, user: User) -> Bool {
         
         db.collection("movies").document("\(review.movieId)")
             .updateData([

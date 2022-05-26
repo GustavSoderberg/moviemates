@@ -136,12 +136,6 @@ class ReviewManager : ObservableObject {
             }
             print("number of ratings: \(allReviews.count) only friends: \(onlyFriends)")
         }
-//        var text = String((Float(totalScore))/Float(allReviews.count))
-//        print("id: \(movieId) review rating: \(text)")
-//        text = String(text.prefix(3))
-//        print("id: \(movieId) review rating after trim: \(text) alt. \(Float(text) ?? 0.0)")
-//        return Float(text) ?? 0.0
-        print("id: \(movieId) review rating \(Float(totalScore)/Float(allReviews.count))")
         return round(Float(totalScore)/Float(allReviews.count) * 100) / 100.0
     }
     
@@ -248,6 +242,38 @@ class ReviewManager : ObservableObject {
             }
         }
         return layerdReviewsArray
+    }
+    
+    func toggleLike(review: Review, removeLike: Bool) {
+        var likes = review.likes
+        if removeLike {
+            for (index, likes1) in likes.enumerated() {
+                if likes1 == um.currentUser!.id! {
+                    likes.remove(at: index)
+                    break;
+                }
+            }
+        } else {
+            likes.append(um.currentUser!.id!)
+        }
+        var reviews = rm.getReviews(movieId: review.movieId, onlyFriends: false, includeSelf: false)
+        
+        let newReview = Review(id: review.id, authorId: review.authorId, movieId: review.movieId, rating: review.rating, reviewText: review.reviewText, whereAt: review.whereAt, withWho: review.withWho, likes: likes, timestamp: review.timestamp)
+        
+        for (index, review1) in reviews.enumerated() {
+            if review1.authorId == review.authorId {
+                reviews.remove(at: index)
+                reviews.insert(newReview, at: index)
+                break;
+            }
+        }
+        
+        if fm.updateReviewsToFirestore(movieId: "\(review.movieId)", reviews: reviews) {
+            print("Successfully added like")
+        }
+        else {
+            print("E: ReviewManager - saveReview() Failed to add like")
+        }
     }
 }
 
