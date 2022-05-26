@@ -54,7 +54,7 @@ struct ProfileView: View {
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
                                         .foregroundColor(um.currentUser!.frequests.count > 0 ? .yellow : .blue)
-                                        
+                                    
                                 }.sheet(isPresented: $showingNotificationSheet) {
                                     NotificationSheet(showNotificationSheet: $showingNotificationSheet)
                                         .preferredColorScheme(darkmode ? .dark : .light)
@@ -67,8 +67,8 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
-                                        
-                                        
+                                    
+                                    
                                 }
                                 
                             }
@@ -204,14 +204,14 @@ struct UserReviewView: View {
                 VStack{
                     ForEach(profileReviewsViewModel.reviews) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true)
-
+                        
                     }
                 }
                 .padding()
                 .sheet(isPresented: $showMovieView) {
                     if let currentMovie = currentMovie {
                         MovieViewController(movie: currentMovie, isUpcoming: false, showMovieView: $showMovieView)
-
+                        
                             .preferredColorScheme(darkmode ? .dark : .light)
                     }
                 }
@@ -291,56 +291,56 @@ struct AboutMeView: View {
     var body: some View{
         VStack{
             ScrollView{
-                HStack{
+                
+                VStack {
                     Text("Biography")
                         .font(.title2)
-                        .padding()
-                    Spacer()
+                    
+                    ZStack(alignment: .leading){
+                        RoundedRectangle(cornerRadius: 25, style: .continuous)
+                            .fill(Color("secondary-background"))
+                            .frame(minHeight: 100)
+                        
+                        VStack{
+                            Text(user.bio!)
+                                .padding()
+                            Spacer()
+                        }
+                    }.padding([.leading, .trailing])
                 }
                 
-                ZStack(alignment: .leading){
-                    RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(Color("secondary-background"))
-                        .frame(minHeight: 100)
-                    
-                    VStack{
-                        Text(user.bio!)
-                            .padding()
-                        Spacer()
-                    }
-                }.padding()
-                HStack{
+                Spacer()
+                
+                VStack{
                     Text("Summary of \(user.username)")
                         .font(.title2)
-                        .padding()
-                    Spacer()
-                }
-                
-                ZStack(alignment: .leading){
-                    RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(Color("secondary-background"))
-                        .frame(minHeight: 100)
                     
-                    VStack(alignment: .leading) {
+                    ZStack(alignment: .leading){
+                        RoundedRectangle(cornerRadius: 25, style: .continuous)
+                            .fill(Color("secondary-background"))
+                            .frame(minHeight: 100)
                         
-                        HStack {
-                            VStack(alignment: .leading){
-                                Text("Reviews: ")
-                                Text("Avrg score: ")
-                                Text("Most Reviewed Genre: ")
-                            }.padding(.trailing, 40)
-                                .onTapGesture {
-                                    print(genres)
-                                }
+                        VStack(alignment: .leading) {
                             
-                            VStack(alignment: .leading){
-                                Text("\(rm.getUsersReviews(user: user).count)")
-                                Text("\(rm.getUserAverageRating(user: user), specifier: "%.1f")")
-                                Text("\(favoriteGenre)")
+                            HStack {
+                                VStack(alignment: .leading){
+                                    Text("Reviews: ")
+                                    Text("Avrg score: ")
+                                    Text("Most Reviewed Genre: ")
+                                }.padding(.trailing, 40)
+                                    .onTapGesture {
+                                        print(genres)
+                                    }
+                                
+                                VStack(alignment: .leading){
+                                    Text("\(rm.getUsersReviews(user: user).count)")
+                                    Text("\(rm.getUserAverageRating(user: user), specifier: "%.1f")")
+                                    Text("\(favoriteGenre)")
+                                }
                             }
-                        }
-                    }.padding()
-                }.padding()
+                        }.padding()
+                    }.padding([.trailing, .leading])
+                }
             }
         }.onAppear{
             getGenreList()
@@ -536,4 +536,4 @@ struct FriendRequestTestView: View {
     }
 }
 
- 
+
