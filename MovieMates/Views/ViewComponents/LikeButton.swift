@@ -8,37 +8,26 @@
 import SwiftUI
 
 struct LikeButton: View {
+    let review: Review
+    @State var isLiked: Bool
     @State var scale: CGFloat = 1
     @State var opacity = 0.0
-    @State var isLiked = false
     @State var likeCounter = 0
     
     var body: some View {
         ZStack{
-            
             Image(systemName: "heart")
             
             Image(systemName: "heart.fill")
-                //.opacity(isLiked ? 1 : 0)
                 .scaleEffect(isLiked ? 1.0 : 0)
-        
         
         }.font(.system(size: 25))
             .onTapGesture {
-                likeCounter += 1
-                print(likeCounter)
+                rm.toggleLike(review: review, removeLike: isLiked)
                 withAnimation{
                     self.isLiked.toggle()
                 }
-                    
              }
             .foregroundColor(isLiked ? .red : .white)
     }
-    
 }
-
-//struct LikeButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LikeButton()
-//    }
-//}

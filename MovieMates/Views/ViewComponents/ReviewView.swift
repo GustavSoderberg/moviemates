@@ -261,7 +261,7 @@ struct ReviewCardGrouped : View {
 }
 
 struct ReviewTopView: View {
-    let review: Review
+    @State var review: Review
     
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
@@ -317,7 +317,7 @@ struct ReviewTopView: View {
                     HStack{
                         ClapperLine(review: review)
                         if grouped {
-                            LikeButton()
+                            LikeLine(review: $review)
                         }
                     }
                 }
@@ -374,7 +374,7 @@ struct ReviewTextView: View {
 }
 
 struct ReviewTab: View {
-    let review: Review
+    @State var review: Review
     let tagSize: CGFloat = 25
     
     var body: some View {
@@ -397,11 +397,19 @@ struct ReviewTab: View {
                 }
             }
             Spacer()
-            HStack(spacing: 0) {
-                Text("2")
-                    .font(.system(size: 12))
-                LikeButton()
-            }
+            LikeLine(review: $review)
+        }
+    }
+}
+
+struct LikeLine: View {
+    @Binding var review: Review
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Text("\(review.likes.count)")
+                .font(.system(size: 12))
+            LikeButton(review: review, isLiked: review.likes.contains(um.currentUser!.id!))
         }
     }
 }
