@@ -46,9 +46,6 @@ struct SettingsSheet: View {
                 } label: {
                     Text("Save")
                 }
-                
-                
-                
             }
             
             Spacer()
@@ -101,18 +98,20 @@ struct SettingsSheet: View {
             
             
         }.padding()
+        
         VStack {
-            HStack{
-                Text("Change Theme")
-                Spacer()
-            }
+            
+            Text("Change Theme")
+            .padding()
             
             Picker("Mode",selection: $darkmode) {
                 Text("Light")
                     .tag(false)
                 Text("Dark")
                     .tag(true)
-            }.pickerStyle(SegmentedPickerStyle())
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
             
             Spacer()
             

@@ -227,5 +227,3 @@ struct ClapperScoreSlider: View {
 //    }
 //}
 
-
-

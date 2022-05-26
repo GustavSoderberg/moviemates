@@ -26,7 +26,7 @@ class ReviewManager : ObservableObject {
                 
                 for review in movie.reviews {
                     
-                    if um.currentUser!.friends.contains(review.authorId) || um.currentUser!.id == review.authorId {
+                    if um.currentUser!.friends.contains(review.authorId) {
                         
                         reviewArray.append(review)
                         
@@ -103,7 +103,7 @@ class ReviewManager : ObservableObject {
                     
                     for review in movie.reviews {
                         
-                        if um.currentUser!.friends.contains(review.authorId) || um.currentUser!.id == review.authorId {
+                        if um.currentUser!.friends.contains(review.authorId) {
                             
                             reviewArray.append(review)
                             
