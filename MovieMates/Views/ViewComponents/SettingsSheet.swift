@@ -22,6 +22,9 @@ struct SettingsSheet: View {
     @State var index = "friends"
     @State private var showingAlert = false
     
+    @Environment(\.colorScheme) var colorScheme
+    @State var checkColorMode = true
+    
     var body: some View {
         
         VStack{
@@ -99,19 +102,35 @@ struct SettingsSheet: View {
             
         }.padding()
         
+        
+        
+        
         VStack {
             
-            Text("Change Theme")
-            .padding()
             
-            Picker("Mode",selection: $darkmode) {
-                Text("Light")
-                    .tag(false)
-                Text("Dark")
-                    .tag(true)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
+                
+            
+            
+                Toggle(isOn: $checkColorMode) {
+                    Text(colorScheme == .dark ? "Dark mode on" : "light mode on")
+                }
+                
+                Toggle(isOn: $darkmode) {
+                    Text("Put spoiler alert")
+                }
+                
+            
+            
+            
+            
+//            Picker("Mode",selection: $darkmode) {
+//                Text("Light")
+//                    .tag(false)
+//                Text("Dark")
+//                    .tag(true)
+//            }
+//            .pickerStyle(SegmentedPickerStyle())
+//            .padding()
             
             Spacer()
             
