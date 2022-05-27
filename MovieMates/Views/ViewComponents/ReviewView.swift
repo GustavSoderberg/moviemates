@@ -350,7 +350,7 @@ struct ReviewTextView: View {
     let heightConstant: CGFloat
     var blurSpoiler: Bool
     
-    @State var showSpoiler = false
+    @State var showSpoiler = true
     
     @State var height: CGFloat
     @State var fullText = false
@@ -360,7 +360,6 @@ struct ReviewTextView: View {
         self.grouped = grouped
         self.heightConstant = heightConstant
         self.blurSpoiler = blurSpoiler
-        showSpoiler = !blurSpoiler
         height = heightConstant
         //check date
     }
@@ -378,10 +377,9 @@ struct ReviewTextView: View {
                 .padding(5)
                 .blur(radius: showSpoiler ? 0 : 8)
             
-            if spoilerCheck && blurSpoiler   {
+            if !showSpoiler {
                 
                 Button {
-                    print(spoilerCheck)
                     showSpoiler = true
                 } label: {
                     ZStack{
@@ -420,6 +418,12 @@ struct ReviewTextView: View {
                     self.height = heightConstant
                 }
             }
+        }
+        .onAppear {
+            if spoilerCheck && blurSpoiler {
+                showSpoiler = false
+            }
+            
         }
     }
 }
