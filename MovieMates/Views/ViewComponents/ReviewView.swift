@@ -388,6 +388,7 @@ struct ReviewTextView: View {
                             .fontWeight(.bold)
                     }
                     
+                    
                 }
                 .padding(5)
                 .foregroundColor(darkmode ? .white : .black)
