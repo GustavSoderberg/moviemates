@@ -10,10 +10,10 @@ import FirebaseAuth
 
 struct SettingsSheet: View {
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     @Binding var showSettingsSheet: Bool
     var user: User
-    
     
     @State var isEditingUsername = false
     @State var isEditingBiography = false
@@ -21,9 +21,6 @@ struct SettingsSheet: View {
     @State var biography = ""
     @State var index = "friends"
     @State private var showingAlert = false
-    
-    @Environment(\.colorScheme) var colorScheme
-    @State var checkColorMode = true
     
     var body: some View {
         
@@ -107,30 +104,22 @@ struct SettingsSheet: View {
         
         VStack {
             
+            Toggle(isOn: $darkmode) {
+                Text("Change color mode")
+            }.padding()
             
-                
-            
-            
-                Toggle(isOn: $checkColorMode) {
-                    Text(colorScheme == .dark ? "Dark mode on" : "light mode on")
-                }
-                
-                Toggle(isOn: $darkmode) {
-                    Text("Put spoiler alert")
-                }
-                
-            
-            
-            
-            
-//            Picker("Mode",selection: $darkmode) {
-//                Text("Light")
-//                    .tag(false)
-//                Text("Dark")
-//                    .tag(true)
-//            }
-//            .pickerStyle(SegmentedPickerStyle())
-//            .padding()
+            Toggle(isOn: $spoilerCheck) {
+                Text("Spoiler Check")
+            }.padding()
+
+            //            Picker("Mode",selection: $darkmode) {
+            //                Text("Light")
+            //                    .tag(false)
+            //                Text("Dark")
+            //                    .tag(true)
+            //            }
+            //            .pickerStyle(SegmentedPickerStyle())
+            //            .padding()
             
             Spacer()
             
