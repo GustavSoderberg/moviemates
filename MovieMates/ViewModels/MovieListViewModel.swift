@@ -16,6 +16,7 @@ final class MovieListViewModel: ObservableObject {
     @Published var page: Int = 1
     @Published var totalPages: Int = 1
     @Published var infoText: String = "Type to search"
+    @Published var movieListTitle = ""
     var lastmovieId = 1
     
     var searchTerm: String = ""
@@ -44,6 +45,13 @@ final class MovieListViewModel: ObservableObject {
         }
     }
     
+    func loadMoreContet(apiRequestType: ApiRequestType) {
+        if (page+1 <= totalPages) {
+            page += 1
+            requestMovies(apiReuestType: apiRequestType)
+        }
+    }
+    
     func requestMovies(apiReuestType: ApiRequestType){
         
         
@@ -53,20 +61,21 @@ final class MovieListViewModel: ObservableObject {
                 print("invalid URL")
                 return
             }
-            
+            movieListTitle = "Results"
             requestApi(url: apiUrl)
         case .popular:
             guard let apiUrl = URL(string: "\(BASE_API_URL)movie/popular?api_key=\(API_KEY)&language=en-US&page=\(page)") else {
                 print("invalid URL")
                 return
             }
+            movieListTitle = POPULAR
             requestApi(url: apiUrl)
         case .upcoming:
             guard let apiUrl = URL(string: "\(BASE_API_URL)movie/upcoming?api_key=\(API_KEY)&language=en-US&page=\(page)") else {
                 print("invalid URL")
                 return
             }
-            
+            movieListTitle = UPCOMING
             requestApi(url: apiUrl)
         }
 //

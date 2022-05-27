@@ -33,6 +33,7 @@ struct HomeView: View {
                     Text("Trending").tag(TRENDING)
                     Text("Popular").tag(POPULAR)
                     Text("Upcoming").tag(UPCOMING)
+                    Text("Discover").tag("discover")
                     
                 })
                 .padding(.horizontal)
@@ -75,6 +76,8 @@ struct HomeView: View {
                                         viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
                                     }
                             }
+                        case "discover":
+                            DicoverView(height: 500)
                         default:
                             ForEach(friendsReviews) { review in
                                 ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: true)
