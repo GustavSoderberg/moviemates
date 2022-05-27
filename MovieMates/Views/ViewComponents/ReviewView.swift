@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ReviewCard: View {
-
+    
     @AppStorage("darkmode") private var darkmode = true
     
     let review: Review
@@ -293,8 +293,8 @@ struct ReviewTopView: View {
                             .font(Font.system(size: 15).italic())
                             .font(Font.system(size: 25))
                             .onTapGesture {
-                            loadProfile()
-                        }
+                                loadProfile()
+                            }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
@@ -312,7 +312,7 @@ struct ReviewTopView: View {
                         .font(Font.headline.weight(.bold))
                         .minimumScaleFactor(0.5)
                         .lineLimit(2)
-
+                    
                 } else {
                     HStack{
                         ClapperLine(review: review)
@@ -335,9 +335,15 @@ struct ReviewTopView: View {
 }
 
 struct ReviewTextView: View {
+    
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
+    
     let reviewText: String
     let grouped: Bool
     let heightConstant: CGFloat
+    
+    @State var showSpoiler = false
+    
     @State var height: CGFloat
     @State var fullText = false
     
@@ -349,15 +355,32 @@ struct ReviewTextView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .topLeading){
-            RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
-                .foregroundColor(.black)
-                .opacity(0.1)
+        ZStack(alignment: .center){
             
             Text(reviewText)
                 .font(.system(size: 15))
                 .frame(height: height, alignment: .topLeading)
                 .padding(5)
+                .blur(radius: showSpoiler ? 0 : 5)
+            
+            if spoilerCheck == true {
+                
+                RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
+                    .foregroundColor(.clear)
+                
+                Button {
+                    print(spoilerCheck)
+                    showSpoiler = true
+                } label: {
+                    Text("SPOILER")
+                }
+                .padding(5)
+                .background(Color("secondary-background"))
+                .foregroundColor(.white)
+                .cornerRadius(15)
+                .opacity(showSpoiler ? 0 : 1)
+                .disabled(showSpoiler)
+            }
         }
         .onTapGesture {
             withAnimation() {
