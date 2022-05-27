@@ -16,39 +16,48 @@ struct MovieCardView: View {
     
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
-            HStack {
+            LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(radius: 4)
+            HStack(alignment: .top) {
                 ZStack{
                     if movie.posterPath != nil {
                         AsyncImage(url: URL(string: "\(BACKDROP_BASE_URL)\(movie.posterPath!)")){ image in
-                            image.resizable()
+                            image
+                                .resizable()
                                 .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
-                                .frame(width: 100, height: 150, alignment: .center)
-                                .border(Color.black, width: 3)
                         } placeholder: {
                             ProgressView()
                         }
+                        .frame(width: 100, height: 150, alignment: .center)
+                        .cornerRadius(5)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     } else {
                         Image(systemName: "film")
                             .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
                             .frame(width: 100, height: 150, alignment: .center)
-                            .border(Color.black, width: 3)
+             
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     }
                 }
              
                 VStack(alignment: .leading){
                     Text(movie.title!)
                         .font(.title2)
-                        .padding(.bottom, 4)
+                        .fontWeight(.bold)
+                        .padding(.bottom, 2)
                         .lineLimit(2)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
-                    Text(movie.overview ?? "")
-                        .lineLimit(6)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
                     Spacer()
+                    Text(movie.overview ?? "")
+                        .lineLimit(5)
+                        .font(.system(size: 16))
+                        
+                    Spacer()
+                        
                 }
-                Spacer()
+                .frame(height: 150)
             }
             .padding()
         }
