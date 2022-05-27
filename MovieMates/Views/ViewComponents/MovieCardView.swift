@@ -31,11 +31,13 @@ struct MovieCardView: View {
                         }
                         .frame(width: 100, height: 150, alignment: .center)
                         .cornerRadius(5)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     } else {
                         Image(systemName: "film")
                             .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
                             .frame(width: 100, height: 150, alignment: .center)
-                            .border(Color.black, width: 1)
+                            
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     }
                 }
              
