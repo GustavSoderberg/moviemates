@@ -53,7 +53,8 @@ struct ReviewCard: View {
                                 ProgressView()
                             }
                             .frame(width: 100, height: 150, alignment: .center)
-                            .border(Color.black, width: 3)
+                            .cornerRadius(5)
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                             .onTapGesture {
                                 loadMovie(id: movie.id!)
                                 showMovieView = true
@@ -141,7 +142,8 @@ struct GroupHeader: View {
                             ProgressView()
                         }
                         .frame(width: 100, height: 150, alignment: .center)
-                        .border(Color.black, width: 3)
+                        .cornerRadius(5)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                         .onTapGesture {
                             loadMovie(id: "\(reviews[0].movieId)")
                             showMovieView = true
