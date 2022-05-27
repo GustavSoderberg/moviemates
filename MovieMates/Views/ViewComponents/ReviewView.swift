@@ -14,6 +14,7 @@ struct ReviewCard: View {
     let review: Review
     var movieFS: MovieFS?
     
+    
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
     
