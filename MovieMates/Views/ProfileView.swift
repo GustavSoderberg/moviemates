@@ -162,7 +162,7 @@ struct ProfileView: View {
                     Text("About").tag("about")
                     
                 })
-                .padding()
+                .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
                 .colorMultiply(Color("accent-color"))
                 
@@ -251,7 +251,7 @@ struct WatchListView: View {
         }.onAppear {
             getMovies()
         }
-        .padding()
+        .padding(.horizontal)
     }
     func getMovies() {
         
