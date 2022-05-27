@@ -14,6 +14,7 @@ struct ReviewCard: View {
     let review: Review
     var movieFS: MovieFS?
     
+    
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
     
@@ -22,6 +23,7 @@ struct ReviewCard: View {
     
     let displayName: Bool
     let displayTitle: Bool
+    var blurSpoiler: Bool
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -77,7 +79,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140)
+                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: blurSpoiler)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -119,6 +121,7 @@ struct GroupHeader: View {
     
     @Binding var userProfile: User?
     @Binding var showProfileView : Bool
+    var blurSpoiler: Bool
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -172,7 +175,7 @@ struct GroupHeader: View {
                 
                 VStack(spacing: 3) {
                     ForEach(reviews, id: \.self) { review in
-                        ReviewCardGrouped(review: review, displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                        ReviewCardGrouped(review: review, displayName: true, displayTitle: false, blurSpoiler: blurSpoiler, showProfileView: $showProfileView, userProfile: $userProfile)
                     }
                 }
                 .padding(.horizontal, 5)
@@ -231,6 +234,7 @@ struct ReviewCardGrouped : View {
     
     let displayName: Bool
     let displayTitle: Bool
+    var blurSpoiler: Bool
     
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
@@ -248,7 +252,7 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18)
+                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18, blurSpoiler: blurSpoiler)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -339,50 +343,72 @@ struct ReviewTopView: View {
 struct ReviewTextView: View {
     
     @AppStorage("spoilerCheck") private var spoilerCheck = true
+    @AppStorage("darkmode") private var darkmode = true
     
     let reviewText: String
     let grouped: Bool
     let heightConstant: CGFloat
+    var blurSpoiler: Bool
     
     @State var showSpoiler = false
     
     @State var height: CGFloat
     @State var fullText = false
     
-    init(reviewText: String, grouped: Bool, heightConstant: CGFloat) {
+    init(reviewText: String, grouped: Bool, heightConstant: CGFloat, blurSpoiler: Bool) {
         self.reviewText = reviewText
         self.grouped = grouped
         self.heightConstant = heightConstant
+        self.blurSpoiler = blurSpoiler
+        showSpoiler = !blurSpoiler
         height = heightConstant
+        //check date
     }
     
     var body: some View {
-        ZStack(alignment: .center){
+        ZStack(alignment: .topLeading){
+            
+            RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
+                .foregroundColor(.black)
+                .opacity(0.1)
             
             Text(reviewText)
                 .font(.system(size: 15))
                 .frame(height: height, alignment: .topLeading)
                 .padding(5)
-                .blur(radius: showSpoiler ? 0 : 5)
+                .blur(radius: showSpoiler ? 0 : 8)
             
-            if spoilerCheck == true {
-                
-                RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
-                    .foregroundColor(.clear)
+            if spoilerCheck && blurSpoiler   {
                 
                 Button {
                     print(spoilerCheck)
                     showSpoiler = true
                 } label: {
-                    Text("SPOILER")
+                    ZStack{
+                        RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
+                            .foregroundColor(.clear)
+                        Text("SPOILER")
+                            .fontWeight(.bold)
+                    }
+                    
+                    
                 }
                 .padding(5)
-                .background(Color("secondary-background"))
-                .foregroundColor(.white)
+                .foregroundColor(darkmode ? .white : .black)
                 .cornerRadius(15)
                 .opacity(showSpoiler ? 0 : 1)
                 .disabled(showSpoiler)
+                
             }
+            //            else {
+            //
+            //                Text(reviewText)
+            //                    .font(.system(size: 15))
+            //                    .frame(height: height, alignment: .topLeading)
+            //                    .padding(5)
+            //
+            //
+            //            }
         }
         .onTapGesture {
             withAnimation() {

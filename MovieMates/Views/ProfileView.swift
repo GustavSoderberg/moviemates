@@ -196,6 +196,7 @@ struct UserReviewView: View {
     @State var showProfileView = false
     @State var userProfile: User? = nil
     
+    
     //@ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     @ObservedObject var orm = rm
     
@@ -204,7 +205,7 @@ struct UserReviewView: View {
             ScrollView{
                 VStack{
                     ForEach(orm.getUsersReviews(user: user)) { review in
-                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true)
+                        ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true, blurSpoiler: false)
                         
                     }
                 }
