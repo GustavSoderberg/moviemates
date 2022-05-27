@@ -16,9 +16,9 @@ struct MovieCardView: View {
     
     var body: some View {
         ZStack{
-            LinearGradient(gradient: Gradient(colors: [Color(.systemGray), Color(.systemGray2)]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                .shadow(radius: 8)
+                .shadow(radius: 4)
             HStack(alignment: .top) {
                 ZStack{
                     if movie.posterPath != nil {
@@ -36,7 +36,7 @@ struct MovieCardView: View {
                         Image(systemName: "film")
                             .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
                             .frame(width: 100, height: 150, alignment: .center)
-                            
+             
                             .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     }
                 }
