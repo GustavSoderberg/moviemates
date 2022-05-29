@@ -17,6 +17,7 @@ final class MovieListViewModel: ObservableObject {
     @Published var totalPages: Int = 1
     @Published var infoText: String = "Type to search"
     @Published var movieListTitle = ""
+    @Published var currentMovie: Movie? = nil
     var lastmovieId = 1
     
     var searchTerm: String = ""
@@ -68,14 +69,28 @@ final class MovieListViewModel: ObservableObject {
                 print("invalid URL")
                 return
             }
-            movieListTitle = POPULAR
+            movieListTitle = "Popular"
             requestApi(url: apiUrl)
         case .upcoming:
             guard let apiUrl = URL(string: "\(BASE_API_URL)movie/upcoming?api_key=\(API_KEY)&language=en-US&page=\(page)") else {
                 print("invalid URL")
                 return
             }
-            movieListTitle = UPCOMING
+            movieListTitle = "Upcoming"
+            requestApi(url: apiUrl)
+        case .nowPlaying:
+            guard let apiUrl = URL(string: "\(BASE_API_URL)movie/now_playing?api_key=\(API_KEY)&language=en-US&page=\(page)") else {
+                print("invalid URL")
+                return
+            }
+            movieListTitle = "Now in cinema"
+            requestApi(url: apiUrl)
+        case .topRated:
+            guard let apiUrl = URL(string: "\(BASE_API_URL)movie/top_rated?api_key=\(API_KEY)&language=en-US&page=\(page)") else {
+                print("invalid URL")
+                return
+            }
+            movieListTitle = "Top Rated"
             requestApi(url: apiUrl)
         }
 //
@@ -127,6 +142,8 @@ enum ApiRequestType {
     case searchByTerm
     case popular
     case upcoming
+    case nowPlaying
+    case topRated
 }
 
 
