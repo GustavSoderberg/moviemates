@@ -1,5 +1,5 @@
 //
-//  ReviewView.swift
+//  ReviewCard.swift
 //  MovieMates
 //
 //  Created by Oscar Karlsson on 2022-05-23.
@@ -7,7 +7,27 @@
 
 /**
  - Description:
+ Where the structs for the visual display of reviews are stored.
  
+  - ReviewCard: The foundation for every review, it calls other structs to build a full review card.
+ 
+  - GroupHeader: The foundation for a group of reviews. this includes a poster, the average ratings and then a list of reviews connected to it.
+ 
+  - AverageRatingLine: A line of "clappers" that can be half filled to reprecent a decimal score ex. 3.5 would be 3 filled and one half filled. This is connected to a GroupHeader.
+ 
+  - ReviewCardGrouped: The foundation for a review that is connected to a GroupHeader
+ 
+  - ReviewTopView: Has the information stired at the top of a review. Profile picture, Name of user, Title of Movie etc.
+ 
+  - ReviewTextView: Displayes the text the user has writen.
+ 
+  - ReviewTab: The bottom of a review. A tap displaying where and with who you saw the movie with, also houses the LikeLine.
+ 
+  - LikeLine: Displays the number of likes and a like button in a HStack
+ 
+  - ClapperLine: Makes a line of clappers displaying the rating the user gave the movie.
+ 
+  - ClapperImage: The ClapperLine contains 5 of these.
  */
 
 import SwiftUI
@@ -165,9 +185,9 @@ struct GroupHeader: View {
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(2)
                             
-                            AverageReviewsLine(movieId: reviews[0].movieId, onlyFriends: false)
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: false)
                                 .padding(.leading)
-                            AverageReviewsLine(movieId: reviews[0].movieId, onlyFriends: true)
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: true)
                                 .padding(.leading)
                         }
                     }
@@ -205,7 +225,7 @@ struct GroupHeader: View {
     }
 }
 
-struct AverageReviewsLine: View {
+struct AverageRatingLine: View {
     let movieId: Int
     let onlyFriends: Bool
     

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F967102283B7F14008228AA /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F967101283B7F14008228AA /* ReviewView.swift */; };
+		1F967102283B7F14008228AA /* ReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F967101283B7F14008228AA /* ReviewCard.swift */; };
 		1F967105283B89A5008228AA /* ExtraFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F967104283B89A5008228AA /* ExtraFunctions.swift */; };
 		1FABF9012822B734006F5259 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FABF9002822B734006F5259 /* MovieView.swift */; };
 		3F2972C02822C67D00D1616D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2972BF2822C67D00D1616D /* AppDelegate.swift */; };
@@ -57,7 +57,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1F967101283B7F14008228AA /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
+		1F967101283B7F14008228AA /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
 		1F967104283B89A5008228AA /* ExtraFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraFunctions.swift; sourceTree = "<group>"; };
 		1FABF9002822B734006F5259 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		3F2972BF2822C67D00D1616D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 				55738AC62823D2E300A5ED38 /* MovieCardView.swift */,
 				415764E12829063400A9795A /* SettingsSheet.swift */,
 				41319566282A8AA9004F9015 /* NotificationSheet.swift */,
-				1F967101283B7F14008228AA /* ReviewView.swift */,
+				1F967101283B7F14008228AA /* ReviewCard.swift */,
 				4131956A283B6B7D004F9015 /* LikeButton.swift */,
 				B54B042D2844327C00064D06 /* StarButton.swift */,
 				B54B0427283F8D0300064D06 /* Carousel.swift */,
@@ -331,7 +331,7 @@
 				3F2F5694281FEF1200C6AF76 /* SearchView.swift in Sources */,
 				55738AC72823D2E300A5ED38 /* MovieCardView.swift in Sources */,
 				55738AC32823CED200A5ED38 /* Review.swift in Sources */,
-				1F967102283B7F14008228AA /* ReviewView.swift in Sources */,
+				1F967102283B7F14008228AA /* ReviewCard.swift in Sources */,
 				1FABF9012822B734006F5259 /* MovieView.swift in Sources */,
 				55EA25F1283CDACA00E157DE /* StatusController.swift in Sources */,
 				3F2972C32822C94900D1616D /* ReviewSheet.swift in Sources */,
