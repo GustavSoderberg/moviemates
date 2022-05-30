@@ -13,6 +13,7 @@ class ReviewManager : ObservableObject {
     @Published var refresh = 0
     @Published var cacheGlobal : Float = 0.0
     @Published var cacheFriends : Float = 0.0
+    @Published var dismissedSpoiler = [String]()
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
