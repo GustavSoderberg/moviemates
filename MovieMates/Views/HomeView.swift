@@ -31,8 +31,9 @@ struct HomeView: View {
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
                     Text("Trending").tag(TRENDING)
-                    Text("Popular").tag(POPULAR)
-                    Text("Upcoming").tag(UPCOMING)
+//                    Text("Popular").tag(POPULAR)
+//                    Text("Upcoming").tag(UPCOMING)
+                    Text("Discover").tag(DISCOVER)
                     
                 })
                 .padding(.horizontal)
@@ -61,20 +62,22 @@ struct HomeView: View {
                                     GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
                                 }
                             }
-                        case POPULAR:
-                            ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-                                    .onAppear(){
-                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
-                                    }
-                            }
-                        case UPCOMING:
-                            ForEach(viewModel.movies, id: \.self) { movie in
-                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-                                    .onAppear(){
-                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
-                                    }
-                            }
+//                        case POPULAR:
+//                            ForEach(viewModel.movies, id: \.self) { movie in
+//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
+//                                    .onAppear(){
+//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
+//                                    }
+//                            }
+//                        case UPCOMING:
+//                            ForEach(viewModel.movies, id: \.self) { movie in
+//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
+//                                    .onAppear(){
+//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
+//                                    }
+//                            }
+                        case DISCOVER:
+                            DicoverView()
                         default:
                             ForEach(friendsReviews) { review in
                                 ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: true)
@@ -107,21 +110,19 @@ struct HomeView: View {
             
             //rm.groupReviews(reviews: rm.getAllReviews(onlyFriends: false))
         }
-        .onChange(of: index, perform: { newValue in
-            switch newValue {
-            case POPULAR:
-                viewModel.clearList()
-                viewModel.requestMovies(apiReuestType: .popular)
-                print("popular tab")
-                
-            case UPCOMING:
-                viewModel.clearList()
-                viewModel.requestMovies(apiReuestType: .upcoming)
-                print("upcoming tab")
-            default:
-                break
-            }
-        })
+//        .onChange(of: index, perform: { newValue in
+//            switch newValue {
+//            case POPULAR:
+//                viewModel.clearList()
+//                viewModel.requestMovies(apiReuestType: .popular)
+//
+//            case UPCOMING:
+//                viewModel.clearList()
+//                viewModel.requestMovies(apiReuestType: .upcoming)
+//            default:
+//                break
+//            }
+//        })
     }
 }
 

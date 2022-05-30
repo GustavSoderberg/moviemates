@@ -473,8 +473,3 @@ struct ReviewClapper: View {
         }
     }
 }
-
-
-
-
-

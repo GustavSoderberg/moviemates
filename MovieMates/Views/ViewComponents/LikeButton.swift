@@ -19,7 +19,7 @@ struct LikeButton: View {
             Image(systemName: "heart")
             
             Image(systemName: "heart.fill")
-                .scaleEffect(isLiked ? 1.0 : 0)
+                .scaleEffect(isLiked ? 1.0 : 0.001)
         
         }.font(.system(size: 25))
             .onTapGesture {
