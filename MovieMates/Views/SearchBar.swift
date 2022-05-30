@@ -31,6 +31,7 @@ struct SearchBar: UIViewRepresentable {
 
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             control.onSearchButtonClicked?()
+            searchBar.resignFirstResponder()
         }
 
     }
