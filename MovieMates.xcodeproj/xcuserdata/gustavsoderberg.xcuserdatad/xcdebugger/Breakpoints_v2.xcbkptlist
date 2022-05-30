@@ -14,9 +14,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "checkIfMovieExists(movieId:)"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
+            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,9 +30,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "checkIfMovieExists(movieId:)"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "checkIfMovieExists(movieId:)"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "checkIfMovieExists(movieId:)"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

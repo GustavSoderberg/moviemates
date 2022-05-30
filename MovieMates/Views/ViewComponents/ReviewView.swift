@@ -84,7 +84,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: blurSpoiler)
+                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: rm.dismissedSpoiler.contains(review.id))
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -236,6 +236,7 @@ struct ReviewCardGrouped : View {
     @AppStorage("darkmode") private var darkmode = true
     
     let review: Review
+    let height = 18
     
     let displayName: Bool
     let displayTitle: Bool
@@ -257,7 +258,7 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18, blurSpoiler: blurSpoiler)
+                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: rm.dismissedSpoiler.contains(review.id))
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -350,24 +351,15 @@ struct ReviewTextView: View {
     @AppStorage("spoilerCheck") private var spoilerCheck = true
     @AppStorage("darkmode") private var darkmode = true
     
-    let reviewText: String
+    let review: Review
     let grouped: Bool
     let heightConstant: CGFloat
     var blurSpoiler: Bool
     
     @State var showSpoiler = true
     
-    @State var height: CGFloat
+    @State var height: CGFloat = 0
     @State var fullText = false
-    
-    init(reviewText: String, grouped: Bool, heightConstant: CGFloat, blurSpoiler: Bool) {
-        self.reviewText = reviewText
-        self.grouped = grouped
-        self.heightConstant = heightConstant
-        self.blurSpoiler = blurSpoiler
-        height = heightConstant
-        //check date
-    }
     
     var body: some View {
         ZStack(alignment: .topLeading){
@@ -376,11 +368,14 @@ struct ReviewTextView: View {
                 .foregroundColor(.black)
                 .opacity(0.1)
             
-            Text(reviewText)
+            Text(review.reviewText)
                 .font(.system(size: 15))
                 .frame(height: height, alignment: .topLeading)
                 .padding(5)
                 .blur(radius: showSpoiler ? 0 : 8)
+                .onAppear {
+                    self.height = heightConstant
+                }
             
             if !showSpoiler {
                 
