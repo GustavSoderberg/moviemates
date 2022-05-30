@@ -401,7 +401,7 @@ struct FriendListView: View{
                             Text(userToDisplay.username)
                             
                             // Add number of reviews object
-                            Text("Reviews: 25")
+                            Text("Reviews: \(rm.getUsersReviews(user: userToDisplay).count)")
                         }
                         
                         Spacer()
