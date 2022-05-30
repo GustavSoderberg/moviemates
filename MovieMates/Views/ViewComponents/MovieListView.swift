@@ -9,6 +9,7 @@
  
  - Description: Instead of seeing the movies in a carousel, this button makes the list of movies in a vertical list.
  */
+
 import SwiftUI
 
 struct MovieListView: View {

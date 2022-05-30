@@ -5,6 +5,10 @@
 //  Created by Sarah Lidberg on 2022-05-04.
 //
 
+/**
+ - Description:
+ 
+ */
 import Foundation
 import FirebaseAuth
 

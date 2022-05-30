@@ -6,7 +6,8 @@
 //
 
 /**
- - Description: On ProfileView, this notificationSheet is used on when you have pending friend request. 
+ - Description: On ProfileView, this notificationSheet is used on when you have pending friend request.
+ 
  */
 
 import SwiftUI

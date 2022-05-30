@@ -6,7 +6,6 @@
 //
 
 /**
- 
  - Description: The struct that makes the carousel on the "discover" tab on HomeView. 
  */
 import SwiftUI

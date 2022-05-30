@@ -6,7 +6,6 @@
 //
 
 /**
- 
 - Description: Here we make the like button that is shown on ReviewView. 
  */
 import SwiftUI

@@ -6,8 +6,8 @@
 //
 
 /**
+ - Description: Here we create a user to Firebase with the parameters that we need for the app.
  
- - Description: Here we create a user to Firebase with the parameters that we need for the app. 
  */
 
 import Foundation

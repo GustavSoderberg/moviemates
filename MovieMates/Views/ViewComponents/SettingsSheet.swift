@@ -7,8 +7,8 @@
 
 
 /**
+ - Description: This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies.
  
- - Description: This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies. 
  */
 
 import SwiftUI

@@ -6,7 +6,7 @@
 //
 
 /**
- - Description: Creates the view for the CarouselSelection with different types of categories. 
+ - Description: Creates the view for the CarouselSelection with different types of categories.
  
  */
 

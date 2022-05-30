@@ -15,12 +15,3 @@ struct SearchViewInfo: View {
         Text(infoText)
     }
 }
-
-//struct SearchViewInfo_Previews: PreviewProvider {
-//    
-//    @Binding infoText: String = "Type to search"
-//    static var previews: some View {
-//        SearchViewInfo(infoText: infoText)
-//    }
-//}
- 

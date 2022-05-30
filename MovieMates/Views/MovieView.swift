@@ -10,7 +10,6 @@ import Alamofire
 import UIKit
 
 /**
- 
  - Description: In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
                 We can also add a movie to our watchlist that you can find on you profileView.
  */

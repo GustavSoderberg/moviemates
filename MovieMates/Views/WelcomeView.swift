@@ -6,7 +6,7 @@
 //
 
 /**
- - Description: The user gets to choose a username that they want on the app. The username is then saved to firebase. 
+ - Description: The user gets to choose a username that they want on the app. The username is then saved to firebase.
  
  */
 import SwiftUI

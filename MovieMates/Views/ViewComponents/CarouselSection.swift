@@ -7,9 +7,7 @@
 
 /**
  - Description: When you pick a movie from the carousel, you are redirected to ReviewView. 
- 
- 
- */
+  */
 
 import SwiftUI
 

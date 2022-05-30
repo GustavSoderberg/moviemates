@@ -6,7 +6,7 @@
 //
 
 /**
- - Description: We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet. 
+ - Description: We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet.
  
  */
 
