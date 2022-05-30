@@ -15,6 +15,7 @@ import SwiftUI
 struct ReviewCard: View {
     
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     let review: Review
     var movieFS: MovieFS?
@@ -84,7 +85,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: rm.dismissedSpoiler.contains(review.id))
+                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -234,6 +235,7 @@ struct AverageReviewsLine: View {
 
 struct ReviewCardGrouped : View {
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     let review: Review
     let height = 18
@@ -258,7 +260,7 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: rm.dismissedSpoiler.contains(review.id))
+                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -381,6 +383,7 @@ struct ReviewTextView: View {
                 
                 Button {
                     showSpoiler = true
+                    rm.dismissedSpoiler.append(review.id)
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
