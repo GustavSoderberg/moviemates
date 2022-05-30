@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LikeButton: View {
+    @AppStorage("darkmode") private var darkmode = true
+    
     let review: Review
     @State var isLiked: Bool
     @State var scale: CGFloat = 1
@@ -28,6 +30,6 @@ struct LikeButton: View {
                     self.isLiked = review.likes.contains(um.currentUser!.id!)
                 }
              }
-            .foregroundColor(isLiked ? .red : .white)
+            .foregroundColor(darkmode ? isLiked ? .red : .white : isLiked ? .red : .black)
     }
 }
