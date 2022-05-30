@@ -14,9 +14,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,9 +30,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "getReviews(movieId:onlyFriends:includeSelf:)"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -80,7 +80,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "237"
             endingLineNumber = "237"
-            landmarkName = "updateReviewsToFirestore(movieId:reviews:)"
+            landmarkName = "saveMovieToFirestore(movieFS:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
