@@ -5,6 +5,12 @@
 //  Created by Joakim Andersson on 2022-05-18.
 //
 
+
+/**
+ - Description:
+ 
+ */
+
 import Foundation
 
 class ReviewListViewModel: ObservableObject {

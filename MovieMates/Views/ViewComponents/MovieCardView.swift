@@ -5,6 +5,11 @@
 //  Created by Joakim Andersson on 2022-05-05.
 //
 
+/**
+ - Description: We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet.
+ 
+ */
+
 import SwiftUI
 
 struct MovieCardView: View {
@@ -72,9 +77,3 @@ struct MovieCardView: View {
     }
 }
 
-//struct MovieCardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MovieCardView(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false)
-//    }
-//}
-// 

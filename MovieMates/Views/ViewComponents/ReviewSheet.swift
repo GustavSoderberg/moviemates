@@ -5,6 +5,11 @@
 //  Created by Sarah Lidberg on 2022-05-03.
 //
 
+/**
+ - Description: This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ */
+
 import SwiftUI
 
 struct ReviewSheet: View {
@@ -220,9 +225,4 @@ struct ClapperScoreSlider: View {
             }
     }
 }
-//
-//struct ProfileSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil))), genres: <#[MovieGenre]?#>
-//    }
-//}
+

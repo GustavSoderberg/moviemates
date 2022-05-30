@@ -9,6 +9,11 @@ import SwiftUI
 import Alamofire
 import UIKit
 
+/**
+ - Description: In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
+                We can also add a movie to our watchlist that you can find on you profileView.
+ */
+
 enum Sheet {
     case MovieView, ReviewSheet
 }
@@ -383,7 +388,6 @@ struct MovieView: View {
         .onAppear(perform: {
             title = currentMovie.title ?? "Title"
             description = currentMovie.overview ?? "Description"
-            //Search for "O", think it's the third movie
             if description == "" {
                 description = "No further description"
             }
@@ -402,14 +406,7 @@ struct MovieView: View {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
-        //        .onChange(of: sheetShowing, perform: { _ in
-        //            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
-        //            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
-        //
-        //            if ratingLocalScore.hasSuffix("0") {
-        //                ratingLocalScore = String(ratingLocalScore.prefix(1))
-        //            }
-        //        })
+
     }
 }
 

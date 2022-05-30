@@ -5,6 +5,9 @@
 //  Created by Denis Rakitin on 2022-05-26.
 //
 
+/**
+ - Description: The struct that makes the carousel on the "discover" tab on HomeView. 
+ */
 import SwiftUI
 
 struct Carousel<Content: View, T: Identifiable>: View {
@@ -72,9 +75,3 @@ struct Carousel<Content: View, T: Identifiable>: View {
                
            }
     }
-
-//struct Carousel_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Carousel()
-//    }
-//}

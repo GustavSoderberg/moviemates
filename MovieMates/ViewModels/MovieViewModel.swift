@@ -4,6 +4,10 @@
 //
 //  Created by Joakim Andersson on 2022-05-09.
 //
+/**
+ - Description:
+ 
+ */
 
 import Foundation
 import Alamofire

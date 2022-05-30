@@ -5,6 +5,10 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: The user gets to choose a username that they want on the app. The username is then saved to firebase.
+ 
+ */
 import SwiftUI
 import FirebaseGoogleAuthUI
 import FirebaseOAuthUI
@@ -43,11 +47,7 @@ struct WelcomeView: View {
                             )
                             .frame(width: 200, height: 200)
                             .shadow(radius: 10)
-//                Image("clapper-big")
-//                    .resizable()
-//                    .frame(width: 200, height: 200)
-//                    .padding()
-                
+
                 Text("Choose your username")
                     .foregroundColor(Color("welcome-title"))
                     .padding()

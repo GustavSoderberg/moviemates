@@ -5,6 +5,11 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: In this view we can see our own reviews that we have made, our watchlist, friendlist and curren user information.  In the information tab we can write a bio and see statistics of reviews made.
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
@@ -45,7 +50,6 @@ struct ProfileView: View {
                             if !ooum.notification {
                                 
                                 Button {
-                                    //ooum.notification = true
                                     showingNotificationSheet = true
                                     statusController.viewShowing = .Loading
                                 } label: {
@@ -61,7 +65,6 @@ struct ProfileView: View {
                                 }
                             } else {
                                 Button {
-                                    //ooum.notification = false
                                 } label: {
                                     Image(systemName: "bell.badge")
                                         .resizable()
@@ -132,7 +135,6 @@ struct ProfileView: View {
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
                                 if Auth.auth().currentUser == nil { statusController.viewShowing = .WelcomeView }
                             }) {
-                                //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
                                 SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user)
                                     .preferredColorScheme(darkmode ? .dark : .light)
                                 
@@ -196,8 +198,6 @@ struct UserReviewView: View {
     @State var showProfileView = false
     @State var userProfile: User? = nil
     
-    
-    //@ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     @ObservedObject var orm = rm
     
     var body: some View{
@@ -473,8 +473,6 @@ struct FriendRequestTestView: View {
                             Text("Add \(user.username)")
                         }
                     }
-                    
-                    
                 }
                 
             }
