@@ -353,7 +353,10 @@ struct FriendListView: View{
             ForEach (user.friends, id:\.self) { friend in
                 
                 let userToDisplay = um.getUser(id: friend)
-                VStack {
+                ZStack{
+                    LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                        .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                        .shadow(radius: 4)
                     HStack{
                         
                         AsyncImage(url: userToDisplay.photoUrl) { image in
@@ -389,7 +392,6 @@ struct FriendListView: View{
                 }
                 
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
-                .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
                 .onTapGesture {
                     if user.id == um.currentUser!.id {
                         userProfile = userToDisplay
