@@ -4,6 +4,12 @@
 //
 //  Created by Gustav Söderberg on 2022-05-02.
 //
+
+/**
+ - Description: In this view we have three tabs. The first is for the profileView where information is about the current user. Second is the homeView where we have three tabs. Here we can find reviews that friends have made but also a tab where reviews from the whole app can be shown. The third tab is searchView, where we can search for a movie/serie and a user.
+ 
+ */
+
 import SwiftUI
 
 struct HomeView: View {
@@ -31,8 +37,6 @@ struct HomeView: View {
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
                     Text("Trending").tag(TRENDING)
-//                    Text("Popular").tag(POPULAR)
-//                    Text("Upcoming").tag(UPCOMING)
                     Text("Discover").tag(DISCOVER)
                     
                 })
@@ -62,20 +66,7 @@ struct HomeView: View {
                                     GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
                                 }
                             }
-//                        case POPULAR:
-//                            ForEach(viewModel.movies, id: \.self) { movie in
-//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-//                                    .onAppear(){
-//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
-//                                    }
-//                            }
-//                        case UPCOMING:
-//                            ForEach(viewModel.movies, id: \.self) { movie in
-//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-//                                    .onAppear(){
-//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
-//                                    }
-//                            }
+                            
                         case DISCOVER:
                             DicoverView()
                         default:
@@ -86,10 +77,10 @@ struct HomeView: View {
                     }
                     .padding()
                     .sheet(isPresented: $showMovieView) {
-
+                        
                         if let currentMovie = currentMovie {
                             MovieViewController(movie: currentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
-
+                            
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }
@@ -101,28 +92,14 @@ struct HomeView: View {
                         
                     }
                 }
-
+                
             }
         }
         .onAppear {
             allReviewsViewModel.getAllReviews()
             friendsReviewsViewModel.getFriendsReviews()
-            
-            //rm.groupReviews(reviews: rm.getAllReviews(onlyFriends: false))
         }
-//        .onChange(of: index, perform: { newValue in
-//            switch newValue {
-//            case POPULAR:
-//                viewModel.clearList()
-//                viewModel.requestMovies(apiReuestType: .popular)
-//
-//            case UPCOMING:
-//                viewModel.clearList()
-//                viewModel.requestMovies(apiReuestType: .upcoming)
-//            default:
-//                break
-//            }
-//        })
+        
     }
 }
 

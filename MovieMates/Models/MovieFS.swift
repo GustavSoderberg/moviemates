@@ -5,6 +5,12 @@
 //  Created by Gustav Söderberg on 2022-05-16.
 //
 
+/**
+ - Description:
+ 
+ 
+ */
+
 import Foundation
 import FirebaseFirestoreSwift
 
@@ -24,13 +30,5 @@ struct MovieFS: Codable, Identifiable, Equatable {
     var description: String
     var reviews: [Review]
     
-//    sum
-//    amount
-//    for review in movieFS && currentUser?.friends.contains(review.authorId){
-//        for review in reviews {
-//            sum += review.rating
-//        }
-//    }
-//
-//    amount = review.count
+
 }

@@ -5,6 +5,11 @@
 //  Created by Joakim Andersson on 2022-05-05.
 //
 
+/**
+ - Description: We make an API call and recieve the information about the movies that we later display throughout the app.
+ 
+ */
+
 import Foundation
 
 struct Movie: Identifiable, Codable, Hashable {
@@ -15,10 +20,6 @@ struct Movie: Identifiable, Codable, Hashable {
         return hasher.combine(id)
     }
     
-    
-    //    var id = UUID()
-    //    var title: String
-    //    var description: String
     let id: Int
     let adult: Bool?
     let backdropPath: String?

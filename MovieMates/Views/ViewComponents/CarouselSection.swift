@@ -5,6 +5,12 @@
 //  Created by Denis Rakitin on 2022-05-26.
 //
 
+/**
+ - Description: When you pick a movie from the carousel, you are redirected to ReviewView. 
+ 
+ 
+ */
+
 import SwiftUI
 
 struct CarouselSection: View {
@@ -41,9 +47,6 @@ struct CarouselSection: View {
                     }
                 }
 
-//                Text("List > ")
-//                    .font(.title3)
-//                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
             Carousel(index: $currIndex, items: movieListVM.movies) { movie in
@@ -109,9 +112,3 @@ struct CarouselSection: View {
         .padding(.bottom, 30)
     }
 }
-
-//struct CarouselSection_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CarouselSection()
-//    }
-//}

@@ -5,6 +5,10 @@
 //  Created by Denis Rakitin on 2022-05-30.
 //
 
+/**
+ 
+ - Description: This star button is used when you want to add a movie to watchlist on your profile. You can find this on the discover tab on HomeView. 
+ */
 import SwiftUI
 
 struct StarButton: View {

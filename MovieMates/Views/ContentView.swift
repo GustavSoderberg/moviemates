@@ -5,6 +5,12 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: The app starts here and then is redirected to homeView. We create tabs here as well.
+ 
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
