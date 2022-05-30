@@ -140,8 +140,9 @@ struct UserCardView: View {
     
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
+            LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(radius: 4)
             HStack{
                 AsyncImage(url: user.photoUrl) { image in
                     image.resizable()
