@@ -54,11 +54,9 @@ struct moviesAndSeriesView: View {
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
             if viewModel.searchTerm.isEmpty {
-//                infoText = "Type to search"
                 SearchViewInfo(infoText: $viewModel.infoText)
                     .frame(maxHeight: .infinity)
             } else if viewModel.movies.isEmpty && !viewModel.searchTerm.isEmpty {
-//                infoText = "Nothing to display"
                 SearchViewInfo(infoText: $viewModel.infoText)
                     .frame(maxHeight: .infinity)
             } else {
@@ -102,8 +100,6 @@ struct usersView: View {
             else {
                 ScrollView{
                     VStack{
-                        
-                            
                         ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                             
                             if user.id != um.currentUser!.id {
@@ -118,13 +114,9 @@ struct usersView: View {
                                         UserCardView(user: user)
                                     }
                                     .buttonStyle(.plain)
-                                    
                                 }
-                                    
-                                
                             }
                         }
-                    
                     }
                     .padding()
                     
@@ -164,24 +156,3 @@ struct UserCardView: View {
         }
     }
 }
-
-//private var searchResultsUsers = [
-//    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
-//]
-
-//private var searchResultsMovies = [
-////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
-////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
-////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
-//]
-
-
-//struct SearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SearchView(text: .constant(""))
-//    }
-//}
- 

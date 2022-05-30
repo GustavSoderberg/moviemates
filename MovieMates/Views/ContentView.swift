@@ -24,9 +24,7 @@ struct ContentView: View {
     @State var text = ""
     
     init() {
-        
         fm.listenToFirestore()
-        
     }
     
     var body: some View {
@@ -36,26 +34,19 @@ struct ContentView: View {
             switch statusController.viewShowing {
                 
             case .Loading:
-                
                 ZStack{
                     Color("background")
                         .ignoresSafeArea()
                     if um.isLoading {
-                        
                         ProgressView("Loading")
-                        
-                    }
-                    else {
-                        
+                    } else {
                         ProgressView("Checking if currentUser exists")
                             .onAppear {
                                 if um.currentUser != nil {
                                     statusController.viewShowing = .HomeView
-                                }
-                                else {
+                                } else {
                                     statusController.viewShowing = .WelcomeView
                                 }
-                                
                             }
                     }
                 }
@@ -72,21 +63,18 @@ struct ContentView: View {
                             Text("Profile")
                         }
                         .tag(1)
-                    
                     HomeView()
                         .tabItem {
                             Image(systemName: "house")
                             Text("Home")
                         }
                         .tag(2)
-                    
                     SearchView(text: $text)
                         .tabItem {
                             Image(systemName: "magnifyingglass")
                             Text("Search")
                         }
                         .tag(3)
-                    
                 }
             }
         }

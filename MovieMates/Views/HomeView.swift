@@ -18,8 +18,6 @@ struct HomeView: View {
     @State var userProfile: User? = nil
     
     @ObservedObject var viewModel = MovieListViewModel()
-    @ObservedObject var allReviewsViewModel = ReviewListViewModel()
-    @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
     @ObservedObject var orm = rm
     
     var body: some View {
@@ -31,8 +29,6 @@ struct HomeView: View {
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
                     Text("Trending").tag(TRENDING)
-//                    Text("Popular").tag(POPULAR)
-//                    Text("Upcoming").tag(UPCOMING)
                     Text("Discover").tag(DISCOVER)
                     
                 })
@@ -62,20 +58,7 @@ struct HomeView: View {
                                     GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
                                 }
                             }
-//                        case POPULAR:
-//                            ForEach(viewModel.movies, id: \.self) { movie in
-//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-//                                    .onAppear(){
-//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .popular)
-//                                    }
-//                            }
-//                        case UPCOMING:
-//                            ForEach(viewModel.movies, id: \.self) { movie in
-//                                MovieCardView(movie: movie, isUpcoming: isUpcoming)
-//                                    .onAppear(){
-//                                        viewModel.loadMoreContent(currentItem: movie, apiRequestType: .upcoming)
-//                                    }
-//                            }
+
                         case DISCOVER:
                             DicoverView()
                         default:
@@ -98,31 +81,10 @@ struct HomeView: View {
                             ProfileView(user: userProfile)
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
-                        
                     }
                 }
-
             }
         }
-        .onAppear {
-            allReviewsViewModel.getAllReviews()
-            friendsReviewsViewModel.getFriendsReviews()
-            
-            //rm.groupReviews(reviews: rm.getAllReviews(onlyFriends: false))
-        }
-//        .onChange(of: index, perform: { newValue in
-//            switch newValue {
-//            case POPULAR:
-//                viewModel.clearList()
-//                viewModel.requestMovies(apiReuestType: .popular)
-//
-//            case UPCOMING:
-//                viewModel.clearList()
-//                viewModel.requestMovies(apiReuestType: .upcoming)
-//            default:
-//                break
-//            }
-//        })
     }
 }
 

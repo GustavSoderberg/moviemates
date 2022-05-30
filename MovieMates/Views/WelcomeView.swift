@@ -35,7 +35,6 @@ struct WelcomeView: View {
                     .foregroundColor(Color("welcome-title"))
                     .padding()
                 
-                
                 LinearGradient(gradient: Gradient(colors: welcomeClapperArray), startPoint: .top, endPoint: .bottom)
                             .mask(Image("clapper-big")
                             .resizable()
@@ -43,10 +42,6 @@ struct WelcomeView: View {
                             )
                             .frame(width: 200, height: 200)
                             .shadow(radius: 10)
-//                Image("clapper-big")
-//                    .resizable()
-//                    .frame(width: 200, height: 200)
-//                    .padding()
                 
                 Text("Choose your username")
                     .foregroundColor(Color("welcome-title"))
@@ -55,23 +50,15 @@ struct WelcomeView: View {
                 TextField("ENTER YOUR USERNAME", text: $username).frame(width: 200)
                     .padding()
                 
-                
-                
                 Button {
                     if Auth.auth().currentUser != nil && !username.isEmpty {
                         
                         if um.login() {
-                            
                             statusController.viewShowing = .HomeView
-                            
-                        }
-                        else {
-                            
+                        } else {
                             um.register(username: username)
                             statusController.viewShowing = .HomeView
-                            
                         }
-                        
                     }
                 } label: {
                     HStack {
@@ -108,7 +95,6 @@ struct WelcomeView: View {
             LoginView(showLoginView: $showLoginView)
                 .preferredColorScheme(darkmode ? .dark : .light)
                 .ignoresSafeArea()
-            
         }
         .environmentObject(statusController)
 
@@ -121,9 +107,7 @@ struct LoginView : View {
     @ObservedObject var authViewModel = AuthViewModel()
     
     var body : some View {
-        
         CustomLoginViewController(delegate: authViewModel)
-        
     }
 }
 
@@ -134,7 +118,6 @@ struct CustomLoginViewController : UIViewControllerRepresentable {
     func makeCoordinator() -> CustomLoginViewController.Coordinator {
         
         Coordinator(self)
-        
     }
     
     func makeUIViewController(context: Context) -> UIViewController {
@@ -160,10 +143,7 @@ struct CustomLoginViewController : UIViewControllerRepresentable {
         
     }
     
-    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<CustomLoginViewController>)
-    {
-        
-    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<CustomLoginViewController>){}
     
     class Coordinator: NSObject {
         
@@ -171,26 +151,18 @@ struct CustomLoginViewController : UIViewControllerRepresentable {
         
         init(_ customLoginViewController : CustomLoginViewController) {
             self.parent = customLoginViewController
-            
         }
-        
     }
-    
 }
 
 class AuthViewModel: NSObject, ObservableObject, FUIAuthDelegate {
     
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, url: URL?, error: Error?) {
-        
         if let error = error {
-            
             print("E: WelcomeView - AuthViewModel() Failed to sign in \n \(error)")
-            
         }
         else {
-            
             showLoginViewGlobal = false
-            
         }
     }
 }
