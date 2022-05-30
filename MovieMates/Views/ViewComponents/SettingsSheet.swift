@@ -22,6 +22,8 @@ struct SettingsSheet: View {
     @State var index = "friends"
     @State private var showingAlert = false
     
+    @State var showCreditSheet = false
+    
     var body: some View {
         
         VStack{
@@ -122,6 +124,15 @@ struct SettingsSheet: View {
             //            .padding()
             
             Spacer()
+            
+            Button {
+                showCreditSheet = true
+            } label: {
+                Text("Credits")
+            }.sheet(isPresented: $showCreditSheet, content: {
+                CreditSheet(showCreditSheet: $showCreditSheet)
+            })
+
             
             Button("Sign out") {
                 
