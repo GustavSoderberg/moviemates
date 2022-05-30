@@ -5,6 +5,11 @@
 //  Created by Sarah Lidberg on 2022-05-03.
 //
 
+/**
+ - Description: This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ */
+
 import SwiftUI
 
 struct ReviewSheet: View {

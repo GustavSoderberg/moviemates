@@ -5,6 +5,11 @@
 //  Created by Joakim Andersson on 2022-05-05.
 //
 
+/**
+ - Description: We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet.
+ 
+ */
+
 import SwiftUI
 
 struct MovieCardView: View {

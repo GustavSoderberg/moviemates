@@ -53,6 +53,7 @@
 		B54B042A28401A1300064D06 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B042928401A1300064D06 /* CarouselSection.swift */; };
 		B54B042C28423D0700064D06 /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B042B28423D0700064D06 /* MovieListView.swift */; };
 		B54B042E2844327C00064D06 /* StarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B042D2844327C00064D06 /* StarButton.swift */; };
+		EB26F9CA2844E3BB0005A4C1 /* CreditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB26F9C92844E3BB0005A4C1 /* CreditSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		B54B042928401A1300064D06 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
 		B54B042B28423D0700064D06 /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 		B54B042D2844327C00064D06 /* StarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarButton.swift; sourceTree = "<group>"; };
+		EB26F9C92844E3BB0005A4C1 /* CreditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				B54B0427283F8D0300064D06 /* Carousel.swift */,
 				B54B042928401A1300064D06 /* CarouselSection.swift */,
 				B54B042B28423D0700064D06 /* MovieListView.swift */,
+				EB26F9C92844E3BB0005A4C1 /* CreditSheet.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				3F2F567E281FE5EA00C6AF76 /* MovieMatesApp.swift in Sources */,
 				3FBC1B1928323126007D83B7 /* MovieFS.swift in Sources */,
 				4131956B283B6B7D004F9015 /* LikeButton.swift in Sources */,
+				EB26F9CA2844E3BB0005A4C1 /* CreditSheet.swift in Sources */,
 				3F2972C02822C67D00D1616D /* AppDelegate.swift in Sources */,
 				B548919C2827F97F00B9ABF4 /* SearchBar.swift in Sources */,
 				415764E02822743300A9795A /* UserManager.swift in Sources */,

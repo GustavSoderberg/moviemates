@@ -5,6 +5,11 @@
 //  Created by Denis Rakitin on 2022-05-28.
 //
 
+/**
+ 
+ - Description: Instead of seeing the movies in a carousel, this button makes the list of movies in a vertical list.
+ */
+
 import SwiftUI
 
 struct MovieListView: View {
@@ -21,6 +26,7 @@ struct MovieListView: View {
                 VStack {
                     ForEach(movieListVM.movies, id: \.self) { movie in
                         MovieCardView(movie: movie, isUpcoming: isUpcoming)
+
                     }
                     Button {
                         movieListVM.loadMoreContet(apiRequestType: apiRequestType)

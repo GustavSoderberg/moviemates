@@ -5,6 +5,11 @@
 //  Created by Oscar Karlsson on 2022-05-23.
 //
 
+/**
+ - Description:
+ 
+ */
+
 import SwiftUI
 
 struct ReviewCard: View {
@@ -398,15 +403,6 @@ struct ReviewTextView: View {
                 .disabled(showSpoiler)
                 
             }
-            //            else {
-            //
-            //                Text(reviewText)
-            //                    .font(.system(size: 15))
-            //                    .frame(height: height, alignment: .topLeading)
-            //                    .padding(5)
-            //
-            //
-            //            }
         }
         .onTapGesture {
             withAnimation() {

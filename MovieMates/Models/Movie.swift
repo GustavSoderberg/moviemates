@@ -5,6 +5,11 @@
 //  Created by Joakim Andersson on 2022-05-05.
 //
 
+/**
+ - Description: We make an API call and recieve the information about the movies that we later display throughout the app.
+ 
+ */
+
 import Foundation
 
 struct Movie: Identifiable, Codable, Hashable {

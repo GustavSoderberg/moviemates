@@ -4,6 +4,10 @@
 //
 //  Created by Gustav Söderberg on 2022-05-05.
 //
+/**
+ - Description:
+ 
+ */
 
 import Foundation
 import Firebase
@@ -227,7 +231,6 @@ class FirestoreManager {
         
         do {
             try db.collection("movies").document(movieFS.id!).setData(from: movieFS)
-//            try db.collection("movies").document(movieFS.id!).collection("reviews").document(review.id).setData(from: review)
             return true
         }
         catch {
@@ -282,7 +285,6 @@ class FirestoreManager {
 
     func removeMovieFromWatchlist(userID: String, movieID: String) -> Bool {
         
-//        if you.id != nil {
             
             db.collection("users").document(userID)
             
@@ -294,10 +296,7 @@ class FirestoreManager {
             
             return true
             
-//        }
-        
-//        return false
-        
+
     }
     
     

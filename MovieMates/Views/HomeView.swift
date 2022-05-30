@@ -4,6 +4,12 @@
 //
 //  Created by Gustav Söderberg on 2022-05-02.
 //
+
+/**
+ - Description: In this view we have three tabs. The first is for the profileView where information is about the current user. Second is the homeView where we have three tabs. Here we can find reviews that friends have made but also a tab where reviews from the whole app can be shown. The third tab is searchView, where we can search for a movie/serie and a user.
+ 
+ */
+
 import SwiftUI
 
 struct HomeView: View {

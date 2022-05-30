@@ -5,6 +5,10 @@
 //  Created by Denis Rakitin on 2022-05-26.
 //
 
+/**
+ - Description: When you pick a movie from the carousel, you are redirected to ReviewView. 
+  */
+
 import SwiftUI
 
 struct CarouselSection: View {

@@ -5,6 +5,11 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: In this view we can search for a movie/serie and also a User.
+ 
+ */
+
 import SwiftUI
 
 struct SearchView: View {
@@ -66,6 +71,7 @@ struct moviesAndSeriesView: View {
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
                 }.listStyle(.plain)
+
                     .onAppear {
                         UITableView.appearance().separatorStyle = .none
                         UITableView.appearance().separatorColor = UIColor(Color("background"))
@@ -97,6 +103,7 @@ struct usersView: View {
             } else {
                 ScrollView{
                     VStack{
+
                         ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                             
                             if user.id != um.currentUser!.id {
@@ -112,8 +119,10 @@ struct usersView: View {
                                     }
                                     .buttonStyle(.plain)
                                 }
+
                             }
                         }
+
                     }
                     .padding()
                 }

@@ -5,6 +5,9 @@
 //  Created by Sarah Lidberg on 2022-05-23.
 //
 
+/**
+- Description: Here we make the like button that is shown on ReviewView. 
+ */
 import SwiftUI
 
 struct LikeButton: View {

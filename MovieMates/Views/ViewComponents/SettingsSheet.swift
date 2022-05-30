@@ -5,6 +5,12 @@
 //  Created by Sarah Lidberg on 2022-05-09.
 //
 
+
+/**
+ - Description: This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies.
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
@@ -21,6 +27,8 @@ struct SettingsSheet: View {
     @State var biography = ""
     @State var index = "friends"
     @State private var showingAlert = false
+    
+    @State var showCreditSheet = false
     
     var body: some View {
         VStack{
@@ -99,8 +107,16 @@ struct SettingsSheet: View {
             Toggle(isOn: $spoilerCheck) {
                 Text("Spoiler Check")
             }.padding()
-            
             Spacer()
+            
+            Button {
+                showCreditSheet = true
+            } label: {
+                Text("Credits")
+            }.sheet(isPresented: $showCreditSheet, content: {
+                CreditSheet(showCreditSheet: $showCreditSheet)
+            })
+
             
             Button("Sign out") {
                 

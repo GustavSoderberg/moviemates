@@ -5,6 +5,11 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: In this view we can see our own reviews that we have made, our watchlist, friendlist and curren user information.  In the information tab we can write a bio and see statistics of reviews made.
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
@@ -364,7 +369,7 @@ struct FriendListView: View{
                             Text(userToDisplay.username)
                             
                             // Add number of reviews object
-                            Text("Reviews: 25")
+                            Text("Reviews: \(rm.getUsersReviews(user: userToDisplay).count)")
                         }
                         
                         Spacer()
