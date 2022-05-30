@@ -194,7 +194,10 @@ struct ReviewSheet: View {
                                 .frame(width: 200, height: 50)
                         }.buttonStyle(.plain)
                             .frame(width: 200, height: 50)
-                            .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
+                        
+                            .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                //.mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                                .shadow(radius: 4))
                             .cornerRadius(10)
                         
                     }

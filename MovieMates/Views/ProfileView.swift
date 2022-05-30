@@ -265,8 +265,8 @@ struct AboutMeView: View {
                         .font(.title2)
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 25, style: .continuous)
-                            .fill(Color("secondary-background"))
+                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                            .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
                         VStack{
@@ -284,8 +284,8 @@ struct AboutMeView: View {
                         .font(.title2)
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 25, style: .continuous)
-                            .fill(Color("secondary-background"))
+                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                            .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
                         VStack(alignment: .leading) {
