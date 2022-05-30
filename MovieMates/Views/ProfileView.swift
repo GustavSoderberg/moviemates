@@ -339,7 +339,7 @@ struct AboutMeView: View {
 }
 
 struct FriendListView: View{
-    @AppStorage("darkmode") private var darkmode = false
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var showProfileView = false
     @State var userProfile: User?
