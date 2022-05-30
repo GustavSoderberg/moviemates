@@ -5,6 +5,11 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: In this view we can search for a movie/serie and also a User.
+ 
+ */
+
 import SwiftUI
 
 struct SearchView: View {
@@ -26,9 +31,9 @@ struct SearchView: View {
                     Text("Movies/Series").tag("movies")
                     Text("Users").tag("users")
                 })
-                    .padding()
-                    .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                    .colorMultiply(Color("accent-color"))
+                .padding()
+                .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
+                .colorMultiply(Color("accent-color"))
                 
                 switch index {
                 case "movies":
@@ -42,11 +47,11 @@ struct SearchView: View {
         }
     }
 }
+
 struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
-    
     
     var body: some View{
         VStack{
@@ -54,11 +59,9 @@ struct moviesAndSeriesView: View {
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
             if viewModel.searchTerm.isEmpty {
-//                infoText = "Type to search"
                 SearchViewInfo(infoText: $viewModel.infoText)
                     .frame(maxHeight: .infinity)
             } else if viewModel.movies.isEmpty && !viewModel.searchTerm.isEmpty {
-//                infoText = "Nothing to display"
                 SearchViewInfo(infoText: $viewModel.infoText)
                     .frame(maxHeight: .infinity)
             } else {
@@ -68,13 +71,13 @@ struct moviesAndSeriesView: View {
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
                 }.listStyle(.plain)
-                    
-                .onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                    UITableView.appearance().separatorColor = UIColor(Color("background"))
-                    UITableViewCell.appearance().backgroundColor = UIColor(Color("background"))
-                    UITableView.appearance().backgroundColor = UIColor(Color("background"))
-                }
+
+                    .onAppear {
+                        UITableView.appearance().separatorStyle = .none
+                        UITableView.appearance().separatorColor = UIColor(Color("background"))
+                        UITableViewCell.appearance().backgroundColor = UIColor(Color("background"))
+                        UITableView.appearance().backgroundColor = UIColor(Color("background"))
+                    }
             }
         }
     }
@@ -82,7 +85,6 @@ struct moviesAndSeriesView: View {
 
 struct usersView: View {
     @AppStorage("darkmode") private var darkmode = true
-    
     
     @ObservedObject var oum = um
     @State var showProfileView = false
@@ -98,12 +100,10 @@ struct usersView: View {
             if searchText.isEmpty {
                 SearchViewInfo(infoText: $templateText)
                     .frame(maxHeight: .infinity)
-            }
-            else {
+            } else {
                 ScrollView{
                     VStack{
-                        
-                            
+
                         ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                             
                             if user.id != um.currentUser!.id {
@@ -118,19 +118,15 @@ struct usersView: View {
                                         UserCardView(user: user)
                                     }
                                     .buttonStyle(.plain)
-                                    
                                 }
-                                    
-                                
+
                             }
                         }
-                    
+
                     }
                     .padding()
-                    
                 }
             }
-            
         }.sheet(isPresented: $showProfileView) {
             ProfileView(user: oum.listOfUsers[self.index1])
                 .preferredColorScheme(darkmode ? .dark : .light)
@@ -144,8 +140,9 @@ struct UserCardView: View {
     
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color("secondary-background"))
+            LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(radius: 4)
             HStack{
                 AsyncImage(url: user.photoUrl) { image in
                     image.resizable()
@@ -164,24 +161,3 @@ struct UserCardView: View {
         }
     }
 }
-
-//private var searchResultsUsers = [
-//    User(id: "1", username: "Jocke", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "2", username: "Oscar", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "3", username: "Sarah", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0),
-//    User(id: "4", username: "Gustav", photoUrl: URL(fileURLWithPath: ""), bio: "", friends: [String](), frequests: [String](), themeId: 0)
-//]
-
-//private var searchResultsMovies = [
-////    Movie(title: "Spooder-Man", description: "See spider man in one of his gazillion movies"),
-////    Movie(title: "Star Wars A New Hope", description: "Small farm boy destoys big buisness"),
-////    Movie(title: "Bill. A documentary", description: "From teacher to hero, follow this man on his journey through the world of computers")
-//]
-
-
-//struct SearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SearchView(text: .constant(""))
-//    }
-//}
- 

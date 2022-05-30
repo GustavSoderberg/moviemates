@@ -5,6 +5,11 @@
 //  Created by Sarah Lidberg on 2022-05-03.
 //
 
+/**
+ - Description: This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ */
+
 import SwiftUI
 
 struct ReviewSheet: View {
@@ -58,7 +63,8 @@ struct ReviewSheet: View {
                                     ProgressView()
                                 }
                                 .frame(width: 100, height: 150, alignment: .center)
-                                .border(Color.black, width: 1)
+                                .cornerRadius(5)
+                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                             }
                             
                             VStack(spacing: 0) {
@@ -151,7 +157,6 @@ struct ReviewSheet: View {
                         
                         Text("Where did you watch the movie?")
                         
-                        
                         Picker(selection: $whereAt, label: Text("Question one")){
                             Text("Home").tag("home")
                             Text("Cinema").tag("cinema")
@@ -190,12 +195,13 @@ struct ReviewSheet: View {
                                 .frame(width: 200, height: 50)
                         }.buttonStyle(.plain)
                             .frame(width: 200, height: 50)
-                            .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
+                        
+                            .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                //.mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                                .shadow(radius: 4))
                             .cornerRadius(10)
                         
-                        
                     }
-                    
                     Spacer()
                 }
             }
@@ -220,9 +226,4 @@ struct ClapperScoreSlider: View {
             }
     }
 }
-//
-//struct ProfileSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil))), genres: <#[MovieGenre]?#>
-//    }
-//}
+

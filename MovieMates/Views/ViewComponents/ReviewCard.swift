@@ -1,15 +1,41 @@
 //
-//  ReviewView.swift
+//  ReviewCard.swift
 //  MovieMates
 //
 //  Created by Oscar Karlsson on 2022-05-23.
 //
+
+/**
+ - Description:
+ Where the structs for the visual display of reviews are stored.
+ 
+  - ReviewCard: The foundation for every review, it calls other structs to build a full review card.
+ 
+  - GroupHeader: The foundation for a group of reviews. this includes a poster, the average ratings and then a list of reviews connected to it.
+ 
+  - AverageRatingLine: A line of "clappers" that can be half filled to reprecent a decimal score ex. 3.5 would be 3 filled and one half filled. This is connected to a GroupHeader.
+ 
+  - ReviewCardGrouped: The foundation for a review that is connected to a GroupHeader
+ 
+  - ReviewTopView: Has the information stired at the top of a review. Profile picture, Name of user, Title of Movie etc.
+ 
+  - ReviewTextView: Displayes the text the user has writen.
+ 
+  - ReviewTab: The bottom of a review. A tap displaying where and with who you saw the movie with, also houses the LikeLine.
+ 
+  - LikeLine: Displays the number of likes and a like button in a HStack
+ 
+  - ClapperLine: Makes a line of clappers displaying the rating the user gave the movie.
+ 
+  - ClapperImage: The ClapperLine contains 5 of these.
+ */
 
 import SwiftUI
 
 struct ReviewCard: View {
     
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     let review: Review
     var movieFS: MovieFS?
@@ -79,7 +105,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: blurSpoiler)
+                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -159,9 +185,9 @@ struct GroupHeader: View {
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(2)
                             
-                            AverageReviewsLine(movieId: reviews[0].movieId, onlyFriends: false)
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: false)
                                 .padding(.leading)
-                            AverageReviewsLine(movieId: reviews[0].movieId, onlyFriends: true)
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: true)
                                 .padding(.leading)
                         }
                     }
@@ -199,7 +225,7 @@ struct GroupHeader: View {
     }
 }
 
-struct AverageReviewsLine: View {
+struct AverageRatingLine: View {
     let movieId: Int
     let onlyFriends: Bool
     
@@ -229,8 +255,10 @@ struct AverageReviewsLine: View {
 
 struct ReviewCardGrouped : View {
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     let review: Review
+    let height = 18
     
     let displayName: Bool
     let displayTitle: Bool
@@ -252,7 +280,7 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18, blurSpoiler: blurSpoiler)
+                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -345,24 +373,15 @@ struct ReviewTextView: View {
     @AppStorage("spoilerCheck") private var spoilerCheck = true
     @AppStorage("darkmode") private var darkmode = true
     
-    let reviewText: String
+    let review: Review
     let grouped: Bool
     let heightConstant: CGFloat
     var blurSpoiler: Bool
     
     @State var showSpoiler = true
     
-    @State var height: CGFloat
+    @State var height: CGFloat = 0
     @State var fullText = false
-    
-    init(reviewText: String, grouped: Bool, heightConstant: CGFloat, blurSpoiler: Bool) {
-        self.reviewText = reviewText
-        self.grouped = grouped
-        self.heightConstant = heightConstant
-        self.blurSpoiler = blurSpoiler
-        height = heightConstant
-        //check date
-    }
     
     var body: some View {
         ZStack(alignment: .topLeading){
@@ -371,16 +390,20 @@ struct ReviewTextView: View {
                 .foregroundColor(.black)
                 .opacity(0.1)
             
-            Text(reviewText)
+            Text(review.reviewText)
                 .font(.system(size: 15))
                 .frame(height: height, alignment: .topLeading)
                 .padding(5)
                 .blur(radius: showSpoiler ? 0 : 8)
+                .onAppear {
+                    self.height = heightConstant
+                }
             
             if !showSpoiler {
                 
                 Button {
                     showSpoiler = true
+                    rm.dismissedSpoiler.append(review.id)
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
@@ -398,15 +421,6 @@ struct ReviewTextView: View {
                 .disabled(showSpoiler)
                 
             }
-            //            else {
-            //
-            //                Text(reviewText)
-            //                    .font(.system(size: 15))
-            //                    .frame(height: height, alignment: .topLeading)
-            //                    .padding(5)
-            //
-            //
-            //            }
         }
         .onTapGesture {
             withAnimation() {

@@ -5,6 +5,12 @@
 //  Created by Sarah Lidberg on 2022-05-09.
 //
 
+
+/**
+ - Description: This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies.
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
@@ -22,10 +28,10 @@ struct SettingsSheet: View {
     @State var index = "friends"
     @State private var showingAlert = false
     
+    @State var showCreditSheet = false
+    
     var body: some View {
-        
         VStack{
-            
             HStack {
                 Button {
                     showSettingsSheet = false
@@ -68,9 +74,7 @@ struct SettingsSheet: View {
                     .onTapGesture {
                         isEditingUsername = true
                     }
-                
             }
-            
             HStack{
                 Text("Change Biography")
                 Spacer()
@@ -93,17 +97,9 @@ struct SettingsSheet: View {
                     .onAppear {
                         UITextView.appearance().backgroundColor = .clear
                     }
-                
             }
-            
-            
         }.padding()
-        
-        
-        
-        
         VStack {
-            
             Toggle(isOn: $darkmode) {
                 Text("Change color mode")
             }.padding()
@@ -111,17 +107,16 @@ struct SettingsSheet: View {
             Toggle(isOn: $spoilerCheck) {
                 Text("Spoiler Check")
             }.padding()
-
-            //            Picker("Mode",selection: $darkmode) {
-            //                Text("Light")
-            //                    .tag(false)
-            //                Text("Dark")
-            //                    .tag(true)
-            //            }
-            //            .pickerStyle(SegmentedPickerStyle())
-            //            .padding()
-            
             Spacer()
+            
+            Button {
+                showCreditSheet = true
+            } label: {
+                Text("Credits")
+            }.sheet(isPresented: $showCreditSheet, content: {
+                CreditSheet(showCreditSheet: $showCreditSheet)
+            })
+
             
             Button("Sign out") {
                 
@@ -143,7 +138,6 @@ struct SettingsSheet: View {
                 }
                 Button("No", role: .cancel) {}
             }
-            
         }
     }
 }

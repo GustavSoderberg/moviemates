@@ -5,6 +5,11 @@
 //  Created by Gustav Söderberg on 2022-05-02.
 //
 
+/**
+ - Description: In this view we can see our own reviews that we have made, our watchlist, friendlist and curren user information.  In the information tab we can write a bio and see statistics of reviews made.
+ 
+ */
+
 import SwiftUI
 import FirebaseAuth
 
@@ -23,29 +28,22 @@ struct ProfileView: View {
     @State var test = 0
     @ObservedObject var ooum = um
     
-    
-    
     var body: some View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            
             VStack{
-                
                 ZStack{
-                    
                     Text(user.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
-                        
                         if user.id == ooum.currentUser!.id {
                             if !ooum.notification {
                                 
                                 Button {
-                                    //ooum.notification = true
                                     showingNotificationSheet = true
                                     statusController.viewShowing = .Loading
                                 } label: {
@@ -61,16 +59,13 @@ struct ProfileView: View {
                                 }
                             } else {
                                 Button {
-                                    //ooum.notification = false
                                 } label: {
                                     Image(systemName: "bell.badge")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
                                     
-                                    
                                 }
-                                
                             }
                         }
                         Spacer()
@@ -85,8 +80,7 @@ struct ProfileView: View {
                                     .padding(.trailing, 20)
                                     .foregroundColor(.green)
                                 
-                            }
-                            else if ooum.currentUser!.frequests.contains(user.id!) {
+                            } else if ooum.currentUser!.frequests.contains(user.id!) {
                                 Button {
                                     um.manageFriendRequests(forId: user.id!, accept: true)
                                 } label: {
@@ -96,17 +90,13 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.green)
                                 }.buttonStyle(.plain)
-                                
-                                
-                            }
-                            else if user.frequests.contains(um.currentUser!.id!) {
+                            } else if user.frequests.contains(um.currentUser!.id!) {
                                 Image(systemName: "hourglass")
                                     .resizable()
                                     .frame(width: 30, height: 30)
                                     .padding(.trailing, 20)
                                     .foregroundColor(.yellow)
-                            }
-                            else {
+                            } else {
                                 Button {
                                     um.friendRequest(to: user)
                                 } label: {
@@ -117,10 +107,7 @@ struct ProfileView: View {
                                         .foregroundColor(darkmode ? .white : .black)
                                 }
                             }
-                            
-                            
-                        }
-                        else {
+                        } else {
                             
                             Button {
                                 showSettingsSheet = true
@@ -132,14 +119,11 @@ struct ProfileView: View {
                             }.sheet(isPresented: $showSettingsSheet, onDismiss: {
                                 if Auth.auth().currentUser == nil { statusController.viewShowing = .WelcomeView }
                             }) {
-                                //FriendRequestTestView(showProfileSheet: $showSettingsSheet)
                                 SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user)
                                     .preferredColorScheme(darkmode ? .dark : .light)
-                                
                             }
                         }
                     }.environmentObject(statusController)
-                    
                 }
                 Spacer()
                 AsyncImage(url: user.photoUrl) { image in
@@ -151,7 +135,6 @@ struct ProfileView: View {
                     ProgressView()
                 }
                 Spacer()
-                
                 
                 Picker(selection: $index,
                        label: Text("Reviews"),
@@ -165,7 +148,6 @@ struct ProfileView: View {
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
                 .colorMultiply(Color("accent-color"))
-                
                 
                 switch index {
                 case "reviews":
@@ -184,7 +166,6 @@ struct ProfileView: View {
             }.padding(.top)
         }
     }
-    
 }
 
 struct UserReviewView: View {
@@ -196,8 +177,6 @@ struct UserReviewView: View {
     @State var showProfileView = false
     @State var userProfile: User? = nil
     
-    
-    //@ObservedObject var profileReviewsViewModel = ReviewListViewModel()
     @ObservedObject var orm = rm
     
     var body: some View{
@@ -206,7 +185,6 @@ struct UserReviewView: View {
                 VStack{
                     ForEach(orm.getUsersReviews(user: user)) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true, blurSpoiler: false)
-                        
                     }
                 }
                 .padding()
@@ -224,7 +202,6 @@ struct UserReviewView: View {
                 ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
-            
         }
     }
 }
@@ -236,17 +213,11 @@ struct WatchListView: View {
     @State var movieWatchlist = [Movie]()
     
     var body: some View{
-        
-        
         VStack{
-            
             ScrollView{
-                
                 ForEach(movieWatchlist, id: \.self) { movie in
                     MovieCardView(movie: movie)
-                    
                 }
-                
             }
         }.onAppear {
             getMovies()
@@ -267,11 +238,8 @@ struct WatchListView: View {
                     }
                 }
             }
-            
         }
-        
     }
-    
 }
 
 struct AboutMeView: View {
@@ -297,8 +265,8 @@ struct AboutMeView: View {
                         .font(.title2)
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 25, style: .continuous)
-                            .fill(Color("secondary-background"))
+                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                            .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
                         VStack{
@@ -316,8 +284,8 @@ struct AboutMeView: View {
                         .font(.title2)
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 25, style: .continuous)
-                            .fill(Color("secondary-background"))
+                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                            .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
                         VStack(alignment: .leading) {
@@ -371,7 +339,7 @@ struct AboutMeView: View {
 }
 
 struct FriendListView: View{
-    @AppStorage("darkmode") private var darkmode = false
+    @AppStorage("darkmode") private var darkmode = true
     
     @State var showProfileView = false
     @State var userProfile: User?
@@ -385,7 +353,10 @@ struct FriendListView: View{
             ForEach (user.friends, id:\.self) { friend in
                 
                 let userToDisplay = um.getUser(id: friend)
-                VStack {
+                ZStack{
+                    LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                        .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                        .shadow(radius: 4)
                     HStack{
                         
                         AsyncImage(url: userToDisplay.photoUrl) { image in
@@ -401,7 +372,7 @@ struct FriendListView: View{
                             Text(userToDisplay.username)
                             
                             // Add number of reviews object
-                            Text("Reviews: 25")
+                            Text("Reviews: \(rm.getUsersReviews(user: userToDisplay).count)")
                         }
                         
                         Spacer()
@@ -421,7 +392,6 @@ struct FriendListView: View{
                 }
                 
                 .frame(width: UIScreen.main.bounds.width * 0.9, height: 100)
-                .background(Color("secondary-background").clipShape(RoundedRectangle(cornerRadius: 15)))
                 .onTapGesture {
                     if user.id == um.currentUser!.id {
                         userProfile = userToDisplay
@@ -438,9 +408,6 @@ struct FriendListView: View{
             }
         }
     }
-    
-    
-    
 }
 
 struct FriendRequestTestView: View {
@@ -473,10 +440,7 @@ struct FriendRequestTestView: View {
                             Text("Add \(user.username)")
                         }
                     }
-                    
-                    
                 }
-                
             }
             
             Text("Requests:").padding().padding(.top,40)
@@ -492,9 +456,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Deny request from \(request)")
                 }
-                
-                
-                
             }
             
             Text("Friends:").padding().padding(.top,40)
@@ -505,8 +466,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Remove \(friend)")
                 }
-                
-                
             }
             
             Text("Change Username:").padding().padding(.top,40)

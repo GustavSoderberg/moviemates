@@ -9,6 +9,11 @@ import SwiftUI
 import Alamofire
 import UIKit
 
+/**
+ - Description: In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
+                We can also add a movie to our watchlist that you can find on you profileView.
+ */
+
 enum Sheet {
     case MovieView, ReviewSheet
 }
@@ -137,15 +142,13 @@ struct MovieView: View {
                     }
                     .padding(.top, 2)
                     
-                    
                     Text(description)
                         .onTapGesture {
                             withAnimation() {
                                 if !descFull {
                                     descFull = true
                                     descHeight = .infinity
-                                }
-                                else {
+                                } else {
                                     descFull = false
                                     descHeight = 110
                                 }
@@ -184,7 +187,6 @@ struct MovieView: View {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
                         watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                     }
-                    
                 }
                 .padding(.horizontal)
                 .padding(.leading, 15)
@@ -312,13 +314,10 @@ struct MovieView: View {
                             HStack{
                                 Text("REVIEWS")
                                     .font(Font.headline.weight(.bold))
-                                //.foregroundColor(.white)
                                 Spacer()
                             }
                             .padding(.horizontal)
                             .padding(.leading, 12)
-                            
-                            
                             
                             Picker(selection: $index, label: Text("Review List"), content: {
                                 Text("Friends").tag("friends")
@@ -328,7 +327,6 @@ struct MovieView: View {
                             .pickerStyle(SegmentedPickerStyle())
                             .colorMultiply(Color("accent-color"))
                         }
-                        
                     }
                     
                     gap(height: 5)
@@ -339,7 +337,6 @@ struct MovieView: View {
                             if movieFS != nil {
                                 ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
-                                    
                                 }
                             } else {
                                 Text("No Reviews")
@@ -369,7 +366,6 @@ struct MovieView: View {
                     }
                 }
             }
-            
         }
         .sheet(isPresented: $showProfileView) {
             if let userProfile = userProfile {
@@ -383,7 +379,6 @@ struct MovieView: View {
         .onAppear(perform: {
             title = currentMovie.title ?? "Title"
             description = currentMovie.overview ?? "Description"
-            //Search for "O", think it's the third movie
             if description == "" {
                 description = "No further description"
             }
@@ -402,14 +397,6 @@ struct MovieView: View {
                 ratingLocalScore = String(ratingLocalScore.prefix(1))
             }
         })
-        //        .onChange(of: sheetShowing, perform: { _ in
-        //            ratingLocalScore = "\(rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true))"
-        //            ratingLocalScore = ratingLocalScore == "nan" ? "-" : ratingLocalScore
-        //
-        //            if ratingLocalScore.hasSuffix("0") {
-        //                ratingLocalScore = String(ratingLocalScore.prefix(1))
-        //            }
-        //        })
     }
 }
 

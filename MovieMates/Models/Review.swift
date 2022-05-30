@@ -5,6 +5,11 @@
 //  Created by Joakim Andersson on 2022-05-05.
 //
 
+/**
+ - Description: Here we create the review parameter.
+ 
+ */
+
 import Foundation
 
 struct Review: Identifiable, Codable, Hashable {

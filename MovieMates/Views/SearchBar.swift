@@ -4,6 +4,10 @@
 //
 //  Created by Denis Rakitin on 2022-05-08.
 //
+/**
+ - Description:
+ 
+ */
 
 import Foundation
 import SwiftUI
@@ -31,6 +35,7 @@ struct SearchBar: UIViewRepresentable {
 
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             control.onSearchButtonClicked?()
+            searchBar.resignFirstResponder()
         }
 
     }
