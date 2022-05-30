@@ -141,6 +141,10 @@ struct ReviewSheet: View {
                             VStack(spacing: 0){
                                 ScrollView{
                                     TextEditor(text: $review)
+                                        .onReceive(review.publisher.collect()) {
+                                                self.review = String($0.prefix(500))
+                                            }
+                                        .lineLimit(6)
                                         .foregroundColor(darkmode ? .white : .black)
                                         .background(.clear)
                                         .frame(height: 170)
