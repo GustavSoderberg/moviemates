@@ -10,10 +10,10 @@ import FirebaseAuth
 
 struct SettingsSheet: View {
     @AppStorage("darkmode") private var darkmode = true
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
     
     @Binding var showSettingsSheet: Bool
     var user: User
-    
     
     @State var isEditingUsername = false
     @State var isEditingBiography = false
@@ -46,9 +46,6 @@ struct SettingsSheet: View {
                 } label: {
                     Text("Save")
                 }
-                
-                
-                
             }
             
             Spacer()
@@ -101,18 +98,28 @@ struct SettingsSheet: View {
             
             
         }.padding()
+        
+        
+        
+        
         VStack {
-            HStack{
-                Text("Change Theme")
-                Spacer()
-            }
             
-            Picker("Mode",selection: $darkmode) {
-                Text("Light")
-                    .tag(false)
-                Text("Dark")
-                    .tag(true)
-            }.pickerStyle(SegmentedPickerStyle())
+            Toggle(isOn: $darkmode) {
+                Text("Change color mode")
+            }.padding()
+            
+            Toggle(isOn: $spoilerCheck) {
+                Text("Spoiler Check")
+            }.padding()
+
+            //            Picker("Mode",selection: $darkmode) {
+            //                Text("Light")
+            //                    .tag(false)
+            //                Text("Dark")
+            //                    .tag(true)
+            //            }
+            //            .pickerStyle(SegmentedPickerStyle())
+            //            .padding()
             
             Spacer()
             

@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ReviewCard: View {
-
+    
     @AppStorage("darkmode") private var darkmode = true
     
     let review: Review
     var movieFS: MovieFS?
+    
     
     @Binding var currentMovie: Movie?
     @Binding var showMovieView : Bool
@@ -22,6 +23,7 @@ struct ReviewCard: View {
     
     let displayName: Bool
     let displayTitle: Bool
+    var blurSpoiler: Bool
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -53,7 +55,8 @@ struct ReviewCard: View {
                                 ProgressView()
                             }
                             .frame(width: 100, height: 150, alignment: .center)
-                            .border(Color.black, width: 3)
+                            .cornerRadius(5)
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                             .onTapGesture {
                                 loadMovie(id: movie.id!)
                                 showMovieView = true
@@ -76,7 +79,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140)
+                            ReviewTextView(reviewText: review.reviewText, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: blurSpoiler)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -118,6 +121,7 @@ struct GroupHeader: View {
     
     @Binding var userProfile: User?
     @Binding var showProfileView : Bool
+    var blurSpoiler: Bool
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
@@ -131,7 +135,7 @@ struct GroupHeader: View {
                     showMovieView = true
                 }
             VStack(spacing: 5){
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0) {
                     if reviews.count > 0 {
                         AsyncImage(url: rm.getMovieFS(movieId: "\(reviews[0].movieId)")?.photoUrl) { image in
                             image
@@ -141,7 +145,8 @@ struct GroupHeader: View {
                             ProgressView()
                         }
                         .frame(width: 100, height: 150, alignment: .center)
-                        .border(Color.black, width: 3)
+                        .cornerRadius(5)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                         .onTapGesture {
                             loadMovie(id: "\(reviews[0].movieId)")
                             showMovieView = true
@@ -170,7 +175,7 @@ struct GroupHeader: View {
                 
                 VStack(spacing: 3) {
                     ForEach(reviews, id: \.self) { review in
-                        ReviewCardGrouped(review: review, displayName: true, displayTitle: false, showProfileView: $showProfileView, userProfile: $userProfile)
+                        ReviewCardGrouped(review: review, displayName: true, displayTitle: false, blurSpoiler: blurSpoiler, showProfileView: $showProfileView, userProfile: $userProfile)
                     }
                 }
                 .padding(.horizontal, 5)
@@ -214,11 +219,9 @@ struct AverageReviewsLine: View {
                     }
                 }
             }
-            if (rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends) == Float(Int(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)))) {
-                
-            }
             Text((rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends) == Float(Int(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)))) ? String(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)).prefix(1) : String(rm.getAverageRating(movieId: movieId, onlyFriends: onlyFriends)).prefix(3))
                 .frame(maxWidth: 30, alignment: .leading)
+                .font(Font.headline.weight(.bold))
                 .font(.system(size: 20))
         }
     }
@@ -231,6 +234,7 @@ struct ReviewCardGrouped : View {
     
     let displayName: Bool
     let displayTitle: Bool
+    var blurSpoiler: Bool
     
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
@@ -248,7 +252,7 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18)
+                            ReviewTextView(reviewText: review.reviewText, grouped: true, heightConstant: 18, blurSpoiler: blurSpoiler)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -263,7 +267,7 @@ struct ReviewCardGrouped : View {
 }
 
 struct ReviewTopView: View {
-    let review: Review
+    @State var review: Review
     
     @Binding var showProfileView: Bool
     @Binding var userProfile: User?
@@ -295,8 +299,8 @@ struct ReviewTopView: View {
                             .font(Font.system(size: 15).italic())
                             .font(Font.system(size: 25))
                             .onTapGesture {
-                            loadProfile()
-                        }
+                                loadProfile()
+                            }
                     } else {
                         Text(um.getMovie(movieID: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
@@ -314,12 +318,12 @@ struct ReviewTopView: View {
                         .font(Font.headline.weight(.bold))
                         .minimumScaleFactor(0.5)
                         .lineLimit(2)
-
+                    
                 } else {
                     HStack{
                         ClapperLine(review: review)
                         if grouped {
-                            LikeButton()
+                            LikeLine(review: $review)
                         }
                     }
                 }
@@ -337,21 +341,32 @@ struct ReviewTopView: View {
 }
 
 struct ReviewTextView: View {
+    
+    @AppStorage("spoilerCheck") private var spoilerCheck = true
+    @AppStorage("darkmode") private var darkmode = true
+    
     let reviewText: String
     let grouped: Bool
     let heightConstant: CGFloat
+    var blurSpoiler: Bool
+    
+    @State var showSpoiler = true
+    
     @State var height: CGFloat
     @State var fullText = false
     
-    init(reviewText: String, grouped: Bool, heightConstant: CGFloat) {
+    init(reviewText: String, grouped: Bool, heightConstant: CGFloat, blurSpoiler: Bool) {
         self.reviewText = reviewText
         self.grouped = grouped
         self.heightConstant = heightConstant
+        self.blurSpoiler = blurSpoiler
         height = heightConstant
+        //check date
     }
     
     var body: some View {
         ZStack(alignment: .topLeading){
+            
             RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
                 .foregroundColor(.black)
                 .opacity(0.1)
@@ -360,6 +375,38 @@ struct ReviewTextView: View {
                 .font(.system(size: 15))
                 .frame(height: height, alignment: .topLeading)
                 .padding(5)
+                .blur(radius: showSpoiler ? 0 : 8)
+            
+            if !showSpoiler {
+                
+                Button {
+                    showSpoiler = true
+                } label: {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: grouped ? 20 : 5, style: .continuous)
+                            .foregroundColor(.clear)
+                        Text("SPOILER")
+                            .fontWeight(.bold)
+                    }
+                    
+                    
+                }
+                .padding(5)
+                .foregroundColor(darkmode ? .white : .black)
+                .cornerRadius(15)
+                .opacity(showSpoiler ? 0 : 1)
+                .disabled(showSpoiler)
+                
+            }
+            //            else {
+            //
+            //                Text(reviewText)
+            //                    .font(.system(size: 15))
+            //                    .frame(height: height, alignment: .topLeading)
+            //                    .padding(5)
+            //
+            //
+            //            }
         }
         .onTapGesture {
             withAnimation() {
@@ -372,11 +419,17 @@ struct ReviewTextView: View {
                 }
             }
         }
+        .onAppear {
+            if spoilerCheck && blurSpoiler {
+                showSpoiler = false
+            }
+            
+        }
     }
 }
 
 struct ReviewTab: View {
-    let review: Review
+    @State var review: Review
     let tagSize: CGFloat = 25
     
     var body: some View {
@@ -399,11 +452,19 @@ struct ReviewTab: View {
                 }
             }
             Spacer()
-            HStack(spacing: 0) {
-                Text("2")
-                    .font(.system(size: 12))
-                LikeButton()
-            }
+            LikeLine(review: $review)
+        }
+    }
+}
+
+struct LikeLine: View {
+    @Binding var review: Review
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Text("\(review.likes.count)")
+                .font(.system(size: 12))
+            LikeButton(review: review, isLiked: review.likes.contains(um.currentUser!.id!))
         }
     }
 }

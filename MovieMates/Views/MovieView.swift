@@ -86,6 +86,7 @@ struct MovieView: View {
                             .font(Font.headline.weight(.bold))
                             .multilineTextAlignment(.center)
                     }
+                    
                     Text("Review")
                         .foregroundColor(.clear)
                 }
@@ -113,7 +114,7 @@ struct MovieView: View {
             Divider()
             
             ScrollView {
-                VStack {
+                VStack(spacing: 0) {
                     AsyncImage(url: currentMovie.backdropURL) { image in
                         image
                             .resizable()
@@ -122,6 +123,20 @@ struct MovieView: View {
                         ProgressView()
                     }
                     .frame(width: .infinity, height: 220, alignment: .center)
+                    
+                    HStack(spacing: 15){
+                        Text(currentMovie.releaseDate!.prefix(4))
+                            .background(RoundedRectangle(cornerRadius: 5)
+                                .foregroundColor(.black)
+                                .opacity(darkmode ? 1 : 0.2)
+                                .padding(.horizontal, -5))
+                            .font(Font.system(size: 15).italic())
+                            .opacity(0.7)
+                            
+                        Spacer()
+                    }
+                    .padding(.top, 2)
+                    
                     
                     Text(description)
                         .onTapGesture {
@@ -151,7 +166,6 @@ struct MovieView: View {
                             watchlistText = "Add to Watchlist"
                             um.removeMovieWatchlist(movieID: "\(currentMovie.id)")
                             onWatchlist =  false
-                            
                         }
                     } label: {
                         Text("\(watchlistText)")
@@ -170,7 +184,7 @@ struct MovieView: View {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
                         watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                     }
-                    Spacer()
+                    
                 }
                 .padding(.horizontal)
                 .padding(.leading, 15)
@@ -214,7 +228,7 @@ struct MovieView: View {
                                     Image(systemName: "globe.europe.africa")
                                         .font(.system(size: 20))
                                 }
-                                .frame(width: 120, alignment: .leading)
+                                .frame(width: 110, alignment: .leading)
                                 Spacer()
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
@@ -242,6 +256,7 @@ struct MovieView: View {
                                 
                                 Text("\(ratingGlobalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(Font.headline.weight(.bold))
                                     .font(.system(size: 20))
                                 Spacer()
                             }
@@ -256,7 +271,7 @@ struct MovieView: View {
                                     Image(systemName: "person.2.circle")
                                         .font(.system(size: 20))
                                 }
-                                .frame(width: 120, alignment: .leading)
+                                .frame(width: 110, alignment: .leading)
                                 Spacer()
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
@@ -279,6 +294,7 @@ struct MovieView: View {
                                 
                                 Text("\(ratingLocalScore)")
                                     .frame(maxWidth: 30, alignment: .leading)
+                                    .font(Font.headline.weight(.bold))
                                     .font(.system(size: 20))
                                 Spacer()
                             }
@@ -321,8 +337,8 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true)) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                     
                                 }
                             } else {
@@ -331,8 +347,8 @@ struct MovieView: View {
                             
                         case "global":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false)) { review in
-                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
+                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
+                                    ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                 }
                             } else {
                                 Text("No Reviews")
@@ -340,12 +356,13 @@ struct MovieView: View {
                             
                         default:
                             ForEach(friendsReviews) { review in
-                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false)
+                                ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                             }
                         }
                     }
                     .padding(.horizontal)
                     .onAppear {
+                        
                         if let movieFS = movieFS {
                             friendsReviews = getFriendsReviews(movieFS: movieFS)
                         }
@@ -456,8 +473,3 @@ struct ReviewClapper: View {
         }
     }
 }
-
-
-
-
-
