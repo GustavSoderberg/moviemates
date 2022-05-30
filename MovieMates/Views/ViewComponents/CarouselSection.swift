@@ -40,10 +40,6 @@ struct CarouselSection: View {
                         Image(systemName: "list.and.film")
                     }
                 }
-
-//                Text("List > ")
-//                    .font(.title3)
-//                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
             Carousel(index: $currIndex, items: movieListVM.movies) { movie in
@@ -109,9 +105,3 @@ struct CarouselSection: View {
         .padding(.bottom, 30)
     }
 }
-
-//struct CarouselSection_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CarouselSection()
-//    }
-//}

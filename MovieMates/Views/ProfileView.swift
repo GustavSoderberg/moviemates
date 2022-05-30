@@ -27,18 +27,14 @@ struct ProfileView: View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            
             VStack{
-                
                 ZStack{
-                    
                     Text(user.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
-                        
                         if user.id == ooum.currentUser!.id {
                             if !ooum.notification {
                                 
@@ -63,7 +59,7 @@ struct ProfileView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
-
+                                    
                                 }
                             }
                         }
@@ -79,8 +75,7 @@ struct ProfileView: View {
                                     .padding(.trailing, 20)
                                     .foregroundColor(.green)
                                 
-                            }
-                            else if ooum.currentUser!.frequests.contains(user.id!) {
+                            } else if ooum.currentUser!.frequests.contains(user.id!) {
                                 Button {
                                     um.manageFriendRequests(forId: user.id!, accept: true)
                                 } label: {
@@ -90,8 +85,7 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.green)
                                 }.buttonStyle(.plain)
-                            }
-                            else if user.frequests.contains(um.currentUser!.id!) {
+                            } else if user.frequests.contains(um.currentUser!.id!) {
                                 Image(systemName: "hourglass")
                                     .resizable()
                                     .frame(width: 30, height: 30)
@@ -136,7 +130,7 @@ struct ProfileView: View {
                     ProgressView()
                 }
                 Spacer()
-
+                
                 Picker(selection: $index,
                        label: Text("Reviews"),
                        content: {
@@ -167,7 +161,6 @@ struct ProfileView: View {
             }.padding(.top)
         }
     }
-    
 }
 
 struct UserReviewView: View {
@@ -204,7 +197,6 @@ struct UserReviewView: View {
                 ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
-            
         }
     }
 }

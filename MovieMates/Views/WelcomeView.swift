@@ -52,7 +52,6 @@ struct WelcomeView: View {
                 
                 Button {
                     if Auth.auth().currentUser != nil && !username.isEmpty {
-                        
                         if um.login() {
                             statusController.viewShowing = .HomeView
                         } else {

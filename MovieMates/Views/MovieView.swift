@@ -143,8 +143,7 @@ struct MovieView: View {
                                 if !descFull {
                                     descFull = true
                                     descHeight = .infinity
-                                }
-                                else {
+                                } else {
                                     descFull = false
                                     descHeight = 110
                                 }

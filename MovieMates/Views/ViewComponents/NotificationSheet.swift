@@ -36,19 +36,10 @@ struct NotificationSheet: View {
                     
                 }
             }
-            
-            
-            
-            
             Spacer()
         }
-        
     }
-    
 }
-
-
-
 
 struct mockupNotification : View{
     
@@ -73,18 +64,6 @@ struct mockupNotification : View{
                 }.foregroundColor(.red)
                     .padding(.leading)
             }.padding()
-            
-            
         }
-        
     }
-    
 }
-
-
-//struct FriendsSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NotificationSheet(showNotificationSheet: true)
-//    }
-//}
- 

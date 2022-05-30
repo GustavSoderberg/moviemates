@@ -15,10 +15,6 @@ struct Movie: Identifiable, Codable, Hashable {
         return hasher.combine(id)
     }
     
-    
-    //    var id = UUID()
-    //    var title: String
-    //    var description: String
     let id: Int
     let adult: Bool?
     let backdropPath: String?
@@ -60,7 +56,6 @@ struct Movie: Identifiable, Codable, Hashable {
     var backdropURL: URL {
         return URL(string: "https://image.tmdb.org/t/p/w500\(backdropPath ?? "")")!
     }
-    
 }
 
 struct MovieGenre: Codable {

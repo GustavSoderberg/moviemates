@@ -13,9 +13,6 @@ struct MovieListView: View {
     let apiRequestType: ApiRequestType
     let isUpcoming: Bool
     
-    //    @Binding var movieList: [Movie]
-    //    let title: String
-    //    @Binding var isUpcoming: Bool
     @Binding var showSheet: Bool
     
     var body: some View {
@@ -24,9 +21,6 @@ struct MovieListView: View {
                 VStack {
                     ForEach(movieListVM.movies, id: \.self) { movie in
                         MovieCardView(movie: movie, isUpcoming: isUpcoming)
-                        //                    .onAppear(){
-                        //                        movieListVM.loadMoreContent(currentItem: movie, apiRequestType: apiRequestType)
-                        //                    }
                     }
                     Button {
                         movieListVM.loadMoreContet(apiRequestType: apiRequestType)
@@ -63,9 +57,3 @@ struct MovieListView: View {
         }
     }
 }
-
-//struct MovieListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MovieListView()
-//    }
-//}

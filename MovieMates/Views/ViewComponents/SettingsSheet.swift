@@ -23,9 +23,7 @@ struct SettingsSheet: View {
     @State private var showingAlert = false
     
     var body: some View {
-        
         VStack{
-            
             HStack {
                 Button {
                     showSettingsSheet = false
@@ -68,9 +66,7 @@ struct SettingsSheet: View {
                     .onTapGesture {
                         isEditingUsername = true
                     }
-                
             }
-            
             HStack{
                 Text("Change Biography")
                 Spacer()
@@ -93,17 +89,9 @@ struct SettingsSheet: View {
                     .onAppear {
                         UITextView.appearance().backgroundColor = .clear
                     }
-                
             }
-            
-            
         }.padding()
-        
-        
-        
-        
         VStack {
-            
             Toggle(isOn: $darkmode) {
                 Text("Change color mode")
             }.padding()
@@ -111,15 +99,6 @@ struct SettingsSheet: View {
             Toggle(isOn: $spoilerCheck) {
                 Text("Spoiler Check")
             }.padding()
-
-            //            Picker("Mode",selection: $darkmode) {
-            //                Text("Light")
-            //                    .tag(false)
-            //                Text("Dark")
-            //                    .tag(true)
-            //            }
-            //            .pickerStyle(SegmentedPickerStyle())
-            //            .padding()
             
             Spacer()
             
@@ -143,7 +122,6 @@ struct SettingsSheet: View {
                 }
                 Button("No", role: .cancel) {}
             }
-            
         }
     }
 }

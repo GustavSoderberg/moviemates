@@ -151,7 +151,6 @@ struct ReviewSheet: View {
                         
                         Text("Where did you watch the movie?")
                         
-                        
                         Picker(selection: $whereAt, label: Text("Question one")){
                             Text("Home").tag("home")
                             Text("Cinema").tag("cinema")
@@ -193,9 +192,7 @@ struct ReviewSheet: View {
                             .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
                             .cornerRadius(10)
                         
-                        
                     }
-                    
                     Spacer()
                 }
             }
@@ -220,9 +217,4 @@ struct ClapperScoreSlider: View {
             }
     }
 }
-//
-//struct ProfileSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ReviewSheet(sheetShowing: .constant(.ReviewSheet), currentMovie: .constant(Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil))), genres: <#[MovieGenre]?#>
-//    }
-//}
+

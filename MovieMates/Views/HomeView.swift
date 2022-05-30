@@ -58,7 +58,7 @@ struct HomeView: View {
                                     GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
                                 }
                             }
-
+                            
                         case DISCOVER:
                             DicoverView()
                         default:
@@ -69,10 +69,10 @@ struct HomeView: View {
                     }
                     .padding()
                     .sheet(isPresented: $showMovieView) {
-
+                        
                         if let currentMovie = currentMovie {
                             MovieViewController(movie: currentMovie, isUpcoming: isUpcoming, showMovieView: $showMovieView)
-
+                            
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
                     }

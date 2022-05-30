@@ -36,11 +36,11 @@ struct MovieCardView: View {
                         Image(systemName: "film")
                             .aspectRatio(CGSize(width: 2, height: 3), contentMode: .fit)
                             .frame(width: 100, height: 150, alignment: .center)
-             
+                        
                             .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                     }
                 }
-             
+                
                 VStack(alignment: .leading){
                     Text(movie.title!)
                         .font(.title2)
@@ -53,9 +53,9 @@ struct MovieCardView: View {
                     Text(movie.overview ?? "")
                         .lineLimit(5)
                         .font(.system(size: 16))
-                        
+                    
                     Spacer()
-                        
+                    
                 }
                 .frame(height: 150)
             }
@@ -71,10 +71,3 @@ struct MovieCardView: View {
         }
     }
 }
-
-//struct MovieCardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MovieCardView(movie: Movie(id: 1, adult: nil, backdropPath: "/f53Jujiap580mgfefID0T0g2e17.jpg", genreIDS: nil, originalLanguage: nil, originalTitle: nil, overview: "Poe Dameron and BB-8 must face the greedy crime boss Graballa the Hutt, who has purchased Darth Vader’s castle and is renovating it into the galaxy’s first all-inclusive Sith-inspired luxury hotel.", releaseDate: nil, posterPath: "/fYiaBZDjyXjvlY6EDZMAxIhBO1I.jpg", popularity: nil, title: "LEGO Star Wars Terrifying Tales", video: nil, voteAverage: nil, voteCount: nil), isUpcoming: false)
-//    }
-//}
-// 

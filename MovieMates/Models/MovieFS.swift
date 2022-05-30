@@ -13,9 +13,6 @@ struct MovieFS: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
         }
     
-    
-    
-    
     @DocumentID var id : String?
     
     var title: String
@@ -24,13 +21,4 @@ struct MovieFS: Codable, Identifiable, Equatable {
     var description: String
     var reviews: [Review]
     
-//    sum
-//    amount
-//    for review in movieFS && currentUser?.friends.contains(review.authorId){
-//        for review in reviews {
-//            sum += review.rating
-//        }
-//    }
-//
-//    amount = review.count
 }
