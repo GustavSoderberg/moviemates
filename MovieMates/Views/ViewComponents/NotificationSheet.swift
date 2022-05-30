@@ -41,19 +41,10 @@ struct NotificationSheet: View {
                     
                 }
             }
-            
-            
-            
-            
             Spacer()
         }
-        
     }
-    
 }
-
-
-
 
 struct mockupNotification : View{
     
@@ -78,11 +69,6 @@ struct mockupNotification : View{
                 }.foregroundColor(.red)
                     .padding(.leading)
             }.padding()
-            
-            
         }
-        
     }
-    
 }
-

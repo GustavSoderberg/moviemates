@@ -47,11 +47,11 @@ struct SearchView: View {
         }
     }
 }
+
 struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
-    
     
     var body: some View{
         VStack{
@@ -71,7 +71,7 @@ struct moviesAndSeriesView: View {
                             viewModel.loadMoreContent(currentItem: movie, apiRequestType: .searchByTerm)
                         }
                 }.listStyle(.plain)
-                
+
                     .onAppear {
                         UITableView.appearance().separatorStyle = .none
                         UITableView.appearance().separatorColor = UIColor(Color("background"))
@@ -85,7 +85,6 @@ struct moviesAndSeriesView: View {
 
 struct usersView: View {
     @AppStorage("darkmode") private var darkmode = true
-    
     
     @ObservedObject var oum = um
     @State var showProfileView = false
@@ -101,11 +100,10 @@ struct usersView: View {
             if searchText.isEmpty {
                 SearchViewInfo(infoText: $templateText)
                     .frame(maxHeight: .infinity)
-            }
-            else {
+            } else {
                 ScrollView{
                     VStack{
-                        
+
                         ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                             
                             if user.id != um.currentUser!.id {
@@ -120,18 +118,15 @@ struct usersView: View {
                                         UserCardView(user: user)
                                     }
                                     .buttonStyle(.plain)
-                                    
                                 }
-                                
+
                             }
                         }
-                        
+
                     }
                     .padding()
-                    
                 }
             }
-            
         }.sheet(isPresented: $showProfileView) {
             ProfileView(user: oum.listOfUsers[self.index1])
                 .preferredColorScheme(darkmode ? .dark : .light)
@@ -165,4 +160,3 @@ struct UserCardView: View {
         }
     }
 }
-

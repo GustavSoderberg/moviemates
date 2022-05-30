@@ -19,9 +19,6 @@ struct MovieFS: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
         }
     
-    
-    
-    
     @DocumentID var id : String?
     
     var title: String
@@ -30,5 +27,4 @@ struct MovieFS: Codable, Identifiable, Equatable {
     var description: String
     var reviews: [Review]
     
-
 }

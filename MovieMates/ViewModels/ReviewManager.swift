@@ -25,31 +25,18 @@ class ReviewManager : ObservableObject {
         var reviewArray = [Review]()
         for movie in listOfMovieFS {
             
-            
             if onlyFriends {
-                
                 for review in movie.reviews {
-                    
                     if um.currentUser!.friends.contains(review.authorId) {
-                        
                         reviewArray.append(review)
-                        
                     }
-                    
                 }
-            }
-            else {
+            } else {
                 
                 for review in movie.reviews {
-                    
                     reviewArray.append(review)
-                    
                 }
-                
             }
-            
-            
-            
         }
         
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
@@ -93,37 +80,25 @@ class ReviewManager : ObservableObject {
                 }
             }
         }
-        
     }
     
     func getReviews(movieId: Int, onlyFriends: Bool, includeSelf: Bool) -> [Review] {
         
         var reviewArray = [Review]()
         for movie in listOfMovieFS {
-            
             if "\(movieId)" == movie.id!{
-                
                 if onlyFriends {
-                    
                     for review in movie.reviews {
-                        
                         if um.currentUser!.friends.contains(review.authorId) || (includeSelf && um.currentUser!.id == review.authorId) {
-                            
                             reviewArray.append(review)
-                            
                         }
-                        
                     }
-                }
-                else {
+                } else {
                     
                     return movie.reviews.sorted(by: { $0.timestamp > $1.timestamp })
                     
-                    
                 }
-                
             }
-            
         }
         
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
@@ -146,20 +121,15 @@ class ReviewManager : ObservableObject {
     func checkIfMovieExists(movieId: String) -> Bool {
         
         for movieFS in listOfMovieFS {
-            
             if movieFS.id == movieId {
-                
                 return true
                 
             }
         }
-        
         return false
-        
     }
     
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
-        
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
             
@@ -174,19 +144,14 @@ class ReviewManager : ObservableObject {
                 }
             }
             
-            
-            
             reviews.append(review)
             
             if fm.updateReviewsToFirestore(movieId: "\(movie.id)", reviews: reviews) {
                 print("Successfully created a new movie with the new review")
-            }
-            else {
+            } else {
                 print("E: ReviewManager - saveReview() Failed to create a new movie + add the review")
             }
-            
-        }
-        else {
+        } else {
             
             let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String](), timestamp: Date.now)
             
@@ -195,12 +160,10 @@ class ReviewManager : ObservableObject {
             
             if fm.saveMovieToFirestore(movieFS: MovieFS(id: "\(movie.id)", title: movie.title!, photoUrl: movie.posterURL, rating: Double(rating), description: movie.overview!, reviews: reviews)) {
                 print("Successfully added the review to an existing movie")
-            }
-            else {
+            } else {
                 print("E: ReviewManager - saveReview() Failed to add review to an existing movie")
             }
         }
-        
     }
     
     func getReview(movieId: String) -> Review {
@@ -274,8 +237,7 @@ class ReviewManager : ObservableObject {
         
         if fm.updateReviewsToFirestore(movieId: "\(review.movieId)", reviews: reviews) {
             print("Successfully added like")
-        }
-        else {
+        } else {
             print("E: ReviewManager - saveReview() Failed to add like")
         }
     }

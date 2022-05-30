@@ -28,24 +28,18 @@ struct ProfileView: View {
     @State var test = 0
     @ObservedObject var ooum = um
     
-    
-    
     var body: some View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            
             VStack{
-                
                 ZStack{
-                    
                     Text(user.username)
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
                     
                     HStack{
-                        
                         if user.id == ooum.currentUser!.id {
                             if !ooum.notification {
                                 
@@ -71,9 +65,7 @@ struct ProfileView: View {
                                         .frame(width: 30, height: 30)
                                         .padding(.leading, 20)
                                     
-                                    
                                 }
-                                
                             }
                         }
                         Spacer()
@@ -88,8 +80,7 @@ struct ProfileView: View {
                                     .padding(.trailing, 20)
                                     .foregroundColor(.green)
                                 
-                            }
-                            else if ooum.currentUser!.frequests.contains(user.id!) {
+                            } else if ooum.currentUser!.frequests.contains(user.id!) {
                                 Button {
                                     um.manageFriendRequests(forId: user.id!, accept: true)
                                 } label: {
@@ -99,17 +90,13 @@ struct ProfileView: View {
                                         .padding(.trailing, 20)
                                         .foregroundColor(.green)
                                 }.buttonStyle(.plain)
-                                
-                                
-                            }
-                            else if user.frequests.contains(um.currentUser!.id!) {
+                            } else if user.frequests.contains(um.currentUser!.id!) {
                                 Image(systemName: "hourglass")
                                     .resizable()
                                     .frame(width: 30, height: 30)
                                     .padding(.trailing, 20)
                                     .foregroundColor(.yellow)
-                            }
-                            else {
+                            } else {
                                 Button {
                                     um.friendRequest(to: user)
                                 } label: {
@@ -120,10 +107,7 @@ struct ProfileView: View {
                                         .foregroundColor(darkmode ? .white : .black)
                                 }
                             }
-                            
-                            
-                        }
-                        else {
+                        } else {
                             
                             Button {
                                 showSettingsSheet = true
@@ -137,11 +121,9 @@ struct ProfileView: View {
                             }) {
                                 SettingsSheet(showSettingsSheet: $showSettingsSheet, user: user)
                                     .preferredColorScheme(darkmode ? .dark : .light)
-                                
                             }
                         }
                     }.environmentObject(statusController)
-                    
                 }
                 Spacer()
                 AsyncImage(url: user.photoUrl) { image in
@@ -153,7 +135,6 @@ struct ProfileView: View {
                     ProgressView()
                 }
                 Spacer()
-                
                 
                 Picker(selection: $index,
                        label: Text("Reviews"),
@@ -167,7 +148,6 @@ struct ProfileView: View {
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
                 .colorMultiply(Color("accent-color"))
-                
                 
                 switch index {
                 case "reviews":
@@ -186,7 +166,6 @@ struct ProfileView: View {
             }.padding(.top)
         }
     }
-    
 }
 
 struct UserReviewView: View {
@@ -206,7 +185,6 @@ struct UserReviewView: View {
                 VStack{
                     ForEach(orm.getUsersReviews(user: user)) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true, blurSpoiler: false)
-                        
                     }
                 }
                 .padding()
@@ -224,7 +202,6 @@ struct UserReviewView: View {
                 ProfileView(user: userProfile)
                     .preferredColorScheme(darkmode ? .dark : .light)
             }
-            
         }
     }
 }
@@ -236,17 +213,11 @@ struct WatchListView: View {
     @State var movieWatchlist = [Movie]()
     
     var body: some View{
-        
-        
         VStack{
-            
             ScrollView{
-                
                 ForEach(movieWatchlist, id: \.self) { movie in
                     MovieCardView(movie: movie)
-                    
                 }
-                
             }
         }.onAppear {
             getMovies()
@@ -267,11 +238,8 @@ struct WatchListView: View {
                     }
                 }
             }
-            
         }
-        
     }
-    
 }
 
 struct AboutMeView: View {
@@ -438,9 +406,6 @@ struct FriendListView: View{
             }
         }
     }
-    
-    
-    
 }
 
 struct FriendRequestTestView: View {
@@ -474,7 +439,6 @@ struct FriendRequestTestView: View {
                         }
                     }
                 }
-                
             }
             
             Text("Requests:").padding().padding(.top,40)
@@ -490,9 +454,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Deny request from \(request)")
                 }
-                
-                
-                
             }
             
             Text("Friends:").padding().padding(.top,40)
@@ -503,8 +464,6 @@ struct FriendRequestTestView: View {
                 } label: {
                     Text("Remove \(friend)")
                 }
-                
-                
             }
             
             Text("Change Username:").padding().padding(.top,40)

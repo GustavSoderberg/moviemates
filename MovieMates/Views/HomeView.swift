@@ -24,8 +24,6 @@ struct HomeView: View {
     @State var userProfile: User? = nil
     
     @ObservedObject var viewModel = MovieListViewModel()
-    @ObservedObject var allReviewsViewModel = ReviewListViewModel()
-    @ObservedObject var friendsReviewsViewModel = ReviewListViewModel()
     @ObservedObject var orm = rm
     
     var body: some View {
@@ -89,17 +87,10 @@ struct HomeView: View {
                             ProfileView(user: userProfile)
                                 .preferredColorScheme(darkmode ? .dark : .light)
                         }
-                        
                     }
                 }
-                
             }
         }
-        .onAppear {
-            allReviewsViewModel.getAllReviews()
-            friendsReviewsViewModel.getFriendsReviews()
-        }
-        
     }
 }
 

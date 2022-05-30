@@ -44,7 +44,6 @@ struct CarouselSection: View {
                         Image(systemName: "list.and.film")
                     }
                 }
-
             }
             
             Carousel(index: $currIndex, items: movieListVM.movies) { movie in

@@ -156,7 +156,6 @@ struct ReviewSheet: View {
                         
                         Text("Where did you watch the movie?")
                         
-                        
                         Picker(selection: $whereAt, label: Text("Question one")){
                             Text("Home").tag("home")
                             Text("Cinema").tag("cinema")
@@ -198,9 +197,7 @@ struct ReviewSheet: View {
                             .background(score <= 0 ? Color("secondary-background") : Color("accent-color"))
                             .cornerRadius(10)
                         
-                        
                     }
-                    
                     Spacer()
                 }
             }

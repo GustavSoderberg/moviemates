@@ -26,7 +26,7 @@ struct MovieListView: View {
                 VStack {
                     ForEach(movieListVM.movies, id: \.self) { movie in
                         MovieCardView(movie: movie, isUpcoming: isUpcoming)
-                        
+
                     }
                     Button {
                         movieListVM.loadMoreContet(apiRequestType: apiRequestType)

@@ -31,9 +31,7 @@ struct SettingsSheet: View {
     @State var showCreditSheet = false
     
     var body: some View {
-        
         VStack{
-            
             HStack {
                 Button {
                     showSettingsSheet = false
@@ -76,9 +74,7 @@ struct SettingsSheet: View {
                     .onTapGesture {
                         isEditingUsername = true
                     }
-                
             }
-            
             HStack{
                 Text("Change Biography")
                 Spacer()
@@ -101,17 +97,9 @@ struct SettingsSheet: View {
                     .onAppear {
                         UITextView.appearance().backgroundColor = .clear
                     }
-                
             }
-            
-            
         }.padding()
-        
-        
-        
-        
         VStack {
-            
             Toggle(isOn: $darkmode) {
                 Text("Change color mode")
             }.padding()
@@ -119,7 +107,6 @@ struct SettingsSheet: View {
             Toggle(isOn: $spoilerCheck) {
                 Text("Spoiler Check")
             }.padding()
-
             Spacer()
             
             Button {
@@ -151,7 +138,6 @@ struct SettingsSheet: View {
                 }
                 Button("No", role: .cancel) {}
             }
-            
         }
     }
 }
