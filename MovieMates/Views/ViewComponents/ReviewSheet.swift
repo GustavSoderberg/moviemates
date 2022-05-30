@@ -63,7 +63,8 @@ struct ReviewSheet: View {
                                     ProgressView()
                                 }
                                 .frame(width: 100, height: 150, alignment: .center)
-                                .border(Color.black, width: 1)
+                                .cornerRadius(5)
+                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
                             }
                             
                             VStack(spacing: 0) {
