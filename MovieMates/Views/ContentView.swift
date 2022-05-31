@@ -25,7 +25,7 @@ struct ContentView: View {
     @ObservedObject var uw = um
     
     @State var viewShowing: Status = .Loading
-    @State private var selection = 2
+    //@State private var selection = 2
     @State var text = ""
     
     init() {
@@ -61,7 +61,7 @@ struct ContentView: View {
                 
             case .HomeView:
                 
-                TabView(selection: $selection) {
+                TabView(selection: $statusController.selection) {
                     ProfileView(user: um.currentUser!)
                         .tabItem {
                             Image(systemName: "person.fill")
