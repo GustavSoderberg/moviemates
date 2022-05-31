@@ -152,62 +152,60 @@ struct GroupHeader: View {
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
     var body: some View {
-        if reviews != [] {
-            ZStack {
-                LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
-                    .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                    .shadow(radius: 10)
-                    .onTapGesture {
-                        loadMovie(id: "\(reviews[0].movieId)")
-                        showMovieView = true
-                    }
-                VStack(spacing: 5){
-                    HStack(alignment: .top, spacing: 0) {
-                        if reviews.count > 0 {
-                            AsyncImage(url: rm.getMovieFS(movieId: "\(reviews[0].movieId)")?.photoUrl) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 100, height: 150, alignment: .center)
-                            .cornerRadius(5)
-                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
-                            .onTapGesture {
-                                loadMovie(id: "\(reviews[0].movieId)")
-                                showMovieView = true
-                            }
-                            
-                            VStack() {
-                                Text(rm.getMovieFS(movieId: "\(reviews[0].movieId)")!.title)
-                                    .font(Font.headline.weight(.bold))
-                                    .font(Font.system(size: 25))
-                                    .minimumScaleFactor(0.5)
-                                    .lineLimit(2)
-                                
-                                AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: false)
-                                    .padding(.leading)
-                                AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: true)
-                                    .padding(.leading)
-                            }
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(radius: 10)
+                .onTapGesture {
+                    loadMovie(id: "\(reviews[0].movieId)")
+                    showMovieView = true
+                }
+            VStack(spacing: 5){
+                HStack(alignment: .top, spacing: 0) {
+                    if reviews.count > 0 {
+                        AsyncImage(url: rm.getMovieFS(movieId: "\(reviews[0].movieId)")?.photoUrl) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 150, alignment: .center)
+                        .cornerRadius(5)
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
+                        .onTapGesture {
+                            loadMovie(id: "\(reviews[0].movieId)")
+                            showMovieView = true
                         }
                         
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    Divider()
-                    
-                    VStack(spacing: 3) {
-                        ForEach(reviews, id: \.self) { review in
-                            ReviewCardGrouped(review: review, displayName: true, displayTitle: false, blurSpoiler: blurSpoiler, showProfileView: $showProfileView, userProfile: $userProfile)
+                        VStack() {
+                            Text(rm.getMovieFS(movieId: "\(reviews[0].movieId)")!.title)
+                                .font(Font.headline.weight(.bold))
+                                .font(Font.system(size: 25))
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(2)
+                            
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: false)
+                                .padding(.leading)
+                            AverageRatingLine(movieId: reviews[0].movieId, onlyFriends: true)
+                                .padding(.leading)
                         }
                     }
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 5)
+                    
+                    Spacer()
                 }
+                .padding(.horizontal)
+                .padding(.top)
+                
+                Divider()
+                
+                VStack(spacing: 3) {
+                    ForEach(reviews, id: \.self) { review in
+                        ReviewCardGrouped(review: review, displayName: true, displayTitle: false, blurSpoiler: blurSpoiler, showProfileView: $showProfileView, userProfile: $userProfile)
+                    }
+                }
+                .padding(.horizontal, 5)
+                .padding(.bottom, 5)
             }
         }
     }
