@@ -369,7 +369,6 @@ struct ReviewTopView: View {
 }
 
 struct ReviewTextView: View {
-    
     @AppStorage("spoilerCheck") private var spoilerCheck = true
     @AppStorage("darkmode") private var darkmode = true
     
@@ -505,7 +504,8 @@ struct ClapperImage: View {
         Image("clapper-big")
             .resizable()
             .frame(width: 20, height: 20)
-            .foregroundColor(filled ? .black : .white)
+            .foregroundColor(filled ? Color("black-white") : .black)
+            .opacity(filled ? 1 : 0.2)
             .onAppear(perform: {
                 if Int(score.prefix(1)) ?? 0 >= pos {
                     filled = true

@@ -177,7 +177,7 @@ struct MovieView: View {
                             .cornerRadius(5)
                             .font(Font.headline.weight(.bold))
                             .font(.system(size: 15))
-                            .background(LinearGradient(gradient: Gradient(colors: onWatchlist ? [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")] : [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
+                            .background(LinearGradient(gradient: Gradient(colors: onWatchlist ? [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")] : [.gray, Color("secondary-background")]), startPoint: .top, endPoint: .bottom)
                                 .mask(Rectangle()
                                     .cornerRadius(5))
                                     .shadow(radius: 10))
@@ -186,6 +186,26 @@ struct MovieView: View {
                     .onAppear {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
                         watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
+                    }
+                    
+                    if isUpcoming != true {
+                        Button {
+                            withAnimation(.easeIn(duration: 0.3)){
+                                sheetShowing = .ReviewSheet
+                            }
+                        } label: {
+                            Text("Review")
+                                .padding(.horizontal)
+                                .padding(.vertical, 4)
+                                .cornerRadius(5)
+                                .font(Font.headline.weight(.bold))
+                                .font(.system(size: 15))
+                                .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                    .mask(Rectangle()
+                                        .cornerRadius(5))
+                                        .shadow(radius: 10))
+                                .foregroundColor(darkmode ? .white : .black)
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -423,12 +443,12 @@ struct ReviewClapper: View {
             Rectangle()
                 .frame(width: 20, height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.white)
+                .foregroundColor(Color("clapper-empty"))
             
             Rectangle()
                 .frame(width: CGFloat(width), height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.black)
+                .foregroundColor(Color("black-white"))
             
             Image("clapper_hollow")
                 .resizable()

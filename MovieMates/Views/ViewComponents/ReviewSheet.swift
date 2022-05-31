@@ -35,7 +35,9 @@ struct ReviewSheet: View {
                         .foregroundColor(.blue)
                         .padding(.top, 4)
                         .onTapGesture {
-                            sheetShowing = .MovieView
+                            withAnimation(.easeIn(duration: 0.3)){
+                                sheetShowing = .MovieView
+                            }
                         }
                     Spacer()
                 }.onAppear {
@@ -181,7 +183,6 @@ struct ReviewSheet: View {
                     HStack {
                         Button {
                             if score > 0 {
-                                print("Leave Review")
                                 rm.saveReview(movie: currentMovie,
                                               rating: score,
                                               text: review,
@@ -190,7 +191,9 @@ struct ReviewSheet: View {
                                 rm.cacheGlobal = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false)
                                 rm.cacheFriends = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true)
                                 rm.refresh += 1
-                                sheetShowing = .MovieView
+                                withAnimation(.easeIn(duration: 0.3)){
+                                    sheetShowing = .MovieView
+                                }
                             } else {
                                 emptyRating = true
                             }
