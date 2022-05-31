@@ -443,7 +443,8 @@ struct ReviewClapper: View {
             Rectangle()
                 .frame(width: 20, height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(Color("clapper-empty"))
+                .foregroundColor(gray ? .black : Color("clapper-empty"))
+                .opacity(gray ? 0.2 : 1)
             
             Rectangle()
                 .frame(width: CGFloat(width), height: 20)
