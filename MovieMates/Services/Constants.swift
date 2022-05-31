@@ -1,13 +1,15 @@
-//
-//  Constants.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-08.
-//
 /**
- - Description: Constant values we have so that we don't make any typos
+ - Description: Constant values we have so that we don't make any typos & allows for easier changes of parameters
  
- */
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+  
+  */
 
 import Foundation
 import Alamofire

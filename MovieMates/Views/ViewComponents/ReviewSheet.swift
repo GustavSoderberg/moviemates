@@ -1,12 +1,15 @@
-//
-//  ProfileSheet.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-03.
-//
-
 /**
- - Description: This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ - Description:
+    This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 

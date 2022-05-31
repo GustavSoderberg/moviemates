@@ -1,9 +1,17 @@
-//
-//  MovieMatesApp.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-02.
-//
+/**
+ 
+ - Description:
+    The main struct of our app. Here view controllers, enviroment variables are initialized as well as our app delegate.
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 import Firebase

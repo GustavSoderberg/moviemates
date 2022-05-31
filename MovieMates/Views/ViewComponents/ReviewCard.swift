@@ -1,11 +1,5 @@
-//
-//  ReviewCard.swift
-//  MovieMates
-//
-//  Created by Oscar Karlsson on 2022-05-23.
-//
-
 /**
+ 
  - Description:
  Where the structs for the visual display of reviews are stored.
  
@@ -28,6 +22,15 @@
  - ClapperLine: Makes a line of clappers displaying the rating the user gave the movie.
  
  - ClapperImage: The ClapperLine contains 5 of these.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
  */
 
 import SwiftUI
@@ -105,7 +108,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
+                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? (!rm.dismissedSpoiler.contains(review.id) && blurSpoiler) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -280,7 +283,9 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
+                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? (!rm.dismissedSpoiler.contains(review.id) && blurSpoiler) : false)
+                            
+
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -330,7 +335,7 @@ struct ReviewTopView: View {
                                 loadProfile()
                             }
                     } else {
-                        Text(um.getMovie(movieID: String(review.movieId))!.title)
+                        Text(rm.getMovieFS(movieId: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
                             .font(Font.system(size: 25))
                             .minimumScaleFactor(0.5)
@@ -342,7 +347,7 @@ struct ReviewTopView: View {
                 }
                 
                 if displayTitle && displayName {
-                    Text(um.getMovie(movieID: String(review.movieId))!.title)
+                    Text(rm.getMovieFS(movieId: String(review.movieId))!.title)
                         .font(Font.headline.weight(.bold))
                         .minimumScaleFactor(0.5)
                         .lineLimit(2)

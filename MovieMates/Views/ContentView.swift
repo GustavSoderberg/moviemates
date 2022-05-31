@@ -1,12 +1,14 @@
-//
-//  ContentView.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-02.
-//
-
 /**
- - Description: The app starts here and then is redirected to homeView. We create tabs here as well.
+ - Description:
+    A loading view is displayed until our app is connected to firebase, then checks if the user is logged in and redirects to the corresponding view.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 
@@ -25,7 +27,6 @@ struct ContentView: View {
     @ObservedObject var uw = um
     
     @State var viewShowing: Status = .Loading
-    //@State private var selection = 2
     @State var text = ""
     
     init() {

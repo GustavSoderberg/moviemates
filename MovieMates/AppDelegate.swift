@@ -1,9 +1,17 @@
-//
-//  AppDelegate.swift
-//  AppDelegate
-//
-//  Created by Gustav Söderberg on 2022-05-04.
-//
+/**
+ 
+ - Description:
+    The app delegate configures firebase
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 import Firebase

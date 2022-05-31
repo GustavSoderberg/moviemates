@@ -1,12 +1,13 @@
-//
-//  StatusController.swift
-//  MovieMates
-//
-//  Created by Joakim Andersson on 2022-05-24.
-//
 /**
- - Description:
+ - Description: StatusController handles all the parameters for which view to display
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation

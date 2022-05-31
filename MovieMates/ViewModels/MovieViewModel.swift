@@ -1,12 +1,14 @@
-//
-//  MovieViewModel.swift
-//  MovieMates
-//
-//  Created by Joakim Andersson on 2022-05-09.
-//
 /**
  - Description:
+    MovieViewModel is a view model that handles the communication specifically to fetch a movie.
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation
@@ -15,8 +17,6 @@ import Alamofire
 struct MovieViewModel {
     
     static let shared = MovieViewModel()
-    
-    private init(){}
     
     func fetchMovie(id: Int, completion: @escaping(Result<Movie, Error>) -> Void){
         let request = AF.request("\(BASE_API_URL)/movie/\(id)?api_key=\(API_KEY)&language=en-US&page=1")
