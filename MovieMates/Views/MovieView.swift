@@ -52,7 +52,6 @@ struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
     @ObservedObject var orm = rm
     
-    
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
@@ -66,7 +65,6 @@ struct MovieView: View {
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
-    @State var poster : Image = Image("bill_poster")
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
@@ -108,7 +106,9 @@ struct MovieView: View {
                         Text("Review")
                             .foregroundColor(.blue)
                             .onTapGesture {
-                                sheetShowing = .ReviewSheet
+                                withAnimation(.easeIn(duration: 0.3)) {
+                                    sheetShowing = .ReviewSheet
+                                }
                             }
                     }
                 }
@@ -209,7 +209,6 @@ struct MovieView: View {
                     }
                 }
                 .padding(.horizontal)
-                .padding(.leading, 15)
                 
                 VStack(spacing:0){
                     ZStack{
@@ -244,6 +243,7 @@ struct MovieView: View {
                             gap(height: 5)
                             
                             HStack{
+                                Spacer()
                                 HStack{
                                     Text("GLOBAL")
                                         .font(Font.headline.weight(.bold))
@@ -282,11 +282,12 @@ struct MovieView: View {
                                     .font(.system(size: 20))
                                 Spacer()
                             }
-                            .padding(.horizontal, 30.0)
+                            .padding(.horizontal)
                             
                             gap(height: 5)
                         
                             HStack{
+                                Spacer()
                                 HStack{
                                     Text("FRIENDS")
                                         .font(Font.headline.weight(.bold))
@@ -320,7 +321,7 @@ struct MovieView: View {
                                     .font(.system(size: 20))
                                 Spacer()
                             }
-                            .padding(.horizontal, 30.0)
+                            .padding(.horizontal)
                         }
                     }
                 }
@@ -454,7 +455,7 @@ struct ReviewClapper: View {
             Image("clapper_hollow")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(gray ? Color("secondary-background") : Color("accent-color"))
+                .foregroundColor(gray ? Color("secondary-background") : Color("welcome-clapper-top"))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {

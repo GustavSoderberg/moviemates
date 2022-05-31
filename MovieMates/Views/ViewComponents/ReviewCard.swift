@@ -237,7 +237,7 @@ struct AverageRatingLine: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .frame(width: 115, height: 25)
-                    .foregroundColor(Color("accent-color"))
+                    .foregroundColor(Color("welcome-clapper-top"))
                 
                 HStack(spacing: 2) {
                     ForEach(1..<6) { i in
