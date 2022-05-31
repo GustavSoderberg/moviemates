@@ -115,6 +115,7 @@ struct SettingsSheet: View {
                 Text("Credits")
             }.sheet(isPresented: $showCreditSheet, content: {
                 CreditSheet(showCreditSheet: $showCreditSheet)
+                    .preferredColorScheme(darkmode ? .dark : .light)
             })
 
             
