@@ -5,8 +5,7 @@
 //  Created by Gustav Söderberg on 2022-05-05.
 //
 /**
- - Description:
- 
+ - Description: Collection of functions used to communicat with our firebase.
  */
 
 import Foundation

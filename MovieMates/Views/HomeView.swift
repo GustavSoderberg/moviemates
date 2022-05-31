@@ -16,7 +16,7 @@ struct HomeView: View {
     @AppStorage("darkmode") private var darkmode = true
     @EnvironmentObject var statusController: StatusController
     
-    @State var index = "trending"
+    @State var index = TRENDING
     @State var showMovieView = false
     @State var showProfileView = false
     @State var currentMovie: Movie? = nil
@@ -66,7 +66,7 @@ struct HomeView: View {
                                         .cornerRadius(5)
                                         .font(Font.headline.weight(.bold))
                                         .font(.system(size: 15))
-                                        .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                        .background(LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP), Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                                             .mask(Rectangle()
                                                 .cornerRadius(5))
                                                 .shadow(radius: 6))
@@ -84,10 +84,12 @@ struct HomeView: View {
                             
                         case TRENDING:
                             ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: false)), id: \.self) { reviews in
-                                if reviews.count == 1 {
-                                    ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: !rm.dismissedSpoiler.contains(reviews[0].id))
-                                } else {
-                                    GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
+                                if !reviews.isEmpty {
+                                    if reviews.count == 1 {
+                                        ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: !rm.dismissedSpoiler.contains(reviews[0].id))
+                                    } else {
+                                        GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
+                                    }
                                 }
                             }
                             
@@ -117,7 +119,7 @@ struct HomeView: View {
                 }
             }
         }.onAppear {
-            statusController.searchIndex = "movies"
+            statusController.searchIndex = MOVIES
         }
     }
 }
