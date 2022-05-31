@@ -55,7 +55,7 @@ struct ReviewCard: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP) , Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 10)
                 .onTapGesture {
@@ -153,7 +153,7 @@ struct GroupHeader: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP) , Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 10)
                 .onTapGesture {
@@ -237,7 +237,7 @@ struct AverageRatingLine: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .frame(width: 115, height: 25)
-                    .foregroundColor(Color("welcome-clapper-top"))
+                    .foregroundColor(Color(GRADIENT_TOP))
                 
                 HStack(spacing: 2) {
                     ForEach(1..<6) { i in
@@ -448,18 +448,18 @@ struct ReviewTab: View {
     var body: some View {
         HStack{
             if review.whereAt != "" || review.withWho != "" {
-                if review.whereAt == "home" {
+                if review.whereAt == HOME {
                     Image(systemName: "house.circle")
                         .font(.system(size: tagSize))
-                } else if review.whereAt == "cinema" {
+                } else if review.whereAt == CINEMA {
                     Image(systemName: "film.circle")
                         .font(.system(size: tagSize))
                 }
                 
-                if review.withWho == "alone" {
+                if review.withWho == ALONE {
                     Image(systemName: "person.circle")
                         .font(.system(size: tagSize))
-                } else if review.withWho == "friends" {
+                } else if review.withWho == W_FRIENDS {
                     Image(systemName: "person.2.circle")
                         .font(.system(size: tagSize))
                 }
@@ -501,10 +501,10 @@ struct ClapperImage: View {
     @State var filled : Bool = false
     
     var body: some View {
-        Image("clapper-big")
+        Image(CLAPPER)
             .resizable()
             .frame(width: 20, height: 20)
-            .foregroundColor(filled ? Color("black-white") : .black)
+            .foregroundColor(filled ? Color(BW) : .black)
             .opacity(filled ? 1 : 0.2)
             .onAppear(perform: {
                 if Int(score.prefix(1)) ?? 0 >= pos {

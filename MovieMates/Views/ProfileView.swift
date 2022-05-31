@@ -18,7 +18,7 @@ struct ProfileView: View {
     @AppStorage("darkmode") private var darkmode = true
     @EnvironmentObject var statusController: StatusController
     
-    @State var index = "reviews"
+    @State var index = REVIEWS
     @State private var showSettingsSheet = false
     @State private var showingNotificationSheet = false
     
@@ -30,7 +30,7 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack{
-            Color("background")
+            Color(BACKGROUND)
                 .ignoresSafeArea()
             VStack{
                 ZStack{
@@ -139,24 +139,24 @@ struct ProfileView: View {
                 Picker(selection: $index,
                        label: Text("Reviews"),
                        content: {
-                    Text("Reviews").tag("reviews")
-                    Text("Watchlist").tag("watchlist")
-                    Text("Friends").tag("friends")
-                    Text("About").tag("about")
+                    Text("Reviews").tag(REVIEWS)
+                    Text("Watchlist").tag(WATCHLIST)
+                    Text("Friends").tag(FRIENDS)
+                    Text("About").tag(ABOUT)
                     
                 })
                 .padding(.horizontal)
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(Color("accent-color"))
+                .colorMultiply(Color(ACCENT_COLOR))
                 
                 switch index {
-                case "reviews":
+                case REVIEWS:
                     UserReviewView(user: user)
-                case "watchlist":
+                case WATCHLIST:
                     WatchListView(user: user)
-                case "friends":
+                case FRIENDS:
                     FriendListView(user: user)
-                case "about":
+                case ABOUT:
                     AboutMeView(user: user)
                 default:
                     UserReviewView(user: user)
@@ -169,7 +169,7 @@ struct ProfileView: View {
 }
 
 struct UserReviewView: View {
-    @AppStorage("darkmode") private var darkmode = true
+    @AppStorage(DARKMODE) private var darkmode = true
     
     let user: User
     @State var currentMovie: Movie? = nil
@@ -269,7 +269,7 @@ struct AboutMeView: View {
                     .padding(.horizontal)
                     
                     ZStack(alignment: .leading){
-                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                        LinearGradient(gradient: Gradient(colors: [Color(GRAY_LIGHT), Color(GRAY_DARK)]), startPoint: .top, endPoint: .bottom)
                             .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
@@ -293,7 +293,7 @@ struct AboutMeView: View {
                     .padding(.horizontal)
                     
                     ZStack(alignment: .leading){
-                        LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                        LinearGradient(gradient: Gradient(colors: [Color(GRAY_LIGHT), Color(GRAY_DARK)]), startPoint: .top, endPoint: .bottom)
                             .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                             .frame(minHeight: 100)
                         
@@ -349,7 +349,7 @@ struct AboutMeView: View {
 }
 
 struct FriendListView: View{
-    @AppStorage("darkmode") private var darkmode = true
+    @AppStorage(DARKMODE) private var darkmode = true
     
     @State var showProfileView = false
     @State var userProfile: User?
@@ -364,7 +364,7 @@ struct FriendListView: View{
                 
                 let userToDisplay = um.getUser(id: friend)
                 ZStack{
-                    LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+                    LinearGradient(gradient: Gradient(colors: [Color(GRAY_LIGHT), Color(GRAY_DARK)]), startPoint: .top, endPoint: .bottom)
                         .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                         .shadow(radius: 4)
                     HStack{
