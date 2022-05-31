@@ -38,6 +38,7 @@ struct ProfileView: View {
                         .font(.largeTitle)
                         .lineLimit(1)
                         .frame(width: 250)
+                        .minimumScaleFactor(0.5)
                     
                     HStack{
                         if user.id == ooum.currentUser!.id {
@@ -108,7 +109,6 @@ struct ProfileView: View {
                                 }
                             }
                         } else {
-                            
                             Button {
                                 showSettingsSheet = true
                             } label: {
@@ -258,11 +258,15 @@ struct AboutMeView: View {
     
     var body: some View{
         VStack{
-            ScrollView{
-                
-                VStack {
-                    Text("Biography")
-                        .font(.title2)
+            ScrollView {
+                VStack(spacing: 5) {
+                    HStack{
+                        Text("Biography")
+                            .font(.title2)
+                            .padding(.leading, 20)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                     
                     ZStack(alignment: .leading){
                         LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
@@ -274,14 +278,19 @@ struct AboutMeView: View {
                                 .padding()
                             Spacer()
                         }
-                    }.padding([.leading, .trailing])
+                    }
+                    .padding(.horizontal)
                 }
+                .padding(.vertical, 5)
                 
-                Spacer()
-                
-                VStack{
-                    Text("Summary of \(user.username)")
-                        .font(.title2)
+                VStack(spacing: 5) {
+                    HStack{
+                        Text("Summary")
+                            .font(.title2)
+                            .padding(.leading, 20)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                     
                     ZStack(alignment: .leading){
                         LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
@@ -307,7 +316,8 @@ struct AboutMeView: View {
                                 }
                             }
                         }.padding()
-                    }.padding([.trailing, .leading])
+                    }
+                    .padding(.horizontal)
                 }
             }
         }.onAppear{
