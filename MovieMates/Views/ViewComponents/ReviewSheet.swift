@@ -89,11 +89,12 @@ struct ReviewSheet: View {
                                     GeometryReader { geo in
                                         Rectangle()
                                             .frame(width: 145, height: 25)
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
+                                            .opacity(0.2)
                                         
                                         Rectangle()
                                             .frame(width: scoreWidth, height: 25)
-                                            .foregroundColor(.black)
+                                            .foregroundColor(Color("black-white"))
                                         
                                         HStack(spacing: 0) {
                                             ForEach(1..<6, id: \.self){ i in
