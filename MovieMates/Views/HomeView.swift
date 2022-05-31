@@ -14,6 +14,7 @@ import SwiftUI
 
 struct HomeView: View {
     @AppStorage("darkmode") private var darkmode = true
+    @EnvironmentObject var statusController: StatusController
     
     @State var index = "friends"
     @State var showMovieView = false
@@ -48,11 +49,38 @@ struct HomeView: View {
                         switch index {
                             
                         case FRIENDS:
-                            ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: true)), id: \.self) { reviews in
-                                if reviews.count == 1 {
-                                    ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: !rm.dismissedSpoiler.contains(reviews[0].id))
-                                } else {
-                                    GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
+                            if orm.getAllReviews(onlyFriends: true).isEmpty {
+                                Text("No Friends")
+                                Button {
+                                    statusController.searchIndex = "users"
+                                    statusController.selection = 3
+                                } label: {
+                                    Text("Add more friends")
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 4)
+                                        .cornerRadius(5)
+                                        .font(Font.headline.weight(.bold))
+                                        .font(.system(size: 15))
+                                        .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                            .mask(Rectangle()
+                                                .cornerRadius(5))
+                                                .shadow(radius: 6))
+                                        .foregroundColor(darkmode ? .white : .black)
+                                }
+//                                Button {
+//                                    statusController.searchIndex = "users"
+//                                    statusController.selection = 3
+//                                } label: {
+//                                    Text("Search Users")
+//                                }
+
+                            } else {
+                                ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: true)), id: \.self) { reviews in
+                                    if reviews.count == 1 {
+                                        ReviewCard(review: reviews[0], movieFS: rm.getMovieFS(movieId: "\(reviews[0].movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: true, blurSpoiler: !rm.dismissedSpoiler.contains(reviews[0].id))
+                                    } else {
+                                        GroupHeader(reviews: reviews, currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, blurSpoiler: true)
+                                    }
                                 }
                             }
                             
@@ -90,6 +118,8 @@ struct HomeView: View {
                     }
                 }
             }
+        }.onAppear {
+            statusController.searchIndex = "movies"
         }
     }
 }

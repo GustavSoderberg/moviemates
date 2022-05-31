@@ -13,6 +13,8 @@ import Foundation
 
 class StatusController: ObservableObject {
     @Published var viewShowing: Status = .Loading
+    @Published var selection = 2
+    @Published var searchIndex = "movies"
 }
 
 enum Status {

@@ -13,6 +13,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    @EnvironmentObject var statusController: StatusController
     
     @Binding var text: String
     
@@ -25,7 +26,7 @@ struct SearchView: View {
                 .ignoresSafeArea()
             VStack{
                 
-                Picker(selection: $index,
+                Picker(selection: $statusController.searchIndex,
                        label: Text("Reviews"),
                        content: {
                     Text("Movies/Series").tag("movies")
@@ -35,7 +36,7 @@ struct SearchView: View {
                 .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
                 .colorMultiply(Color("accent-color"))
                 
-                switch index {
+                switch statusController.searchIndex {
                 case "movies":
                     moviesAndSeriesView()
                 case "users":
