@@ -1,12 +1,15 @@
-//
-//  MovieCardView.swift
-//  MovieMates
-//
-//  Created by Joakim Andersson on 2022-05-05.
-//
-
 /**
- - Description: We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet.
+ 
+ - Description:
+    We are creating our movie card in this struct. This is the layout for the review that is made from ReviewSheet.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 
@@ -21,7 +24,7 @@ struct MovieCardView: View {
     
     var body: some View {
         ZStack{
-            LinearGradient(gradient: Gradient(colors: [Color("grey"), Color("grey2")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(GRAY_LIGHT), Color(GRAY_DARK)]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 4)
             HStack(alignment: .top) {

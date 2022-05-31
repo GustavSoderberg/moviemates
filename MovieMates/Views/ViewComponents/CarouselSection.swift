@@ -1,13 +1,17 @@
-//
-//  CarouselSection.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-26.
-//
-
 /**
- - Description: When you pick a movie from the carousel, you are redirected to ReviewView. 
-  */
+ 
+ - Description:
+    When you pick a movie from the carousel, you are redirected to ReviewView.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
+*/
 
 import SwiftUI
 

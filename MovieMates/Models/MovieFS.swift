@@ -1,14 +1,14 @@
-//
-//  MovieFS.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-16.
-//
-
 /**
  - Description:
+    MovieFS is a Movie object to be decoded & stored in firebase
  
- 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation

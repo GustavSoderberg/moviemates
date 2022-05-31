@@ -1,9 +1,17 @@
-//
-//  CreditSheet.swift
-//  MovieMates
-//
-//  Created by Karol Oman on 2022-05-30.
-//
+/**
+ 
+ - Description:
+    Here we display the credits of our amazing developers.
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 

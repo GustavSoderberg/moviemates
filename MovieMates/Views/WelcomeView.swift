@@ -1,14 +1,17 @@
-//
-//  WelcomeView.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-02.
-//
-
 /**
- - Description: The user gets to choose a username that they want on the app. The username is then saved to firebase.
+ - Description:
+    The user is prompted to log in via FirebaseUI,
+    If the user is new, they get to choose a username that they want on the app. The username is then saved to firebase and the user is then logged in.
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
+
 import SwiftUI
 import FirebaseGoogleAuthUI
 import FirebaseOAuthUI

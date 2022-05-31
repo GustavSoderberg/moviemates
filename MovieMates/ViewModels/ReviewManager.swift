@@ -1,12 +1,14 @@
-//
-//  ReviewManager.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-16.
-//
 /**
  - Description:
+    ReviewManager is a view model that handles the communication between displaying reviews and firebase.
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation
@@ -42,6 +44,43 @@ class ReviewManager : ObservableObject {
         }
         
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
+    }
+    
+    func getMovieReviews(movieId: Int, onlyFriends: Bool, includeSelf: Bool) -> [Review] {
+        
+        var reviewArray = [Review]()
+        for movie in listOfMovieFS {
+            if "\(movieId)" == movie.id!{
+                if onlyFriends {
+                    for review in movie.reviews {
+                        if um.currentUser!.friends.contains(review.authorId) || (includeSelf && um.currentUser!.id == review.authorId) {
+                            reviewArray.append(review)
+                        }
+                    }
+                } else {
+                    
+                    return movie.reviews.sorted(by: { $0.timestamp > $1.timestamp })
+                    
+                }
+            }
+        }
+        
+        return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
+    }
+    
+    func getReview(movieId: String) -> Review {
+        
+        for movie in listOfMovieFS {
+            if movie.id == movieId {
+                for review in movie.reviews {
+                    if review.authorId == um.currentUser!.id! {
+                        return review
+                    }
+                }
+            }
+        }
+        
+        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", likes: [""], timestamp: Date.now)
     }
     
     func getUsersReviews(user: User) -> [Review] {
@@ -84,30 +123,10 @@ class ReviewManager : ObservableObject {
         }
     }
     
-    func getReviews(movieId: Int, onlyFriends: Bool, includeSelf: Bool) -> [Review] {
-        
-        var reviewArray = [Review]()
-        for movie in listOfMovieFS {
-            if "\(movieId)" == movie.id!{
-                if onlyFriends {
-                    for review in movie.reviews {
-                        if um.currentUser!.friends.contains(review.authorId) || (includeSelf && um.currentUser!.id == review.authorId) {
-                            reviewArray.append(review)
-                        }
-                    }
-                } else {
-                    
-                    return movie.reviews.sorted(by: { $0.timestamp > $1.timestamp })
-                    
-                }
-            }
-        }
-        
-        return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
-    }
+    
     
     func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
-        let allReviews = getReviews(movieId: movieId, onlyFriends: onlyFriends, includeSelf: true)
+        let allReviews = getMovieReviews(movieId: movieId, onlyFriends: onlyFriends, includeSelf: true)
         var totalScore: Int = 0
         if allReviews.count == 0 {
             return 0.0
@@ -137,7 +156,7 @@ class ReviewManager : ObservableObject {
             
             let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String]() , timestamp: Date.now)
             
-            var reviews = getReviews(movieId: movie.id, onlyFriends: false, includeSelf: false)
+            var reviews = getMovieReviews(movieId: movie.id, onlyFriends: false, includeSelf: false)
             
             for (index, review1) in reviews.enumerated() {
                 if review1.authorId == um.currentUser!.id! {
@@ -157,7 +176,7 @@ class ReviewManager : ObservableObject {
             
             let review = Review(authorId: um.currentUser!.id!, movieId: movie.id, rating: rating, reviewText: text, whereAt: whereAt, withWho: withWho, likes: [String](), timestamp: Date.now)
             
-            var reviews = getReviews(movieId: movie.id, onlyFriends: false, includeSelf: false)
+            var reviews = getMovieReviews(movieId: movie.id, onlyFriends: false, includeSelf: false)
             reviews.append(review)
             
             if fm.saveMovieToFirestore(movieFS: MovieFS(id: "\(movie.id)", title: movie.title!, photoUrl: movie.posterURL, rating: Double(rating), description: movie.overview!, reviews: reviews)) {
@@ -167,22 +186,7 @@ class ReviewManager : ObservableObject {
             }
         }
     }
-    
-    func getReview(movieId: String) -> Review {
-        
-        for movie in listOfMovieFS {
-            if movie.id == movieId {
-                for review in movie.reviews {
-                    if review.authorId == um.currentUser!.id! {
-                        return review
-                    }
-                }
-            }
-        }
-        
-        return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", likes: [""], timestamp: Date.now)
-    }
-    
+
     func getMovieFS(movieId: String) -> MovieFS? {
         
         for movieFS in listOfMovieFS {
@@ -225,7 +229,7 @@ class ReviewManager : ObservableObject {
         } else {
             likes.append(um.currentUser!.id!)
         }
-        var reviews = rm.getReviews(movieId: review.movieId, onlyFriends: false, includeSelf: false)
+        var reviews = rm.getMovieReviews(movieId: review.movieId, onlyFriends: false, includeSelf: false)
         
         let newReview = Review(id: review.id, authorId: review.authorId, movieId: review.movieId, rating: review.rating, reviewText: review.reviewText, whereAt: review.whereAt, withWho: review.withWho, likes: likes, timestamp: review.timestamp)
         

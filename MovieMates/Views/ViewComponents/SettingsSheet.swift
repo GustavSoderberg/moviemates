@@ -1,13 +1,15 @@
-//
-//  SettingsSheet.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-09.
-//
-
-
 /**
- - Description: This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies.
+ 
+ - Description:
+    This is the settingSheet that you can find on your ProfieView. Here we can change username, bio, change to light mode and if we want spoilers on or movies.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 

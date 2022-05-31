@@ -1,9 +1,17 @@
-//
-//  SearchViewInfo.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-10.
-//
+/**
+ 
+ - Description:
+    The text displayed if there's no input / search results
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 

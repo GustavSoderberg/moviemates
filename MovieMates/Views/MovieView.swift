@@ -1,18 +1,22 @@
-//
-//  MovieView.swift
-//  MovieMates
-//
-//  Created by Oscar Karlsson on 2022-05-03.
-//
+/**
+ - Description:
+    In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
+    We can also add a movie to our watchlist that you can find on you profileView.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
+ */
+
 
 import SwiftUI
 import Alamofire
 import UIKit
-
-/**
- - Description: In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
-                We can also add a movie to our watchlist that you can find on you profileView.
- */
 
 enum Sheet {
     case MovieView, ReviewSheet
@@ -347,7 +351,7 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
+                                ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                 }
                             } else {
@@ -356,7 +360,7 @@ struct MovieView: View {
                             
                         case "global":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
+                                ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                 }
                             } else {
@@ -373,7 +377,7 @@ struct MovieView: View {
                     .onAppear {
                         
                         if let movieFS = movieFS {
-                            friendsReviews = getFriendsReviews(movieFS: movieFS)
+                            friendsReviews = rm.getMovieReviews(movieId: Int(movieFS.id!)!, onlyFriends: true, includeSelf: false)
                         }
                     }
                 }
@@ -410,16 +414,6 @@ struct MovieView: View {
             }
         })
     }
-}
-
-func getFriendsReviews(movieFS: MovieFS) -> [Review]{
-    var friendsReviews = [Review]()
-    for review in movieFS.reviews {
-        if um.currentUser!.friends.contains(review.authorId) {
-            friendsReviews.append(review)
-        }
-    }
-    return friendsReviews
 }
 
 
