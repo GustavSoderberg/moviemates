@@ -15,7 +15,7 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("darkmode") private var darkmode = true
     
-    @State var index = "friends"
+    @State var index = "trending"
     @State var showMovieView = false
     @State var showProfileView = false
     @State var currentMovie: Movie? = nil

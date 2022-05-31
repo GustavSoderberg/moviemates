@@ -81,7 +81,7 @@ struct MovieView: View {
         VStack(spacing: 0) {
             ZStack {
                 HStack {
-                    Text("Done")
+                    Text("Close")
                         .foregroundColor(.clear)
                     VStack{
                         gap(height: 2)
@@ -90,27 +90,18 @@ struct MovieView: View {
                             .multilineTextAlignment(.center)
                     }
                     
-                    Text("Review")
+                    Text("Close")
                         .foregroundColor(.clear)
                 }
                 .padding(.horizontal)
                 
                 HStack {
-                    Text("Done")
+                    Text("Close")
                         .foregroundColor(.blue)
                         .onTapGesture {
                             showMovieView = false
                         }
                     Spacer()
-                    if isUpcoming != true {
-                        Text("Review")
-                            .foregroundColor(.blue)
-                            .onTapGesture {
-                                withAnimation(.easeIn(duration: 0.3)) {
-                                    sheetShowing = .ReviewSheet
-                                }
-                            }
-                    }
                 }
                 .padding(.horizontal)
             }
