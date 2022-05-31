@@ -6,7 +6,7 @@
 //
 
 /**
- - Description: In this view we can see our own reviews that we have made, our watchlist, friendlist and curren user information.  In the information tab we can write a bio and see statistics of reviews made.
+ - Description: In this view we can see our own reviews that we have made, our watchlist, friendlist and current user information.  In the information tab we can write a bio and see statistics of reviews made.
  
  */
 
