@@ -27,11 +27,17 @@ struct HomeView: View {
     @ObservedObject var orm = rm
     
     var body: some View {
+        
         ZStack{
             Color("background")
                 .ignoresSafeArea()
             
             VStack{
+                
+                Image("moviemates")
+                    .resizable()
+                    .frame(width: 75, height: 75)
+                
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
                     Text("Trending").tag(TRENDING)
