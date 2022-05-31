@@ -98,39 +98,43 @@ struct usersView: View {
         VStack{
             SearchBar(text: $searchText)
             Spacer()
-            if searchText.isEmpty {
-                SearchViewInfo(infoText: $templateText)
-                    .frame(maxHeight: .infinity)
-            } else {
-                ScrollView{
-                    VStack{
-
+            ScrollView{
+                VStack{
+                    if searchText.isEmpty {
                         ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
-                            
+                            if user.id != um.currentUser!.id {
+                                Button {
+                                    index1 = index
+                                    um.refresh += 1
+                                    showProfileView = true
+                                } label: {
+                                    UserCardView(user: user)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    } else {
+                        ForEach(Array(zip(oum.listOfUsers.indices, oum.listOfUsers)), id: \.0) { index, user in
                             if user.id != um.currentUser!.id {
                                 if user.username.lowercased().contains(searchText.lowercased())  {
-                                    
                                     Button {
                                         index1 = index
                                         um.refresh += 1
-                                        
                                         showProfileView = true
                                     } label: {
                                         UserCardView(user: user)
                                     }
                                     .buttonStyle(.plain)
                                 }
-
                             }
                         }
-
                     }
-                    .padding()
+                }.sheet(isPresented: $showProfileView) {
+                    ProfileView(user: oum.listOfUsers[self.index1])
+                        .preferredColorScheme(darkmode ? .dark : .light)
                 }
             }
-        }.sheet(isPresented: $showProfileView) {
-            ProfileView(user: oum.listOfUsers[self.index1])
-                .preferredColorScheme(darkmode ? .dark : .light)
+            .padding()
         }
     }
 }
