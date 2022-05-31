@@ -47,7 +47,6 @@ struct HomeView: View {
                 ScrollView{
                     VStack {
                         switch index {
-                            
                         case FRIENDS:
                             if orm.getAllReviews(onlyFriends: true).isEmpty {
                                 Text("No Friends")
@@ -67,13 +66,6 @@ struct HomeView: View {
                                                 .shadow(radius: 6))
                                         .foregroundColor(darkmode ? .white : .black)
                                 }
-//                                Button {
-//                                    statusController.searchIndex = "users"
-//                                    statusController.selection = 3
-//                                } label: {
-//                                    Text("Search Users")
-//                                }
-
                             } else {
                                 ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: true)), id: \.self) { reviews in
                                     if reviews.count == 1 {
