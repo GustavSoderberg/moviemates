@@ -46,11 +46,20 @@ struct HomeView: View {
             Color("background")
                 .ignoresSafeArea()
             
-            VStack{
+            VStack(spacing: 0){
                 
-                Image("moviemates")
-                    .resizable()
-                    .frame(width: 75, height: 75)
+                HStack {
+                    Image("moviemates")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .overlay(RoundedRectangle(cornerRadius: 75).stroke(.black, lineWidth: 2))
+                    
+                    Text("Movie Mates")
+                        .font(.title)
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top, 5)
                 
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
@@ -59,9 +68,9 @@ struct HomeView: View {
                     
                 })
                 .padding(.horizontal)
-                .padding(.top, 20)
+                .padding(.top, 10)
                 .pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(Color("accent-color"))
+                .colorMultiply(Color(ACCENT_COLOR))
                 
                 ScrollView{
                     VStack {
