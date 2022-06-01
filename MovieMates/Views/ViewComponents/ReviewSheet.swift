@@ -1,12 +1,15 @@
-//
-//  ProfileSheet.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-03.
-//
-
 /**
- - Description: This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ - Description:
+    This is where a review of a movie is made. Here we get the chosen movie we want to review and then save to Firebase.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 
@@ -35,7 +38,9 @@ struct ReviewSheet: View {
                         .foregroundColor(.blue)
                         .padding(.top, 4)
                         .onTapGesture {
-                            sheetShowing = .MovieView
+                            withAnimation(.easeIn(duration: 0.3)){
+                                sheetShowing = .MovieView
+                            }
                         }
                     Spacer()
                 }.onAppear {
@@ -87,11 +92,12 @@ struct ReviewSheet: View {
                                     GeometryReader { geo in
                                         Rectangle()
                                             .frame(width: 145, height: 25)
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
+                                            .opacity(0.2)
                                         
                                         Rectangle()
                                             .frame(width: scoreWidth, height: 25)
-                                            .foregroundColor(.black)
+                                            .foregroundColor(Color("black-white"))
                                         
                                         HStack(spacing: 0) {
                                             ForEach(1..<6, id: \.self){ i in
@@ -181,7 +187,6 @@ struct ReviewSheet: View {
                     HStack {
                         Button {
                             if score > 0 {
-                                print("Leave Review")
                                 rm.saveReview(movie: currentMovie,
                                               rating: score,
                                               text: review,
@@ -190,7 +195,9 @@ struct ReviewSheet: View {
                                 rm.cacheGlobal = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: false)
                                 rm.cacheFriends = rm.getAverageRating(movieId: currentMovie.id, onlyFriends: true)
                                 rm.refresh += 1
-                                sheetShowing = .MovieView
+                                withAnimation(.easeIn(duration: 0.3)){
+                                    sheetShowing = .MovieView
+                                }
                             } else {
                                 emptyRating = true
                             }

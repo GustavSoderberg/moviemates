@@ -1,9 +1,17 @@
-//
-//  CreditSheet.swift
-//  MovieMates
-//
-//  Created by Karol Oman on 2022-05-30.
-//
+/**
+ 
+ - Description:
+    Here we display the credits of our amazing developers.
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 
@@ -27,9 +35,37 @@ struct CreditSheet: View {
                 
             }
             
-            Spacer()
+            Image("moviemates")
+                .resizable()
+                .frame(width: 150, height: 150)
+                .padding()
             
-            Text("CREDITS")
+            VStack(alignment: .center) {
+                Text("Developers:")
+                    .font(.title)
+                    .padding(.bottom)
+                
+                VStack(alignment: .leading) {
+                    
+                    Text("Denis Rakitin")
+                    Text("Gustav Söderberg")
+                    Text("Joakim Andersson")
+                    Text("Karol Öman")
+                    Text("Oscar Karlsson")
+                    Text("Sarah Lidberg")
+                    
+                }
+            }.padding(.bottom)
+            
+            Image("tmdb")
+                .resizable()
+                .frame(width: 75, height: 75)
+                .padding()
+            
+            Text("This product uses the TMDB API but is not endorsed or certified by TMDB.")
+                .padding()
+            
+            Spacer()
             
             
         }

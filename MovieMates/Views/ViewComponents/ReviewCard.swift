@@ -1,33 +1,36 @@
-//
-//  ReviewCard.swift
-//  MovieMates
-//
-//  Created by Oscar Karlsson on 2022-05-23.
-//
-
 /**
+ 
  - Description:
  Where the structs for the visual display of reviews are stored.
  
-  - ReviewCard: The foundation for every review, it calls other structs to build a full review card.
+ - ReviewCard: The foundation for every review, it calls other structs to build a full review card.
  
-  - GroupHeader: The foundation for a group of reviews. this includes a poster, the average ratings and then a list of reviews connected to it.
+ - GroupHeader: The foundation for a group of reviews. this includes a poster, the average ratings and then a list of reviews connected to it.
  
-  - AverageRatingLine: A line of "clappers" that can be half filled to reprecent a decimal score ex. 3.5 would be 3 filled and one half filled. This is connected to a GroupHeader.
+ - AverageRatingLine: A line of "clappers" that can be half filled to reprecent a decimal score ex. 3.5 would be 3 filled and one half filled. This is connected to a GroupHeader.
  
-  - ReviewCardGrouped: The foundation for a review that is connected to a GroupHeader
+ - ReviewCardGrouped: The foundation for a review that is connected to a GroupHeader
  
-  - ReviewTopView: Has the information stired at the top of a review. Profile picture, Name of user, Title of Movie etc.
+ - ReviewTopView: Has the information stired at the top of a review. Profile picture, Name of user, Title of Movie etc.
  
-  - ReviewTextView: Displayes the text the user has writen.
+ - ReviewTextView: Displayes the text the user has writen.
  
-  - ReviewTab: The bottom of a review. A tap displaying where and with who you saw the movie with, also houses the LikeLine.
+ - ReviewTab: The bottom of a review. A tap displaying where and with who you saw the movie with, also houses the LikeLine.
  
-  - LikeLine: Displays the number of likes and a like button in a HStack
+ - LikeLine: Displays the number of likes and a like button in a HStack
  
-  - ClapperLine: Makes a line of clappers displaying the rating the user gave the movie.
+ - ClapperLine: Makes a line of clappers displaying the rating the user gave the movie.
  
-  - ClapperImage: The ClapperLine contains 5 of these.
+ - ClapperImage: The ClapperLine contains 5 of these.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
  */
 
 import SwiftUI
@@ -55,7 +58,7 @@ struct ReviewCard: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP) , Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 10)
                 .onTapGesture {
@@ -105,7 +108,7 @@ struct ReviewCard: View {
                         }
                         
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
+                            ReviewTextView(review: review, grouped: false, heightConstant: displayName ? displayTitle ? 115 : .infinity : 140, blurSpoiler: spoilerCheck ? (!rm.dismissedSpoiler.contains(review.id) && blurSpoiler) : false)
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -153,7 +156,7 @@ struct GroupHeader: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top") , Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP) , Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                 .mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 .shadow(radius: 10)
                 .onTapGesture {
@@ -237,7 +240,7 @@ struct AverageRatingLine: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .frame(width: 115, height: 25)
-                    .foregroundColor(Color("accent-color"))
+                    .foregroundColor(Color(GRADIENT_TOP))
                 
                 HStack(spacing: 2) {
                     ForEach(1..<6) { i in
@@ -280,7 +283,9 @@ struct ReviewCardGrouped : View {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(spacing: 0) {
                         if review.reviewText != "" {
-                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
+                            ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? (!rm.dismissedSpoiler.contains(review.id) && blurSpoiler) : false)
+                            
+
                                 .padding(.bottom, 5)
                         }
                         gap(height: 0)
@@ -330,7 +335,7 @@ struct ReviewTopView: View {
                                 loadProfile()
                             }
                     } else {
-                        Text(um.getMovie(movieID: String(review.movieId))!.title)
+                        Text(rm.getMovieFS(movieId: String(review.movieId))!.title)
                             .font(Font.headline.weight(.bold))
                             .font(Font.system(size: 25))
                             .minimumScaleFactor(0.5)
@@ -342,7 +347,7 @@ struct ReviewTopView: View {
                 }
                 
                 if displayTitle && displayName {
-                    Text(um.getMovie(movieID: String(review.movieId))!.title)
+                    Text(rm.getMovieFS(movieId: String(review.movieId))!.title)
                         .font(Font.headline.weight(.bold))
                         .minimumScaleFactor(0.5)
                         .lineLimit(2)
@@ -369,7 +374,6 @@ struct ReviewTopView: View {
 }
 
 struct ReviewTextView: View {
-    
     @AppStorage("spoilerCheck") private var spoilerCheck = true
     @AppStorage("darkmode") private var darkmode = true
     
@@ -449,18 +453,18 @@ struct ReviewTab: View {
     var body: some View {
         HStack{
             if review.whereAt != "" || review.withWho != "" {
-                if review.whereAt == "home" {
+                if review.whereAt == HOME {
                     Image(systemName: "house.circle")
                         .font(.system(size: tagSize))
-                } else if review.whereAt == "cinema" {
+                } else if review.whereAt == CINEMA {
                     Image(systemName: "film.circle")
                         .font(.system(size: tagSize))
                 }
                 
-                if review.withWho == "alone" {
+                if review.withWho == ALONE {
                     Image(systemName: "person.circle")
                         .font(.system(size: tagSize))
-                } else if review.withWho == "friends" {
+                } else if review.withWho == W_FRIENDS {
                     Image(systemName: "person.2.circle")
                         .font(.system(size: tagSize))
                 }
@@ -502,10 +506,11 @@ struct ClapperImage: View {
     @State var filled : Bool = false
     
     var body: some View {
-        Image("clapper-big")
+        Image(CLAPPER)
             .resizable()
             .frame(width: 20, height: 20)
-            .foregroundColor(filled ? .black : .white)
+            .foregroundColor(filled ? Color(BW) : .black)
+            .opacity(filled ? 1 : 0.2)
             .onAppear(perform: {
                 if Int(score.prefix(1)) ?? 0 >= pos {
                     filled = true

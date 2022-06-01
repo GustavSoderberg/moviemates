@@ -1,13 +1,14 @@
-//
-//  UserManager.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-04.
-//
-
 /**
  - Description:
+    UserManager is a view model that handles the communication between the user interactions and firebase.
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 import Foundation
 import FirebaseAuth
@@ -173,38 +174,5 @@ class UserManager: ObservableObject {
             print("ERROR!! You did not succefully save the movie")
         }
          
-    }
-    
-    func getMovie(movieID: String) -> MovieFS?{
-        
-        for movie in rm.listOfMovieFS {
-            if movie.id == movieID {
-                return movie
-            }
-            
-        }
-            return nil
-    }
-    
-    func like(review: Review){
-    
-        if fm.saveLikeToFirestore(review: review, user: currentUser!) {
-            
-            print("Succefully liked the review")
-        }else{
-            print("Error: could not like the review")
-        }
-        
-    }
-
-    func dislike(review: Review){
-      
-        if fm.removeLikeFromFirestore(review: review, user: currentUser!) {
-            
-            print("Succefully removed the like")
-        }else{
-            print("Error: could not dislike the review")
-        }
-        
     }
 }

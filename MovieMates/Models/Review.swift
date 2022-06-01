@@ -1,13 +1,14 @@
-//
-//  Review.swift
-//  MovieMates
-//
-//  Created by Joakim Andersson on 2022-05-05.
-//
-
 /**
- - Description: Here we create the review parameter.
+ - Description:
+    Review is a model for a Review object
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation

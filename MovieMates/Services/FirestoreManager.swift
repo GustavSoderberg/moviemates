@@ -1,11 +1,14 @@
-//
-//  FirestoreManager.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-05.
-//
 /**
- - Description:
+ 
+ - Description: FirestoreManager handles the communication with our view controllers.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 
@@ -306,25 +309,4 @@ class FirestoreManager {
         db.collection("movies").document("\(movieId)").updateData(["rating" : average])
     }
     
-    func saveLikeToFirestore(review: Review, user: User) -> Bool {
-        
-        db.collection("movies").document("\(review.movieId)")
-            .updateData([
-            
-                "likes": FieldValue.arrayUnion([user.id!])
-
-            ])
-        return true
-    }
-    
-    func removeLikeFromFirestore(review: Review, user: User) ->  Bool{
-        
-        db.collection("movies").document("\(review.movieId)")
-            .updateData([
-            
-                "likes": FieldValue.arrayRemove([user.id!])
-
-            ])
-        return true
-    }
 }

@@ -1,18 +1,22 @@
-//
-//  MovieView.swift
-//  MovieMates
-//
-//  Created by Oscar Karlsson on 2022-05-03.
-//
+/**
+ - Description:
+    In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
+    We can also add a movie to our watchlist that you can find on you profileView.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
+ */
+
 
 import SwiftUI
 import Alamofire
 import UIKit
-
-/**
- - Description: In this View we get the chosen movie that we picked. In here we get the description of the current movie and reviews from the tab "global" and "friends".
-                We can also add a movie to our watchlist that you can find on you profileView.
- */
 
 enum Sheet {
     case MovieView, ReviewSheet
@@ -52,7 +56,6 @@ struct MovieView: View {
     @AppStorage("darkmode") private var darkmode = true
     @ObservedObject var orm = rm
     
-    
     @Binding var sheetShowing: Sheet
     @Binding var currentMovie: Movie
     @Binding var showMovieView: Bool
@@ -66,7 +69,6 @@ struct MovieView: View {
     
     @State var title : String = "Movie Title"
     @State var description : String = "Movie Description"
-    @State var poster : Image = Image("bill_poster")
     @State var ratingGlobalScore : String = "0"
     @State var ratingLocalScore : String = "0"
     
@@ -83,7 +85,7 @@ struct MovieView: View {
         VStack(spacing: 0) {
             ZStack {
                 HStack {
-                    Text("Done")
+                    Text("Close")
                         .foregroundColor(.clear)
                     VStack{
                         gap(height: 2)
@@ -92,25 +94,18 @@ struct MovieView: View {
                             .multilineTextAlignment(.center)
                     }
                     
-                    Text("Review")
+                    Text("Close")
                         .foregroundColor(.clear)
                 }
                 .padding(.horizontal)
                 
                 HStack {
-                    Text("Done")
+                    Text("Close")
                         .foregroundColor(.blue)
                         .onTapGesture {
                             showMovieView = false
                         }
                     Spacer()
-                    if isUpcoming != true {
-                        Text("Review")
-                            .foregroundColor(.blue)
-                            .onTapGesture {
-                                sheetShowing = .ReviewSheet
-                            }
-                    }
                 }
                 .padding(.horizontal)
             }
@@ -177,7 +172,7 @@ struct MovieView: View {
                             .cornerRadius(5)
                             .font(Font.headline.weight(.bold))
                             .font(.system(size: 15))
-                            .background(LinearGradient(gradient: Gradient(colors: onWatchlist ? [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")] : [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
+                            .background(LinearGradient(gradient: Gradient(colors: onWatchlist ? [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")] : [.gray, Color("secondary-background")]), startPoint: .top, endPoint: .bottom)
                                 .mask(Rectangle()
                                     .cornerRadius(5))
                                     .shadow(radius: 10))
@@ -187,9 +182,28 @@ struct MovieView: View {
                         onWatchlist = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? true : false
                         watchlistText = um.currentUser!.watchlist.contains("\(currentMovie.id)") ? "On Watchlist" : "Add to Watchlist"
                     }
+                    
+                    if isUpcoming != true {
+                        Button {
+                            withAnimation(.easeIn(duration: 0.3)){
+                                sheetShowing = .ReviewSheet
+                            }
+                        } label: {
+                            Text("Review")
+                                .padding(.horizontal)
+                                .padding(.vertical, 4)
+                                .cornerRadius(5)
+                                .font(Font.headline.weight(.bold))
+                                .font(.system(size: 15))
+                                .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                    .mask(Rectangle()
+                                        .cornerRadius(5))
+                                        .shadow(radius: 10))
+                                .foregroundColor(darkmode ? .white : .black)
+                        }
+                    }
                 }
                 .padding(.horizontal)
-                .padding(.leading, 15)
                 
                 VStack(spacing:0){
                     ZStack{
@@ -224,6 +238,7 @@ struct MovieView: View {
                             gap(height: 5)
                             
                             HStack{
+                                Spacer()
                                 HStack{
                                     Text("GLOBAL")
                                         .font(Font.headline.weight(.bold))
@@ -262,11 +277,12 @@ struct MovieView: View {
                                     .font(.system(size: 20))
                                 Spacer()
                             }
-                            .padding(.horizontal, 30.0)
+                            .padding(.horizontal)
                             
                             gap(height: 5)
                         
                             HStack{
+                                Spacer()
                                 HStack{
                                     Text("FRIENDS")
                                         .font(Font.headline.weight(.bold))
@@ -300,7 +316,7 @@ struct MovieView: View {
                                     .font(.system(size: 20))
                                 Spacer()
                             }
-                            .padding(.horizontal, 30.0)
+                            .padding(.horizontal)
                         }
                     }
                 }
@@ -335,7 +351,7 @@ struct MovieView: View {
                         switch index {
                         case "friends":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
+                                ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                 }
                             } else {
@@ -344,7 +360,7 @@ struct MovieView: View {
                             
                         case "global":
                             if movieFS != nil {
-                                ForEach(rm.getReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
+                                ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
                                 }
                             } else {
@@ -361,7 +377,7 @@ struct MovieView: View {
                     .onAppear {
                         
                         if let movieFS = movieFS {
-                            friendsReviews = getFriendsReviews(movieFS: movieFS)
+                            friendsReviews = rm.getMovieReviews(movieId: Int(movieFS.id!)!, onlyFriends: true, includeSelf: false)
                         }
                     }
                 }
@@ -400,16 +416,6 @@ struct MovieView: View {
     }
 }
 
-func getFriendsReviews(movieFS: MovieFS) -> [Review]{
-    var friendsReviews = [Review]()
-    for review in movieFS.reviews {
-        if um.currentUser!.friends.contains(review.authorId) {
-            friendsReviews.append(review)
-        }
-    }
-    return friendsReviews
-}
-
 
 struct ReviewClapper: View {
     var pos : Int
@@ -423,17 +429,18 @@ struct ReviewClapper: View {
             Rectangle()
                 .frame(width: 20, height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.white)
+                .foregroundColor(gray ? .black : Color("clapper-empty"))
+                .opacity(gray ? 0.2 : 1)
             
             Rectangle()
                 .frame(width: CGFloat(width), height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.black)
+                .foregroundColor(Color("black-white"))
             
             Image("clapper_hollow")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(gray ? Color("secondary-background") : Color("accent-color"))
+                .foregroundColor(gray ? Color("secondary-background") : Color("welcome-clapper-top"))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {

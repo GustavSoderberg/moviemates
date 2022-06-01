@@ -1,13 +1,18 @@
-//
-//  LikeReview.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-23.
-//
-
 /**
-- Description: Here we make the like button that is shown on ReviewView. 
+ 
+ - Description:
+    Here we make the like button that is shown on ReviewView.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
  */
+
 import SwiftUI
 
 struct LikeButton: View {

@@ -1,11 +1,16 @@
-//
-//  SearchBar.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-08.
-//
 /**
+ 
  - Description:
+    The view of the search bar with it's corresponding functions
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
  
  */
 

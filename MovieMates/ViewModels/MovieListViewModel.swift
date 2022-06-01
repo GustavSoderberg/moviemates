@@ -1,12 +1,14 @@
-//
-//  MovieListViewModel.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-08.
-//
 /**
  - Description:
+    MovieListViewModel is a view model that handles the communication between the API and the corresponding views.
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation
@@ -97,12 +99,6 @@ final class MovieListViewModel: ObservableObject {
             movieListTitle = "Top Rated"
             requestApi(url: apiUrl)
         }
-//
-//        guard let encodedString  =  searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let apiUrl = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&language=en-US&query=\(encodedString)&page=\(page)&include_adult=false")  else {
-//            print("invalid URL")
-//            return
-//
-//        }
         
 
     }
@@ -123,23 +119,6 @@ final class MovieListViewModel: ObservableObject {
             }
         }
     }
-    
-    
-//    func fetchPopularMovies(){
-//
-//        if (popularMovies.isEmpty){
-//            let request = AF.request("\(BASE_API_URL)movie/popular?api_key=\(API_KEY)&language=en-US&page=1")
-//
-//            request.responseDecodable(of: APIMovieResponse.self) { response in
-//                switch response.result {
-//                case.success(let value):
-//                    self.popularMovies.append(contentsOf: value.results!)
-//                case.failure(let error):
-//                    print(error)
-//                }
-//            }
-//        }
-//    }
 }
 
 enum ApiRequestType {

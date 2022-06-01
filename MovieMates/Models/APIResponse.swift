@@ -1,9 +1,15 @@
-//
-//  APIResponse.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-08.
-//
+/**
+ - Description:
+    APIMovieResponse represents an object to be decoded from the API response.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ */
 
 import Foundation
 

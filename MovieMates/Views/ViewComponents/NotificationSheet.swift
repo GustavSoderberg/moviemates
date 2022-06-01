@@ -1,12 +1,14 @@
-//
-//  FriendsSheet.swift
-//  MovieMates
-//
-//  Created by Sarah Lidberg on 2022-05-10.
-//
-
 /**
- - Description: On ProfileView, this notificationSheet is used on when you have pending friend request.
+ - Description:
+    On ProfileView, this notificationSheet is used on when you have pending friend request.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  
  */
 

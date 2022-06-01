@@ -1,13 +1,14 @@
-//
-//  User.swift
-//  MovieMates
-//
-//  Created by Gustav Söderberg on 2022-05-04.
-//
-
 /**
- - Description: Here we create a user to Firebase with the parameters that we need for the app.
+ - Description:
+    User is a model for a User object
  
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
  */
 
 import Foundation

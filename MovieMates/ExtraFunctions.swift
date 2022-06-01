@@ -1,9 +1,17 @@
-//
-//  ExtraFunctions.swift
-//  MovieMates
-//
-//  Created by Oscar Karlsson on 2022-05-23.
-//
+/**
+ 
+ - Description:
+    Extra view features to make our app look better.
+ 
+ - Authors:
+   Karol Ö
+   Oscar K
+   Sarah L
+   Joakim A
+   Denis R
+   Gustav S
+
+*/
 
 import SwiftUI
 

@@ -1,13 +1,16 @@
-//
-//  MovieListView.swift
-//  MovieMates
-//
-//  Created by Denis Rakitin on 2022-05-28.
-//
-
 /**
  
- - Description: Instead of seeing the movies in a carousel, this button makes the list of movies in a vertical list.
+ - Description:
+    Instead of seeing the movies in a carousel, this button makes the list of movies in a vertical list.
+ 
+ - Authors:
+    Karol Ö
+    Oscar K
+    Sarah L
+    Joakim A
+    Denis R
+    Gustav S
+ 
  */
 
 import SwiftUI
