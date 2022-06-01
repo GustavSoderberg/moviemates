@@ -283,7 +283,6 @@ struct ReviewCardGrouped : View {
                             ReviewTextView(review: review, grouped: true, heightConstant: CGFloat(height), blurSpoiler: spoilerCheck ? !rm.dismissedSpoiler.contains(review.id) : false)
                                 .padding(.bottom, 5)
                         }
-                        gap(height: 0)
                     }
                     .padding(.horizontal, 5)
                 }
@@ -369,8 +368,8 @@ struct ReviewTopView: View {
 }
 
 struct ReviewTextView: View {
-    @AppStorage("spoilerCheck") private var spoilerCheck = true
-    @AppStorage("darkmode") private var darkmode = true
+    @AppStorage(SPOILER) private var spoilerCheck = true
+    @AppStorage(DARKMODE) private var darkmode = true
     
     let review: Review
     let grouped: Bool
