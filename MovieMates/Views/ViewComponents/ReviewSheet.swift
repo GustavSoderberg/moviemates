@@ -16,7 +16,7 @@
 import SwiftUI
 
 struct ReviewSheet: View {
-    @AppStorage("darkmode") private var darkmode = false
+    @AppStorage(DARKMODE) private var darkmode = false
     
     @Environment(\.dismiss) var dismiss
     
@@ -207,7 +207,7 @@ struct ReviewSheet: View {
                         }.buttonStyle(.plain)
                             .frame(width: 200, height: 50)
                         
-                            .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                            .background(LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP), Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                                 //.mask(RoundedRectangle(cornerRadius: 25, style: .continuous))
                                 .shadow(radius: 4))
                             .cornerRadius(10)
@@ -231,7 +231,7 @@ struct ClapperScoreSlider: View {
         Image("clapper_hollow")
             .resizable()
             .frame(width: 25, height: 25)
-            .foregroundColor(Color("secondary-background"))
+            .foregroundColor(Color(BACKGROUND_2))
             .onTapGesture {
                 score = pos
             }
