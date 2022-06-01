@@ -54,7 +54,7 @@ struct HomeView: View {
                         .frame(width: 40, height: 40)
                         .overlay(RoundedRectangle(cornerRadius: 75).stroke(.black, lineWidth: 2))
                     
-                    Text("Movie Mates")
+                    Text("MovieMates")
                         .font(.title)
                     Spacer()
                 }
