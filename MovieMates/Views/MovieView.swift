@@ -53,7 +53,7 @@ struct MovieViewController: View {
 }
 
 struct MovieView: View {
-    @AppStorage("darkmode") private var darkmode = true
+    @AppStorage(DARKMODE) private var darkmode = true
     @ObservedObject var orm = rm
     
     @Binding var sheetShowing: Sheet
@@ -78,7 +78,7 @@ struct MovieView: View {
     @State var descFull = false
     @State var descHeight: CGFloat? = 110
     
-    @State var index = "friends"
+    @State var index = FRIENDS
     @State var watchlist = false
     
     var body: some View {
@@ -195,7 +195,7 @@ struct MovieView: View {
                                 .cornerRadius(5)
                                 .font(Font.headline.weight(.bold))
                                 .font(.system(size: 15))
-                                .background(LinearGradient(gradient: Gradient(colors: [Color("welcome-clapper-top"), Color("welcome-clapper-bottom")]), startPoint: .top, endPoint: .bottom)
+                                .background(LinearGradient(gradient: Gradient(colors: [Color(GRADIENT_TOP), Color(GRADIENT_BOTTOM)]), startPoint: .top, endPoint: .bottom)
                                     .mask(Rectangle()
                                         .cornerRadius(5))
                                         .shadow(radius: 10))
@@ -210,7 +210,7 @@ struct MovieView: View {
                         Rectangle()
                             .cornerRadius(15, corners: [.topLeft, .topRight])
                             .frame(height: 30)
-                            .foregroundColor(Color("secondary-background"))
+                            .foregroundColor(Color(BACKGROUND_2))
                         
                         VStack(spacing:0) {
                             
@@ -227,7 +227,7 @@ struct MovieView: View {
                     Divider()
                     
                     ZStack{
-                        LinearGradient(gradient: Gradient(colors: [Color("secondary-background") , .gray]), startPoint: .top, endPoint: .bottom)
+                        LinearGradient(gradient: Gradient(colors: [Color(BACKGROUND_2) , .gray]), startPoint: .top, endPoint: .bottom)
                             .mask(Rectangle()
                                 .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
                                 .frame(height: 70))
@@ -250,7 +250,7 @@ struct MovieView: View {
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
                                         .frame(width: 115, height: 25)
-                                        .foregroundColor(Color("secondary-background"))
+                                        .foregroundColor(Color(BACKGROUND_2))
                                     
                                     HStack(spacing: 2) {
                                         if orm.cacheGlobal != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: false) {
@@ -294,7 +294,7 @@ struct MovieView: View {
                                 ZStack(alignment: .center) {
                                     RoundedRectangle(cornerRadius: 5)
                                         .frame(width: 115, height: 25)
-                                        .foregroundColor(Color("secondary-background"))
+                                        .foregroundColor(Color(BACKGROUND_2))
                                     
                                     HStack(spacing: 2) {
                                         if orm.cacheFriends != orm.getAverageRating(movieId: currentMovie.id, onlyFriends: true) {
@@ -336,12 +336,12 @@ struct MovieView: View {
                             .padding(.leading, 12)
                             
                             Picker(selection: $index, label: Text("Review List"), content: {
-                                Text("Friends").tag("friends")
-                                Text("Global").tag("global")
+                                Text("Friends").tag(FRIENDS)
+                                Text("Global").tag(GLOBAL)
                             })
                             .padding(.horizontal, 14)
                             .pickerStyle(SegmentedPickerStyle())
-                            .colorMultiply(Color("accent-color"))
+                            .colorMultiply(Color(BACKGROUND_2))
                         }
                     }
                     
@@ -349,7 +349,7 @@ struct MovieView: View {
                     
                     LazyVStack(spacing: 2) {
                         switch index {
-                        case "friends":
+                        case FRIENDS:
                             if movieFS != nil {
                                 ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: true, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
@@ -358,7 +358,7 @@ struct MovieView: View {
                                 Text("No Reviews")
                             }
                             
-                        case "global":
+                        case GLOBAL:
                             if movieFS != nil {
                                 ForEach(rm.getMovieReviews(movieId: currentMovie.id, onlyFriends: false, includeSelf: false)) { review in
                                     ReviewCard(review: review, currentMovie: .constant(nil), showMovieView: .constant(true), userProfile: $userProfile, showProfileView: $showProfileView, displayName: true, displayTitle: false, blurSpoiler: false)
@@ -429,18 +429,18 @@ struct ReviewClapper: View {
             Rectangle()
                 .frame(width: 20, height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(gray ? .black : Color("clapper-empty"))
+                .foregroundColor(gray ? .black : Color(CLAPPER_SHADOW))
                 .opacity(gray ? 0.2 : 1)
             
             Rectangle()
                 .frame(width: CGFloat(width), height: 20)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(Color("black-white"))
+                .foregroundColor(Color(BW))
             
-            Image("clapper_hollow")
+            Image(CLAPPER_HOLE)
                 .resizable()
                 .frame(width: 20, height: 20)
-                .foregroundColor(gray ? Color("secondary-background") : Color("welcome-clapper-top"))
+                .foregroundColor(gray ? Color(BACKGROUND_2) : Color(GRADIENT_TOP))
         }
         .frame(width: 20, height: 20)
         .onAppear(perform: {
