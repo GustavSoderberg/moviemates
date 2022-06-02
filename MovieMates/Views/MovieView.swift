@@ -416,7 +416,9 @@ struct MovieView: View {
     }
 }
 
-
+/**
+ - Description: This view draws our clappers and sets the score.
+ */
 struct ReviewClapper: View {
     var pos : Int
     @State var score : String
