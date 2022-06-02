@@ -37,17 +37,17 @@ struct SearchView: View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            VStack{
-                
+            VStack(spacing: 0){
                 Picker(selection: $statusController.searchIndex,
                        label: Text("Reviews"),
                        content: {
                     Text("Movies/Series").tag("movies")
                     Text("Users").tag("users")
                 })
-                .padding()
+                .padding(.horizontal)
+                .padding(.vertical, 5)
                 .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                .colorMultiply(Color("accent-color"))
+                .colorMultiply(Color(ACCENT_COLOR))
                 
                 switch statusController.searchIndex {
                 case "movies":
@@ -67,11 +67,11 @@ struct SearchView: View {
  */
 struct moviesAndSeriesView: View {
     
-    @ObservedObject var viewModel = MovieListViewModel()
+    @StateObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
     
     var body: some View{
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $viewModel.searchTerm,
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
@@ -100,11 +100,13 @@ struct moviesAndSeriesView: View {
     }
 }
 
+
 /**
  - Description: Here we can search for a user.  We loop through a list of users and return the searched quary.
  */
 struct searchUserView: View {
     @AppStorage("darkmode") private var darkmode = true
+
     
     @ObservedObject var oum = um
     @State var showProfileView = false
@@ -114,9 +116,8 @@ struct searchUserView: View {
     
     var body: some View{
         
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $searchText)
-            Spacer()
             ScrollView{
                 VStack{
                     if searchText.isEmpty {
@@ -153,7 +154,7 @@ struct searchUserView: View {
                         .preferredColorScheme(darkmode ? .dark : .light)
                 }
             }
-            .padding()
+            .padding(.horizontal)
         }
     }
 }
