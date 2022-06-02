@@ -223,11 +223,13 @@ class ReviewManager : ObservableObject {
             for (index, likes1) in likes.enumerated() {
                 if likes1 == um.currentUser!.id! {
                     likes.remove(at: index)
+                    refresh += 1
                     break;
                 }
             }
         } else {
             likes.append(um.currentUser!.id!)
+            refresh += 1
         }
         var reviews = rm.getMovieReviews(movieId: review.movieId, onlyFriends: false, includeSelf: false)
         
@@ -237,6 +239,7 @@ class ReviewManager : ObservableObject {
             if review1.authorId == review.authorId {
                 reviews.remove(at: index)
                 reviews.insert(newReview, at: index)
+                refresh += 1
                 break;
             }
         }
