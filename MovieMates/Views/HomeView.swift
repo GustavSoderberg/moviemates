@@ -69,6 +69,7 @@ struct HomeView: View {
                 })
                 .padding(.horizontal)
                 .padding(.top, 10)
+                .padding(.bottom, 5)
                 .pickerStyle(SegmentedPickerStyle())
                 .colorMultiply(Color(ACCENT_COLOR))
                 
