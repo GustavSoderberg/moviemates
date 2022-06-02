@@ -102,7 +102,7 @@ class FirestoreManager {
         return false
     }
     
-    /// Adds friend to users friendlist and adds user to friends friendslist
+    /// Adds friend to users friendlist and adds user to friends friendslist, returns true if successful
     func acceptFriendRequest(you: User, newFriendId: String) -> Bool {
         
         if you.id != nil {

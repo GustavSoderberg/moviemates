@@ -102,7 +102,7 @@ final class MovieListViewModel: ObservableObject {
         }
     }
     
-    /// Send API-request
+    /// Send API-request, appends result to movies Array
     func requestApi(url: URL) {
         AF.request(url).responseDecodable(of: APIMovieResponse.self) { responce in
             switch responce.result {
