@@ -29,10 +29,9 @@ struct MovieListView: View {
                 VStack {
                     ForEach(movieListVM.movies, id: \.self) { movie in
                         MovieCardView(movie: movie, isUpcoming: isUpcoming)
-
                     }
                     Button {
-                        movieListVM.loadMoreContet(apiRequestType: apiRequestType)
+                        movieListVM.loadMoreContent(apiRequestType: apiRequestType)
                     } label: {
                         Text("LOAD MORE")
                             .frame(minWidth: 0, maxWidth: .infinity)
@@ -51,7 +50,7 @@ struct MovieListView: View {
                 }
             }
             .onAppear(){
-                movieListVM.requestMovies(apiReuestType: apiRequestType)
+                movieListVM.requestMovies(apiRequestType: apiRequestType)
             }
             .navigationTitle(movieListVM.movieListTitle.uppercased())
             .toolbar {
