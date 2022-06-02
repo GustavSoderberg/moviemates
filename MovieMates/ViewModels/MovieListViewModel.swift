@@ -44,14 +44,15 @@ final class MovieListViewModel: ObservableObject {
         infoText = "Type to search"
     }
     
+    /// Request more data from API when currentItem is last movie id
     func loadMoreContent(currentItem item: Movie, apiRequestType: ApiRequestType){
-        //        let thresholdIndex = self.movies.index(self.movies.endIndex, offsetBy: -1)
         if lastmovieId == item.id, (page + 1) <= totalPages {
             page += 1
             requestMovies(apiReuestType: apiRequestType)
         }
     }
     
+    /// Request more data from API
     func loadMoreContet(apiRequestType: ApiRequestType) {
         if (page+1 <= totalPages) {
             page += 1
@@ -59,7 +60,9 @@ final class MovieListViewModel: ObservableObject {
         }
     }
     
+    /// Creates API-request URL based on request type
     func requestMovies(apiReuestType: ApiRequestType){
+
         switch apiReuestType {
         case .searchByTerm:
             guard let encodedString  = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let apiUrl = URL(string: "\(BASE_API_URL)search/movie?api_key=\(API_KEY)&language=en-US&query=\(encodedString)&page=\(page)&include_adult=false")  else {
@@ -97,10 +100,9 @@ final class MovieListViewModel: ObservableObject {
             movieListTitle = "Top Rated"
             requestApi(url: apiUrl)
         }
-        
-
     }
     
+    /// Send API-request, appends result to movies Array
     func requestApi(url: URL) {
         AF.request(url).responseDecodable(of: APIMovieResponse.self) { responce in
             switch responce.result {
