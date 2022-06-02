@@ -117,6 +117,11 @@ struct LoginView : View {
     }
 }
 
+
+/**
+In this struct we choose which providers we want to use as a log in method.  This code is provided by Firebase and we adjusted the code to our prefrences.
+ 
+ */
 struct CustomLoginViewController : UIViewControllerRepresentable {
     
     var delegate: FUIAuthDelegate?

@@ -13,8 +13,14 @@
 import Foundation
 
 class StatusController: ObservableObject {
+    
+    /// Loading-, Welcome-, and HomeView
     @Published var viewShowing: Status = .Loading
+    
+    /// Profile-, Home-, and SearchView
     @Published var selection = 2
+    
+    /// SearchView: Movies or Users
     @Published var searchIndex = "movies"
 }
 

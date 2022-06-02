@@ -70,7 +70,6 @@ struct MovieCardView: View {
             .padding()
         }
         .onTapGesture {
-            print("click!")
             showMovieView = true
         }
         .sheet(isPresented: $showMovieView) {

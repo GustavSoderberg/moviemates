@@ -37,23 +37,23 @@ struct SearchView: View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            VStack{
-                
+            VStack(spacing: 0){
                 Picker(selection: $statusController.searchIndex,
                        label: Text("Reviews"),
                        content: {
                     Text("Movies/Series").tag("movies")
                     Text("Users").tag("users")
                 })
-                .padding()
+                .padding(.horizontal)
+                .padding(.vertical, 5)
                 .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                .colorMultiply(Color("accent-color"))
+                .colorMultiply(Color(ACCENT_COLOR))
                 
                 switch statusController.searchIndex {
                 case "movies":
                     moviesAndSeriesView()
                 case "users":
-                    usersView()
+                    searchUserView()
                 default:
                     moviesAndSeriesView()
                 }
@@ -61,14 +61,17 @@ struct SearchView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is where we draw our view for the SearchView. Here we check if you put a search word or not, if the search quary is found we make card views of the results. 
+ */
 struct moviesAndSeriesView: View {
     
-    @ObservedObject var viewModel = MovieListViewModel()
+    @StateObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
     
     var body: some View{
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $viewModel.searchTerm,
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
@@ -97,8 +100,13 @@ struct moviesAndSeriesView: View {
     }
 }
 
-struct usersView: View {
+
+/**
+ - Description: Here we can search for a user.  We loop through a list of users and return the searched quary.
+ */
+struct searchUserView: View {
     @AppStorage("darkmode") private var darkmode = true
+
     
     @ObservedObject var oum = um
     @State var showProfileView = false
@@ -108,9 +116,8 @@ struct usersView: View {
     
     var body: some View{
         
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $searchText)
-            Spacer()
             ScrollView{
                 VStack{
                     if searchText.isEmpty {
@@ -147,11 +154,14 @@ struct usersView: View {
                         .preferredColorScheme(darkmode ? .dark : .light)
                 }
             }
-            .padding()
+            .padding(.horizontal)
         }
     }
 }
-
+/**
+ 
+ - Description: This is the layout of how a card is going to look like if you search for a user. It is used in the struct above.
+ */
 struct UserCardView: View {
     
     let user: User
