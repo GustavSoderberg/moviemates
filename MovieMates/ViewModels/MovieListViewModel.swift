@@ -60,8 +60,6 @@ final class MovieListViewModel: ObservableObject {
     }
     
     func requestMovies(apiReuestType: ApiRequestType){
-        
-        
         switch apiReuestType {
         case .searchByTerm:
             guard let encodedString  = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let apiUrl = URL(string: "\(BASE_API_URL)search/movie?api_key=\(API_KEY)&language=en-US&query=\(encodedString)&page=\(page)&include_adult=false")  else {

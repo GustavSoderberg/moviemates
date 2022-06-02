@@ -64,7 +64,7 @@ struct SearchView: View {
 
 struct moviesAndSeriesView: View {
     
-    @ObservedObject var viewModel = MovieListViewModel()
+    @StateObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
     
     var body: some View{
