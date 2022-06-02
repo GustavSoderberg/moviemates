@@ -53,7 +53,7 @@ struct SearchView: View {
                 case "movies":
                     moviesAndSeriesView()
                 case "users":
-                    usersView()
+                    searchUserView()
                 default:
                     moviesAndSeriesView()
                 }
@@ -61,7 +61,10 @@ struct SearchView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is where we draw our view for the SearchView. Here we check if you put a search word or not, if the search quary is found we make card views of the results. 
+ */
 struct moviesAndSeriesView: View {
     
     @ObservedObject var viewModel = MovieListViewModel()
@@ -97,7 +100,10 @@ struct moviesAndSeriesView: View {
     }
 }
 
-struct usersView: View {
+/**
+ - Description: Here we can search for a user.  We loop through a list of users and return the searched quary.
+ */
+struct searchUserView: View {
     @AppStorage("darkmode") private var darkmode = true
     
     @ObservedObject var oum = um
@@ -151,7 +157,10 @@ struct usersView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is the layout of how a card is going to look like if you search for a user. It is used in the struct above.
+ */
 struct UserCardView: View {
     
     let user: User

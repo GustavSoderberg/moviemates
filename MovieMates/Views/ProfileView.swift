@@ -180,7 +180,11 @@ struct ProfileView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is where we draw our cards for our own reviews of a movie.
+ 
+ */
 struct UserReviewView: View {
     @AppStorage(DARKMODE) private var darkmode = true
     
@@ -218,7 +222,10 @@ struct UserReviewView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is were the movies we added to our watchlist is shown.
+ */
 struct WatchListView: View {
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
@@ -254,7 +261,11 @@ struct WatchListView: View {
         }
     }
 }
-
+/**
+ 
+ - Description: This is were we draw our view for our About me tab. In this struct you can also find how we make the statistics for a most written review genre. 
+ 
+ */
 struct AboutMeView: View {
     
     let user: User
@@ -361,6 +372,11 @@ struct AboutMeView: View {
     }
 }
 
+/**
+- Description: Here we can see if we have a friend added to our friendsList and also how many reviews that friend has made.
+ 
+ */
+
 struct FriendListView: View{
     @AppStorage(DARKMODE) private var darkmode = true
     
@@ -432,90 +448,4 @@ struct FriendListView: View{
         }
     }
 }
-
-struct FriendRequestTestView: View {
-    @Binding var showProfileSheet: Bool
-    @ObservedObject var uq = um
-    
-    @State var username = ""
-    @State var biography = ""
-    
-    var body: some View {
-        VStack{
-            
-            ForEach(uq.listOfUsers) { user in
-                
-                if user.id != um.currentUser!.id! {
-                    
-                    if um.currentUser!.friends.contains(user.id!) {
-                        Text("\(user.username) is your friend")
-                    }
-                    else if um.currentUser!.frequests.contains(user.id!) {
-                        Text("\(user.username) has sent you a request")
-                    }
-                    else if user.frequests.contains(um.currentUser!.id!) {
-                        Text("You've sent \(user.username) a request")
-                    }
-                    else {
-                        Button {
-                            um.friendRequest(to: user)
-                        } label: {
-                            Text("Add \(user.username)")
-                        }
-                    }
-                }
-            }
-            
-            Text("Requests:").padding().padding(.top,40)
-            ForEach(uq.currentUser!.frequests, id: \.self) { request in
-                
-                Button {
-                    uq.manageFriendRequests(forId: request, accept: true)
-                } label: {
-                    Text("Accept request from \(request)")
-                }
-                Button {
-                    uq.manageFriendRequests(forId: request, accept: false)
-                } label: {
-                    Text("Deny request from \(request)")
-                }
-            }
-            
-            Text("Friends:").padding().padding(.top,40)
-            ForEach(uq.currentUser!.friends, id: \.self) { friend in
-                
-                Button {
-                    um.removeFriend(id: friend)
-                } label: {
-                    Text("Remove \(friend)")
-                }
-            }
-            
-            Text("Change Username:").padding().padding(.top,40)
-            TextField("username", text: $username)
-            
-            Button {
-                if !username.isEmpty {
-                    um.changeUsername(username: username)
-                    username = ""
-                }
-            } label: {
-                Text("Change username")
-            }
-        }
-        Text("Change Biography:").padding().padding(.top,40)
-        
-        TextField("biography", text: $biography)
-        
-        Button {
-            if !biography.isEmpty {
-                um.updateBiography(biography: biography)
-                biography = ""
-            }
-        } label: {
-            Text("Change biography")
-        }
-    }
-}
-
 
