@@ -24,6 +24,7 @@ class ReviewManager : ObservableObject {
     
     private let movieViewModel: MovieViewModel = MovieViewModel.shared
     
+    //Returns a review array consisting of all review objects from each movies, also option to include only friends
     func getAllReviews(onlyFriends: Bool) -> [Review] {
         
         var reviewArray = [Review]()
@@ -46,6 +47,7 @@ class ReviewManager : ObservableObject {
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
     }
     
+    //Returns a review array consisting of reviews from a specific movie, also options to include only friends/yourself
     func getMovieReviews(movieId: Int, onlyFriends: Bool, includeSelf: Bool) -> [Review] {
         
         var reviewArray = [Review]()
@@ -68,6 +70,7 @@ class ReviewManager : ObservableObject {
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
     }
     
+    //Returns a single review from a movie based on review id
     func getReview(movieId: String) -> Review {
         
         for movie in listOfMovieFS {
@@ -83,6 +86,7 @@ class ReviewManager : ObservableObject {
         return Review(id: "\(UUID())", authorId: um.currentUser!.id!, movieId: 0, rating: 0, reviewText: "", whereAt: "", withWho: "", likes: [""], timestamp: Date.now)
     }
     
+    //Returns a review array consisting of reviews from a specific user
     func getUsersReviews(user: User) -> [Review] {
         var reviewArray = [Review]()
         
@@ -96,6 +100,7 @@ class ReviewManager : ObservableObject {
         return reviewArray.sorted(by: { $0.timestamp > $1.timestamp })
     }
     
+    //Calculates and returns the average rating of a user based on its total score and review amount
     func getUserAverageRating(user: User) -> Float {
         let reviewArray = getUsersReviews(user: user)
         var sum: Float = 0
@@ -106,25 +111,7 @@ class ReviewManager : ObservableObject {
         return Float(result)
     }
     
-    func getFavoriteGenre(user: User) {
-        let reviewArray = getUsersReviews(user: user)
-        var movieArray = [Movie]()
-        for review in reviewArray {
-            movieViewModel.fetchMovie(id: review.movieId) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                    case .success(let movie):
-                        movieArray.append(movie)
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
+    //Calculates the average of a movie based on its total score and review amount with an option for only friends
     func getAverageRating(movieId: Int, onlyFriends: Bool) -> Float {
         let allReviews = getMovieReviews(movieId: movieId, onlyFriends: onlyFriends, includeSelf: true)
         var totalScore: Int = 0
@@ -139,6 +126,7 @@ class ReviewManager : ObservableObject {
         return round(Float(totalScore)/Float(allReviews.count) * 100) / 100.0
     }
     
+    //Checks if a movie object already exists
     func checkIfMovieExists(movieId: String) -> Bool {
         
         for movieFS in listOfMovieFS {
@@ -150,6 +138,8 @@ class ReviewManager : ObservableObject {
         return false
     }
     
+    //Saves a review to a movie object depending if the movie already exists in our database(which is matched with our listOfMovieFS) either retrieves and appends the new review and overwrites the current movie object.
+    //Otherwise a new movieFS object is created with the new review and stored to firebase
     func saveReview(movie: Movie, rating: Int, text: String, whereAt: String, withWho: String) {
         
         if checkIfMovieExists(movieId: "\(movie.id)") {
@@ -187,6 +177,7 @@ class ReviewManager : ObservableObject {
         }
     }
 
+    //Returns a movieFS object based on a movieId
     func getMovieFS(movieId: String) -> MovieFS? {
         
         for movieFS in listOfMovieFS {
@@ -197,6 +188,9 @@ class ReviewManager : ObservableObject {
         return nil
     }
   
+    //This is a function for displaying grouped reviews if the previous review were written on the same movie, thus we want to display them in a grouped view instead of duplicate movie cards
+    //Determines if the movie id is the same as the previous id and if so appends the review to a nested array
+    //Otherwise returns a nested array consisting of just one review
     func groupReviews(reviews: [Review]) -> [[Review]] {
         var layerdReviewsArray: [[Review]] = [[]]
         var posAtLayerdArray = 0
@@ -217,6 +211,8 @@ class ReviewManager : ObservableObject {
         return layerdReviewsArray
     }
     
+    // To like/dislike a review, we retrieve the review and appends/removes the matching like of the user id
+    // Then proceeds to retrieve and modify the existing review from firebase and makes the adjustments which is then overwritten as a review object to firebase
     func toggleLike(review: Review, removeLike: Bool) {
         var likes = review.likes
         if removeLike {
