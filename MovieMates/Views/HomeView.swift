@@ -61,6 +61,7 @@ struct HomeView: View {
                 .padding(.horizontal)
                 .padding(.top, 5)
                 
+                // Shows different views depending on which picker you have choosen
                 Picker(selection: $index, label: Text("Review List"), content: {
                     Text("Friends").tag(FRIENDS)
                     Text("Trending").tag(TRENDING)
@@ -74,6 +75,7 @@ struct HomeView: View {
                 
                 ScrollView{
                     VStack {
+                        // Shows if you have any friends that have made any reviews if not he prompt them to add friends
                         switch index {
                         case FRIENDS:
                             if orm.getAllReviews(onlyFriends: true).isEmpty {
@@ -103,7 +105,7 @@ struct HomeView: View {
                                     }
                                 }
                             }
-                            
+                        // Displays reviews from all users from the app
                         case TRENDING:
                             ForEach(orm.groupReviews(reviews: orm.getAllReviews(onlyFriends: false)), id: \.self) { reviews in
                                 if !reviews.isEmpty {
@@ -114,7 +116,7 @@ struct HomeView: View {
                                     }
                                 }
                             }
-                            
+                        // Shows the top rated movies from the API
                         case DISCOVER:
                             DicoverView()
                         default:
