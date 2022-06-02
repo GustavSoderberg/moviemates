@@ -395,7 +395,7 @@ struct ReviewTextView: View {
             
             Text(review.reviewText)
                 .font(.system(size: 15))
-                .lineLimit(fullText ? 20 : 1)
+                .lineLimit(fullText ? 450 : 1)
                 .fixedSize(horizontal: false, vertical: fullText ? true : false)
                 .padding(5)
                 .blur(radius: showSpoiler ? 0 : 8)
