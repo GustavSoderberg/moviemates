@@ -24,12 +24,12 @@ final class MovieListViewModel: ObservableObject {
     @Published var infoText: String = "Type to search"
     @Published var movieListTitle = ""
     @Published var currentMovie: Movie? = nil
-    var lastmovieId = 1
+    var lastMovieId = 1
     
     var searchTerm: String = ""
     
     func onSearchTapped() {
-        requestMovies(apiReuestType: .searchByTerm)
+        requestMovies(apiRequestType: .searchByTerm)
     }
     
     func onCancelTapped() {
@@ -40,30 +40,30 @@ final class MovieListViewModel: ObservableObject {
         movies.removeAll()
         page = 1
         totalPages = 1
-        lastmovieId = 1
+        lastMovieId = 1
         infoText = "Type to search"
     }
     
     /// Request more data from API when currentItem is last movie id
     func loadMoreContent(currentItem item: Movie, apiRequestType: ApiRequestType){
-        if lastmovieId == item.id, (page + 1) <= totalPages {
+        if lastMovieId == item.id, (page + 1) <= totalPages {
             page += 1
-            requestMovies(apiReuestType: apiRequestType)
+            requestMovies(apiRequestType: apiRequestType)
         }
     }
     
     /// Request more data from API
-    func loadMoreContet(apiRequestType: ApiRequestType) {
+    func loadMoreContent(apiRequestType: ApiRequestType) {
         if (page+1 <= totalPages) {
             page += 1
-            requestMovies(apiReuestType: apiRequestType)
+            requestMovies(apiRequestType: apiRequestType)
         }
     }
     
     /// Creates API-request URL based on request type
-    func requestMovies(apiReuestType: ApiRequestType){
+    func requestMovies(apiRequestType: ApiRequestType){
 
-        switch apiReuestType {
+        switch apiRequestType {
         case .searchByTerm:
             guard let encodedString  = searchTerm.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let apiUrl = URL(string: "\(BASE_API_URL)search/movie?api_key=\(API_KEY)&language=en-US&query=\(encodedString)&page=\(page)&include_adult=false")  else {
                 print("invalid URL")
@@ -104,13 +104,13 @@ final class MovieListViewModel: ObservableObject {
     
     /// Send API-request, appends result to movies Array
     func requestApi(url: URL) {
-        AF.request(url).responseDecodable(of: APIMovieResponse.self) { responce in
-            switch responce.result {
+        AF.request(url).responseDecodable(of: APIMovieResponse.self) { response in
+            switch response.result {
             case.success(let value):
                 self.totalPages = value.total_pages ?? 1
                 
                 self.movies.append(contentsOf: value.results ?? [Movie]())
-                self.lastmovieId = self.movies.last?.id ?? 1
+                self.lastMovieId = self.movies.last?.id ?? 1
                 if self.movies.isEmpty {
                     self.infoText = "Nothing to display"
                 }
