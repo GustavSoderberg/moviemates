@@ -22,6 +22,7 @@ class UserManager: ObservableObject {
     @Published var isLoading = true
     @Published var refresh = 0
     
+    // We register a new user in Firebase and assign them all neccesasery stuff
     func register(username: String) {
         
         let user = User(id: Auth.auth().currentUser!.uid, username: username, photoUrl: Auth.auth().currentUser!.photoURL!, bio: "Hello! I am new here 📺.", friends: [String](), frequests: [String](), watchlist: [String](),  themeId: 0)
@@ -32,6 +33,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // We check if the user has logged in before on this device then they will auto login otherwise we ask them to login manually through there choice of sign up
     func login() -> Bool {
         
         if Auth.auth().currentUser == nil {
@@ -61,6 +63,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // Here we handle the friends function in the database we check if you have already added the friend, if already have sent a request, also errors
     func friendRequest(to: User) {
         
         if currentUser!.friends.contains(to.id!){
@@ -78,6 +81,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // Checks with the database if the "friend" has accepted or not and works from there depending on the response
     func manageFriendRequests(forId: String, accept: Bool) {
         
         if accept {
@@ -107,6 +111,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // Removes the "friend" from the array in the database
     func removeFriend(id: String) {
         
         if fm.removeFriend(you: currentUser!, removeUserId: id) {
@@ -119,6 +124,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // Changes the username of currentuser that is logged in
     func changeUsername(username: String) {
         
         if fm.changeUsername(you: currentUser!, username: username) {
@@ -129,7 +135,7 @@ class UserManager: ObservableObject {
         }
         
     }
-    
+    // Updates the bio of currentuser that is logged in
     func updateBiography(biography: String) {
         
         if fm.updateBiography(you: currentUser!, biography: biography) {
@@ -141,6 +147,7 @@ class UserManager: ObservableObject {
         
     }
     
+    // Returns a user based on a users id
     func getUser(id: String) -> User{
         
         for user in listOfUsers {
@@ -154,6 +161,7 @@ class UserManager: ObservableObject {
         return User(id: "", username: "", photoUrl: URL(string: "no")!, bio: "", friends: ["",""], frequests: ["",""], watchlist: [""], themeId: 0)
     }
     
+    // Addes movies to the array in firebase
     func addToWatchlist(movieID: String){
         
         if fm.saveWatchlistToFirebase(user: um.currentUser!, movieID: movieID) {
@@ -165,6 +173,7 @@ class UserManager: ObservableObject {
          
     }
     
+    // Removes movies from the array in firebase
     func removeMovieWatchlist(movieID: String){
         
         if fm.removeMovieFromWatchlist(userID: um.currentUser!.id!, movieID: movieID) {

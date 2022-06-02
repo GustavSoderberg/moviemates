@@ -1,6 +1,7 @@
 /**
  
  - Description:
+    Carousel block. Fetch list of movies accroding type of request and then display as block inside of discovery view. Can show array of movies as horizontal carousel or as list
     When you pick a movie from the carousel, you are redirected to ReviewView.
  
  - Authors:
@@ -50,8 +51,11 @@ struct CarouselSection: View {
                 }
             }
             
+            
+            ///Loading Carousel view with closure for recreate separate element of list
             Carousel(index: $currIndex, items: movieListVM.movies) { movie in
                 
+                //get size of  elements inside
                 GeometryReader{proxy in
                     
                     let size = proxy.size
@@ -78,6 +82,7 @@ struct CarouselSection: View {
                         } placeholder: {
                             ProgressView()
                     }
+                        //Star button to add movie to watch list directly from movie poster
                         StarButton(currentMovie: movie)
                             .frame( maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                             .padding(15)
@@ -88,20 +93,23 @@ struct CarouselSection: View {
             .padding(.vertical, 15)
         }
         .onAppear(){
+            //call movie request in case if movies list is empty for prevent get same movie list double when view reinitiate
             if movieListVM.movies.count == 0 {
-                movieListVM.requestMovies(apiReuestType: movieListType)
+                movieListVM.requestMovies(apiRequestType: movieListType)
             }
+            //Prevent to appear review button
             if movieListType == .upcoming {
                 isUpcoming = true
             }
         }
+        //Paginate list when user scroll to last movie in carousel
         .onChange(of: currIndex, perform: { index in
             if index == movieListVM.movies.count - 1 && !movieListVM.movies.isEmpty {
-                movieListVM.loadMoreContet(apiRequestType: movieListType)
+                movieListVM.loadMoreContent(apiRequestType: movieListType)
             }
         })
         .sheet(isPresented: $showSheet) {
-            
+            // Show sheet of review or movie list depends on user action
             if showMovieView {
                 MovieViewController(movie: movieListVM.currentMovie!, isUpcoming: isUpcoming, showMovieView: $showSheet)
                 .preferredColorScheme(darkmode ? .dark : .light)

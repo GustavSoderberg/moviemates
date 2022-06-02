@@ -14,8 +14,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
             landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "MovieMates/ViewModels/ReviewManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "getAverageRating(movieId:onlyFriends:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -79,9 +79,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "241"
-            endingLineNumber = "241"
-            landmarkName = "saveMovieToFirestore(movieFS:)"
-            landmarkType = "7">
+            endingLineNumber = "241">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

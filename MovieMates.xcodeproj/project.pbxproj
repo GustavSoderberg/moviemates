@@ -133,6 +133,7 @@
 				B54B042928401A1300064D06 /* CarouselSection.swift */,
 				B54B042B28423D0700064D06 /* MovieListView.swift */,
 				EB26F9C92844E3BB0005A4C1 /* CreditSheet.swift */,
+				B548919B2827F97F00B9ABF4 /* SearchBar.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -190,7 +191,6 @@
 				3F2F5693281FEF1200C6AF76 /* SearchView.swift */,
 				B54B0425283F8C3600064D06 /* DicoverView.swift */,
 				3F2972C12822C92D00D1616D /* ViewComponents */,
-				B548919B2827F97F00B9ABF4 /* SearchBar.swift */,
 				B54891A8282B15F700B9ABF4 /* SearchViewInfo.swift */,
 			);
 			path = Views;
