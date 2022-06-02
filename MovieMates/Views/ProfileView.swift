@@ -45,7 +45,7 @@ struct ProfileView: View {
         ZStack{
             Color(BACKGROUND)
                 .ignoresSafeArea()
-            VStack{
+            VStack(spacing: 0){
                 ZStack{
                     Text(user.username)
                         .font(.largeTitle)
@@ -159,6 +159,7 @@ struct ProfileView: View {
                     
                 })
                 .padding(.horizontal)
+                .padding(.bottom, 5)
                 .pickerStyle(SegmentedPickerStyle())
                 .colorMultiply(Color(ACCENT_COLOR))
                 
@@ -174,9 +175,7 @@ struct ProfileView: View {
                 default:
                     UserReviewView(user: user)
                 }
-                
-                Spacer()
-            }.padding(.top)
+            }
         }
     }
 }
@@ -196,7 +195,7 @@ struct UserReviewView: View {
         VStack{
             ScrollView{
                 VStack{
-                    ForEach(orm.getUsersReviews(user: user)) { review in
+                    ForEach(orm.getUsersReviews(user: user), id: \.self) { review in
                         ReviewCard(review: review, movieFS: rm.getMovieFS(movieId: "\(review.movieId)"), currentMovie: $currentMovie, showMovieView: $showMovieView, userProfile: $userProfile, showProfileView: $showProfileView, displayName: false, displayTitle: true, blurSpoiler: false)
                     }
                 }

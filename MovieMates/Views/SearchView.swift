@@ -37,17 +37,17 @@ struct SearchView: View {
         ZStack{
             Color("background")
                 .ignoresSafeArea()
-            VStack{
-                
+            VStack(spacing: 0){
                 Picker(selection: $statusController.searchIndex,
                        label: Text("Reviews"),
                        content: {
                     Text("Movies/Series").tag("movies")
                     Text("Users").tag("users")
                 })
-                .padding()
+                .padding(.horizontal)
+                .padding(.vertical, 5)
                 .pickerStyle(SegmentedPickerStyle()).foregroundColor(Color.white)
-                .colorMultiply(Color("accent-color"))
+                .colorMultiply(Color(ACCENT_COLOR))
                 
                 switch statusController.searchIndex {
                 case "movies":
@@ -64,11 +64,11 @@ struct SearchView: View {
 
 struct moviesAndSeriesView: View {
     
-    @ObservedObject var viewModel = MovieListViewModel()
+    @StateObject var viewModel = MovieListViewModel()
     @State var infoText = "Type to search"
     
     var body: some View{
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $viewModel.searchTerm,
                       onSearchButtonClicked: viewModel.onSearchTapped, onCancelButtonClicked: viewModel.onCancelTapped)
             
@@ -98,7 +98,7 @@ struct moviesAndSeriesView: View {
 }
 
 struct usersView: View {
-    @AppStorage("darkmode") private var darkmode = true
+    @AppStorage(DARKMODE) private var darkmode = true
     
     @ObservedObject var oum = um
     @State var showProfileView = false
@@ -108,9 +108,8 @@ struct usersView: View {
     
     var body: some View{
         
-        VStack{
+        VStack(spacing: 0){
             SearchBar(text: $searchText)
-            Spacer()
             ScrollView{
                 VStack{
                     if searchText.isEmpty {
@@ -147,7 +146,7 @@ struct usersView: View {
                         .preferredColorScheme(darkmode ? .dark : .light)
                 }
             }
-            .padding()
+            .padding(.horizontal)
         }
     }
 }

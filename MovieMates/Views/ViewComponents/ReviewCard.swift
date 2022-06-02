@@ -381,6 +381,8 @@ struct ReviewTextView: View {
     let heightConstant: CGFloat
     var blurSpoiler: Bool
     
+    @State var lineLimit: Int = 1
+    
     @State var showSpoiler = true
     
     @State var height: CGFloat = 0
@@ -395,12 +397,27 @@ struct ReviewTextView: View {
             
             Text(review.reviewText)
                 .font(.system(size: 15))
-                .lineLimit(fullText ? 20 : 1)
+                .lineLimit(fullText ? 450 : lineLimit)
                 .fixedSize(horizontal: false, vertical: fullText ? true : false)
-                .padding(5)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 3)
                 .blur(radius: showSpoiler ? 0 : 8)
                 .onAppear {
                     self.height = heightConstant
+                    switch heightConstant {
+                    case .infinity:
+                        lineLimit = 450
+
+                    case 115:
+                        lineLimit = 6
+
+                    case 140:
+                        lineLimit = 8
+
+                    default:
+                        lineLimit = 1
+                    }
+                    lineLimit = grouped ? 1 : lineLimit
                 }
             
             if !showSpoiler {
@@ -441,7 +458,6 @@ struct ReviewTextView: View {
             if spoilerCheck && blurSpoiler {
                 showSpoiler = false
             }
-            
         }
     }
 }
